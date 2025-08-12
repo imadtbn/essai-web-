@@ -1,217 +1,260 @@
-<!-- خاصية هذا الكود: تصميم واجهة عرض فئات المنتجات — نسخة مختصرة تحتوي على صنف واحد من كل فئة -->
+<!--
+  خاصية هذا الكود:
+  - تصميم مطوّر مختصر لمشتلة السلام (صنف واحد من كل فئة)
+  - يحتوي على تعليقات تعليمية شاملة لكل جزء
+  - يرسل الطلبية إلى Google Sheets عبر Google Apps Script (الرابط يضاف لاحقًا)
+  - يرسل الطلبية عبر واتساب لرقم 0697743721
+-->
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>مشتلة السلام — التصميم المطوّر</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مشتلة السلام - نسخة مختصرة</title>
+
   <style>
-    /* ========== تعريف الألوان والمتغيرات الرئيسية ========== */
-    :root{
-      --green-900:#0b5a2b;  /* أخضر غامق */
-      --green-700:#11864a;  /* أخضر متوسط */
-      --green-500:#19a657;  /* أخضر فاتح */
-      --bg:#f6fbf7;         /* لون خلفية الموقع */
-      --card:#ffffff;       /* لون خلفية البطاقات */
-      --muted:#6b6b6b;      /* لون النصوص الثانوية */
-      --accent:#f2f9f2;     /* لون خلفية الحقول */
+    /* ==============================
+       إعداد المتغيرات والألوان العامة
+       ============================== */
+    :root {
+      --green-900: #0b5a2b;  /* أخضر غامق */
+      --green-700: #11864a;  /* أخضر متوسط */
+      --green-500: #19a657;  /* أخضر فاتح */
+      --bg: #f6fbf7;         /* لون خلفية الموقع */
+      --card: #ffffff;       /* لون خلفية البطاقات */
+      --muted: #6b6b6b;      /* لون النصوص الثانوية */
+      --accent: #f2f9f2;     /* لون خلفية الحقول */
       font-family: Arial, sans-serif;
     }
 
-    /* ========== إعادة ضبط المسافات والعناصر ========== */
-    *{box-sizing:border-box}
-    body{
-      background:var(--bg);
-      margin:0;
-      padding:20px;
-      color:#103318
+    /* إعادة ضبط العناصر */
+    * { box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      margin: 0;
+      padding: 20px;
+      color: #103318;
     }
 
-    /* ========== رأس الصفحة (الشعار، البحث، زر السلة) ========== */
-    header{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      justify-content:space-between
+    /* ==============================
+       رأس الصفحة (الشعار + البحث + السلة)
+       ============================== */
+    header {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
     }
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{
-      width:56px;
-      height:56px;
-      border-radius:10px;
-      background:linear-gradient(135deg,var(--green-700),var(--green-500));
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:white;
-      font-weight:700
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    h1{font-size:20px;margin:0}
-    .search{flex:1;margin:0 12px}
-    .search input{
-      width:100%;
-      padding:10px 14px;
-      border-radius:10px;
-      border:1px solid #dbeedd;
-      background:var(--accent);
-      outline:none
+    .logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--green-700), var(--green-500));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
     }
-    .cart-btn{
-      background:var(--green-700);
-      color:#fff;
-      padding:8px 12px;
-      border-radius:10px;
-      border:none;
-      cursor:pointer
+    h1 { font-size: 20px; margin: 0; }
+    .search { flex: 1; margin: 0 12px; }
+    .search input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #dbeedd;
+      background: var(--accent);
+      outline: none;
     }
-
-    /* ========== شبكة عرض الفئات ========== */
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:18px;
-      margin-top:18px
+    .cart-btn {
+      background: var(--green-700);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
     }
 
-    /* ========== بطاقة الفئة ========== */
-    .category-card{
-      background:var(--card);
-      border-radius:14px;
-      padding:14px;
-      box-shadow:0 6px 18px rgba(8,64,30,0.06);
-      border:1px solid rgba(6,44,20,0.04)
-    }
-    .cat-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px
-    }
-    .cat-title{display:flex;align-items:center;gap:12px}
-    .cat-title .icon{
-      width:42px;
-      height:42px;
-      border-radius:8px;
-      background:var(--green-500);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:white;
-      font-weight:700
-    }
-    .items{margin-top:12px}
-
-    /* ========== العنصر الفردي داخل البطاقة ========== */
-    .item{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      padding:10px;
-      border-radius:10px;
-      border:1px solid #f0f5f0;
-      margin-bottom:10px
-    }
-    .item img{
-      width:72px;
-      height:54px;
-      border-radius:8px;
-      object-fit:cover
-    }
-    .meta{flex:1}
-    .meta h4{margin:0;font-size:15px}
-    .meta p{margin:6px 0 0 0;color:var(--muted);font-size:13px}
-    .price{font-weight:700;color:var(--green-900)}
-    .add{
-      background:var(--green-700);
-      color:#fff;
-      padding:8px 10px;
-      border-radius:8px;
-      border:none;
-      cursor:pointer
+    /* شبكة عرض الفئات */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin-top: 18px;
     }
 
-    /* ========== السلة المصغّرة (Mini Cart) ========== */
-    .mini-cart{
-      position:fixed;
-      left:20px;
-      bottom:20px;
-      width:320px;
-      background:var(--card);
-      border-radius:12px;
-      box-shadow:0 12px 30px rgba(8,64,30,0.12);
-      overflow:hidden;
-      transform:translateY(120%);
-      transition:transform .28s ease
+    /* بطاقة الفئة */
+    .category-card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 6px 18px rgba(8,64,30,0.06);
+      border: 1px solid rgba(6,44,20,0.04);
     }
-    .mini-cart.open{transform:translateY(0)}
-    .mini-cart header{
-      background:var(--green-700);
-      color:#fff;
-      padding:12px;
-      font-weight:700
+    .cat-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .mini-cart .body{
-      padding:12px;
-      max-height:320px;
-      overflow:auto
+    .cat-title .icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: var(--green-500);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
     }
-    .mini-cart .footer{
-      padding:12px;
-      border-top:1px solid #eef7ee;
-      display:flex;
-      justify-content:space-between;
-      align-items:center
-    }
-    .btn-checkout{
-      background:var(--green-900);
-      color:#fff;
-      padding:8px 12px;
-      border-radius:8px;
-      border:none
-    }
+    .items { margin-top: 12px; }
 
-    /* ========== تصميم للأجهزة الصغيرة ========== */
-    @media (max-width:420px){
-      body{padding:12px}
-      .logo{width:46px;height:46px}
-      .cat-title .icon{width:36px;height:36px}
-      .item img{width:60px;height:48px}
-      .mini-cart{width:92%}
+    /* العنصر داخل البطاقة */
+    .item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #f0f5f0;
+    }
+    .item img {
+      width: 72px;
+      height: 54px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+    .meta { flex: 1; }
+    .meta h4 { margin: 0; font-size: 15px; }
+    .meta p { margin: 6px 0 0 0; color: var(--muted); font-size: 13px; }
+    .price { font-weight: 700; color: var(--green-900); }
+    .add {
+      background: var(--green-700);
+      color: #fff;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <!-- المحتوى كما في النسخة السابقة -->
+
+  <!-- رأس الموقع -->
+  <header>
+    <div class="brand">
+      <div class="logo">🌱</div>
+      <h1>مشتلة السلام</h1>
+    </div>
+    <div class="search">
+      <input type="text" id="searchInput" placeholder="ابحث عن منتج...">
+    </div>
+    <button class="cart-btn" id="openCart">🛒 <span id="cartCount">0</span></button>
+  </header>
+
+  <!-- شبكة الفئات -->
+  <div class="grid" id="categories">
+    <!-- فئة 1 -->
+    <div class="category-card">
+      <div class="cat-title">
+        <div class="icon">🌿</div>
+        <h3>النباتات الداخلية</h3>
+      </div>
+      <div class="items">
+        <div class="item" data-name="زهره بيضاء">
+          <img src="https://via.placeholder.com/72x54" alt="صورة">
+          <div class="meta">
+            <h4>زهره بيضاء</h4>
+            <p class="price">200 د.ج</p>
+          </div>
+          <button class="add">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- فئة 2 -->
+    <div class="category-card">
+      <div class="cat-title">
+        <div class="icon">🌳</div>
+        <h3>النباتات الخارجية</h3>
+      </div>
+      <div class="items">
+        <div class="item" data-name="شجرة صغيرة">
+          <img src="https://via.placeholder.com/72x54" alt="صورة">
+          <div class="meta">
+            <h4>شجرة صغيرة</h4>
+            <p class="price">500 د.ج</p>
+          </div>
+          <button class="add">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
-    /* ========== متغيرات عناصر DOM ========== */
+    /* ==============================
+       إعداد المتغيرات والمصفوفات
+       ============================== */
     const searchInput = document.getElementById('searchInput'); // حقل البحث
-    const categories = document.getElementById('categories');  // قائمة الفئات
-    const cartBtn = document.getElementById('openCart');        // زر عرض السلة
-    const cartCount = document.getElementById('cartCount');     // عداد السلة
-    let cart = []; // مصفوفة السلة
+    const cartBtn = document.getElementById('openCart');         // زر السلة
+    const cartCount = document.getElementById('cartCount');      // عداد المنتجات في السلة
+    let cart = []; // مصفوفة لحفظ الطلبات
 
-    /* ========== حدث البحث عن منتج ========== */
+    /* ==============================
+       وظيفة البحث
+       ============================== */
     searchInput.addEventListener('input', () => {
-      const query = searchInput.value.toLowerCase();
+      const query = searchInput.value.toLowerCase(); // تحويل النص لصغير لسهولة المقارنة
       document.querySelectorAll('.item').forEach(item => {
         const name = item.dataset.name.toLowerCase();
+        // إظهار أو إخفاء بناءً على تطابق النص
         item.style.display = name.includes(query) ? 'flex' : 'none';
       });
     });
 
-    /* ========== حدث إضافة منتج إلى السلة ========== */
+    /* ==============================
+       إضافة منتج إلى السلة
+       ============================== */
     document.querySelectorAll('.add').forEach(btn => {
       btn.addEventListener('click', () => {
         const productName = btn.closest('.item').dataset.name;
-        cart.push(productName);
-        cartCount.textContent = cart.length;
+        cart.push(productName); // إضافة المنتج للمصفوفة
+        cartCount.textContent = cart.length; // تحديث العداد
       });
     });
 
-    /* ========== حدث فتح السلة (يمكن تطويره لاحقًا) ========== */
+    /* ==============================
+       إرسال الطلبية إلى Google Sheets وواتساب
+       ============================== */
     cartBtn.addEventListener('click', () => {
-      alert('السلة تحتوي على: ' + cart.join(', '));
+      if (cart.length === 0) {
+        alert('السلة فارغة');
+        return;
+      }
+
+      // تجهيز البيانات
+      const orderDetails = cart.join(', ');
+
+      // 1- إرسال البيانات إلى Google Sheets (ضع رابطك هنا)
+      fetch('رابط_Google_Apps_Script_هنا', {
+        method: 'POST',
+        body: JSON.stringify({ order: orderDetails }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(res => res.text())
+      .then(data => console.log('تم إرسال الطلب إلى Google Sheets:', data))
+      .catch(err => console.error('خطأ في الإرسال:', err));
+
+      // 2- فتح واتساب مع الطلبية
+      const phone = '213697743721'; // رقمك بصيغة دولية (الجزائر 213)
+      const whatsappUrl = `https://wa.me/${phone}?text=طلبية جديدة: ${encodeURIComponent(orderDetails)}`;
+      window.open(whatsappUrl, '_blank');
     });
   </script>
 </body>
