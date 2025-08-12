@@ -1,261 +1,980 @@
 <!--
-  خاصية هذا الكود:
-  - تصميم مطوّر مختصر لمشتلة السلام (صنف واحد من كل فئة)
-  - يحتوي على تعليقات تعليمية شاملة لكل جزء
-  - يرسل الطلبية إلى Google Sheets عبر Google Apps Script (الرابط يضاف لاحقًا)
-  - يرسل الطلبية عبر واتساب لرقم 0697743721
+  خاصية هذا الكود: ملف HTML واحد متكامل لواجهة "مشتلة السلام" (نسخة مطوّرة مختصرة)
+  - يعرض الفئات -> الأنواع -> الأصناف (صنف واحد لكل نوع في النسخة المختصرة)
+  - صور مصغرة مأخوذة من ويكيبيديا Commons (روابط مباشرة)
+  - سلة منبثقة (تحرير الكميات، حذف، إجمالي)
+  - نموذج معلومات الزبون داخل السلة
+  - إرسال الطلب إلى Google Sheets (ضع رابط Google Apps Script لاحقاً)
+  - إرسال الطلب إلى واتساب إلى رقم: 0697743721
+  - تعليقات تعليمية شاملة داخل HTML/CSS/JS لشرح كل جزء
 -->
 
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مشتلة السلام - نسخة مختصرة</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>مشتلة السلام — المتجر (نسخة مطوّرة مختصرة)</title>
 
+  <!-- ===========================
+       CSS + تعليقات تعليمية شاملة
+       =========================== -->
   <style>
-    /* ==============================
-       إعداد المتغيرات والألوان العامة
-       ============================== */
-    :root {
-      --green-900: #0b5a2b;  /* أخضر غامق */
-      --green-700: #11864a;  /* أخضر متوسط */
-      --green-500: #19a657;  /* أخضر فاتح */
-      --bg: #f6fbf7;         /* لون خلفية الموقع */
-      --card: #ffffff;       /* لون خلفية البطاقات */
-      --muted: #6b6b6b;      /* لون النصوص الثانوية */
-      --accent: #f2f9f2;     /* لون خلفية الحقول */
-      font-family: Arial, sans-serif;
+    /* ==========================
+       ألوان ومقاسات عامة — متناسقة مع الهواتف
+       ========================== */
+    :root{
+      --bg: #e8f5e9;            /* خلفية فاتحة خضراء ناعمة */
+      --card: #ffffff;          /* خلفية البطاقات */
+      --primary: #2e7d32;       /* أخضر للعناوين والأزرار الأساسية */
+      --primary-dark:#1b5e20;   /* أخضر أقوى للتباين */
+      --accent: #ffb74d;        /* لون ثانوي دافئ للأزرار الثانوية */
+      --muted: #4b5563;         /* لون نص ثانوي */
+      --text: #212121;          /* لون نص أساسي */
+      --shadow: 0 8px 20px rgba(16, 63, 30, 0.08);
+      --radius: 12px;
+      font-family: "Arial", "Noto Kufi Arabic", sans-serif;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
 
-    /* إعادة ضبط العناصر */
-    * { box-sizing: border-box; }
-    body {
-      background: var(--bg);
-      margin: 0;
-      padding: 20px;
-      color: #103318;
+    /* إعادة ضبط بسيطة */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      padding:16px;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.4;
+      -webkit-tap-highlight-color: transparent; /* يحسن تجربة اللمس */
     }
 
-    /* ==============================
-       رأس الصفحة (الشعار + البحث + السلة)
-       ============================== */
-    header {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      justify-content: space-between;
+    /* ========= رأس الصفحة: شعار + بحث + زر السلة ========= */
+    header{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:14px;
     }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    .brand{
+      display:flex;
+      gap:10px;
+      align-items:center;
     }
-    .logo {
-      width: 56px;
-      height: 56px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--green-700), var(--green-500));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 700;
+    .logo{
+      width:56px;
+      height:56px;
+      border-radius:14px;
+      background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-weight:700;
+      box-shadow:var(--shadow);
+      font-size:20px;
     }
-    h1 { font-size: 20px; margin: 0; }
-    .search { flex: 1; margin: 0 12px; }
-    .search input {
-      width: 100%;
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 1px solid #dbeedd;
-      background: var(--accent);
-      outline: none;
+    h1{font-size:18px;margin:0}
+    .tagline{font-size:12px;color:var(--muted)}
+
+    /* بحث */
+    .search{
+      flex:1;
+      margin:0 12px;
     }
-    .cart-btn {
-      background: var(--green-700);
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
+    .search input{
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid rgba(0,0,0,0.06);
+      background:white;
+      font-size:14px;
     }
 
-    /* شبكة عرض الفئات */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 18px;
-      margin-top: 18px;
+    /* زر السلة ثابت على اليمين في الهواتف */
+    .cart-btn{
+      background:var(--primary);
+      color:white;
+      padding:10px 12px;
+      border-radius:10px;
+      border:none;
+      cursor:pointer;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      font-weight:700;
+      box-shadow:var(--shadow);
+    }
+    .cart-count{
+      background:rgba(255,255,255,0.15);
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:13px;
+    }
+
+    /* ========= شبكة الفئات ========= */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:14px;
     }
 
     /* بطاقة الفئة */
-    .category-card {
-      background: var(--card);
-      border-radius: 14px;
-      padding: 14px;
-      box-shadow: 0 6px 18px rgba(8,64,30,0.06);
-      border: 1px solid rgba(6,44,20,0.04);
+    .category-card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:12px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(16,63,30,0.04);
     }
-    .cat-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    .cat-top{display:flex;align-items:center;gap:12px;justify-content:space-between}
+    .cat-title{display:flex;gap:10px;align-items:center}
+    .cat-title .icon{
+      width:44px;height:44;border-radius:10px;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-weight:700;
     }
-    .cat-title .icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 8px;
-      background: var(--green-500);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 700;
-    }
-    .items { margin-top: 12px; }
+    .cat-sub{font-size:13px;color:var(--muted)}
 
-    /* العنصر داخل البطاقة */
-    .item {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #f0f5f0;
+    /* منطقة عرض الأنواع (قابلة للطي) */
+    .types{margin-top:12px;display:flex;flex-direction:column;gap:10px}
+
+    /* بطاقة النوع */
+    .type-card{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px;
+      border-radius:10px;
+      border:1px solid rgba(0,0,0,0.04);
+      background: linear-gradient(180deg, #ffffff, #fcfff8);
     }
-    .item img {
-      width: 72px;
-      height: 54px;
-      border-radius: 8px;
-      object-fit: cover;
+    .type-info{flex:1;display:flex;flex-direction:column}
+    .type-name{font-weight:700}
+    .open-items{background:transparent;border:none;color:var(--primary);cursor:pointer;font-weight:700}
+
+    /* قائمة الأصناف داخل نافذة منبثقة بسيطة */
+    .items-panel{
+      margin-top:10px;
+      display:none; /* تظهر عند الضغط على زر النوع */
+      gap:10px;
+      flex-direction:column;
     }
-    .meta { flex: 1; }
-    .meta h4 { margin: 0; font-size: 15px; }
-    .meta p { margin: 6px 0 0 0; color: var(--muted); font-size: 13px; }
-    .price { font-weight: 700; color: var(--green-900); }
-    .add {
-      background: var(--green-700);
-      color: #fff;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
+    .item-row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      padding:8px;
+      border-radius:10px;
+      border:1px solid rgba(0,0,0,0.04);
+      background:#fff;
+    }
+    .item-row img{
+      width:84px;
+      height:64px;
+      border-radius:8px;
+      object-fit:cover;
+      flex-shrink:0;
+    }
+    .item-meta{flex:1}
+    .item-meta h4{margin:0;font-size:15px}
+    .item-meta p{margin:6px 0 0 0;color:var(--muted);font-size:13px}
+    .item-actions{text-align:center}
+    .price{font-weight:800;color:var(--primary-dark);display:block;margin-bottom:6px}
+    .btn-add{
+      background:var(--primary);
+      color:white;
+      border:none;
+      padding:8px 10px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    /* ========== زر السلة العائم (محمول) ========== */
+    .floating-cart{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:999;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .floating-open{
+      background:var(--primary);
+      color:#fff;
+      padding:12px 14px;
+      border-radius:14px;
+      border:none;
+      box-shadow:var(--shadow);
+      cursor:pointer;
+      font-weight:700;
+    }
+
+    /* ========== النافذة الجانبية للسلة (Modal) ========== */
+    .cart-panel{
+      position:fixed;
+      left:0; /* لواجهة RTL نفتح من اليسار (يمكن تغييره) */
+      top:0;
+      height:100%;
+      width:420px;
+      max-width:100%;
+      background:var(--card);
+      transform:translateX(-110%);
+      transition:transform .28s ease;
+      box-shadow: 8px 0 30px rgba(16,63,30,0.12);
+      z-index:1000;
+      display:flex;
+      flex-direction:column;
+      padding:14px;
+    }
+    .cart-panel.open{transform:translateX(0)}
+    .cart-panel header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:8px;border-bottom:1px solid #eef6ee}
+    .cart-items{flex:1;overflow:auto;padding:8px 0;display:flex;flex-direction:column;gap:10px}
+    .cart-row{display:flex;gap:10px;align-items:center;padding:8px;border-radius:10px;border:1px solid #f2f6f2}
+    .cart-row img{width:64px;height:48px;border-radius:8px;object-fit:cover}
+    .cart-row .name{flex:1}
+    .qty-controls{display:flex;gap:6px;align-items:center}
+    .qty-controls button{width:34px;height:34px;border-radius:8px;border:none;background:#f0f0f0;cursor:pointer}
+    .total-bar{padding-top:10px;border-top:1px solid #f0f6f0;display:flex;justify-content:space-between;align-items:center;font-weight:800}
+
+    /* نموذج معلومات الزبون داخل السلة */
+    .customer-form{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+    .customer-form input, .customer-form textarea{
+      padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);font-size:14px;
+    }
+    .send-buttons{display:flex;gap:8px;margin-top:8px}
+    .btn-send{flex:1;padding:10px;border-radius:8px;border:none;cursor:pointer;font-weight:800}
+    .btn-send.gs{background:var(--primary-dark);color:#fff}
+    .btn-send.wa{background:var(--accent);color:#fff}
+
+    /* ========= استجابة الهواتف الصغيرة ========= */
+    @media (max-width:480px){
+      body{padding:12px}
+      .logo{width:48px;height:48px;border-radius:12px}
+      .cat-title .icon{width:40px;height:40}
+      .item-row img{width:72px;height:56px}
+      .cart-panel{width:100%;} /* السلة تغطي الصفحة في الموبايل */
+      .floating-open{padding:10px 12px}
+      .btn-add{padding:10px 12px}
+      .search input{padding:10px}
+    }
+
+    /* لمسة جمالية للروابط والازرار عند التركيز (الوصولية) */
+    button:focus, input:focus, textarea:focus {
+      outline: 3px solid rgba(46,125,50,0.12);
+      outline-offset: 2px;
     }
   </style>
 </head>
 <body>
+  <!--
+    ===============
+    HTML — البنية العامة
+    ===============
+    القسم التالي يعرض:
+    - رأس الصفحة (شعار، بحث، زر سلة)
+    - شبكة الفئات (كل فئة تحتوي على أنواع، وكل نوع يفتح الأصناف)
+    - نافذة سلة جانبية لإدارة الطلب وإرسال المعلومات
+  -->
 
-  <!-- رأس الموقع -->
+  <!-- رأس التطبيق -->
   <header>
-    <div class="brand">
-      <div class="logo">🌱</div>
-      <h1>مشتلة السلام</h1>
+    <div class="brand" aria-hidden="false">
+      <div class="logo" aria-hidden="true">م</div>
+      <div>
+        <h1>مشتلة السلام</h1>
+        <div class="tagline">شتلات، بذور، أدوات ومواد للحديقة</div>
+      </div>
     </div>
-    <div class="search">
-      <input type="text" id="searchInput" placeholder="ابحث عن منتج...">
+
+    <!-- حقل البحث: يفلتر الأصناف بحسب الاسم -->
+    <div class="search" role="search" aria-label="بحث عن منتجات">
+      <input id="searchInput" placeholder="ابحث عن صنف، نوع، أو فئة..." aria-label="حقل البحث">
     </div>
-    <button class="cart-btn" id="openCart">🛒 <span id="cartCount">0</span></button>
+
+    <!-- زر سلة سريع -->
+    <button class="cart-btn" id="openCartBtn" aria-controls="cartPanel" aria-expanded="false">
+      🛒 سلة (<span id="cartCount">0</span>)
+    </button>
   </header>
 
-  <!-- شبكة الفئات -->
-  <div class="grid" id="categories">
-    <!-- فئة 1 -->
-    <div class="category-card">
-      <div class="cat-title">
-        <div class="icon">🌿</div>
-        <h3>النباتات الداخلية</h3>
-      </div>
-      <div class="items">
-        <div class="item" data-name="زهره بيضاء">
-          <img src="https://via.placeholder.com/72x54" alt="صورة">
-          <div class="meta">
-            <h4>زهره بيضاء</h4>
-            <p class="price">200 د.ج</p>
-          </div>
-          <button class="add">+</button>
-        </div>
-      </div>
-    </div>
+  <!-- شبكة الفئات الرئيسية.
+       ملاحظة: الصور مأخوذة من ويكيبيديا (روابط مباشرة لصغرات الصور thumbnails).
+       لكل فئة مجموعة أنواع. في النسخة المختصرة نعرض صنف واحد لكل نوع.
+  -->
+  <main>
+    <section class="grid" id="categoriesGrid" aria-live="polite">
 
-    <!-- فئة 2 -->
-    <div class="category-card">
-      <div class="cat-title">
-        <div class="icon">🌳</div>
-        <h3>النباتات الخارجية</h3>
-      </div>
-      <div class="items">
-        <div class="item" data-name="شجرة صغيرة">
-          <img src="https://via.placeholder.com/72x54" alt="صورة">
-          <div class="meta">
-            <h4>شجرة صغيرة</h4>
-            <p class="price">500 د.ج</p>
+      <!-- ========== الأشجار المثمرة ==========
+           كل فئة عبارة عن بطاقة تحوي قائمة أنواع قابلة للفتح -->
+      <article class="category-card" data-category="الأشجار المثمرة">
+        <div class="cat-top">
+          <div class="cat-title">
+            <div class="icon" aria-hidden="true">🌳</div>
+            <div>
+              <div style="font-weight:800">الأشجار المثمرة</div>
+              <div class="cat-sub">زيتون، حمضيات، تفاح</div>
+            </div>
           </div>
-          <button class="add">+</button>
+          <div style="font-size:13px;color:var(--muted)">اضغط على النوع لعرض الأصناف</div>
         </div>
-      </div>
-    </div>
+
+        <!-- قائمة الأنواع -->
+        <div class="types">
+          <!-- نوع: الزيتون -->
+          <div class="type-card">
+            <div class="type-info">
+              <div class="type-name">الزيتون</div>
+              <div class="cat-sub">أشهر الأصناف: بيكوال، شملال، ملكة العرب</div>
+            </div>
+            <!-- زر لفتح لوحة الأصناف لهذا النوع -->
+            <button class="open-items" data-target="items-olive">عرض الأصناف ▸</button>
+          </div>
+
+          <!-- أنواع أخرى (مبسطة) -->
+          <div class="type-card">
+            <div class="type-info">
+              <div class="type-name">الحمضيات</div>
+              <div class="cat-sub">برتقال، ليمون</div>
+            </div>
+            <button class="open-items" data-target="items-citrus">عرض الأصناف ▸</button>
+          </div>
+
+          <!-- لوحة الأصناف للزيتون (تظهر عند الضغط) -->
+          <div id="items-olive" class="items-panel">
+            <!-- أصناف (النسخة المختصرة: صنف واحد لكل نوع لكن هنا نضع 3 أصناف كمثال) -->
+            <div class="item-row" data-category="الأشجار المثمرة" data-type="الزيتون" data-name="بيكوال" data-price="60">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Olea_europaea_%28Fruit%29.jpg/320px-Olea_europaea_%28Fruit%29.jpg" alt="زيتون - بيكوال">
+              <div class="item-meta">
+                <h4>زيتون — بيكوال</h4>
+                <p>صنف شائع لإنتاج الزيت. مناسب للزراعة المحلية.</p>
+                <span class="price">60 د.ج</span>
+              </div>
+              <div class="item-actions">
+                <button class="btn-add">أضف</button>
+              </div>
+            </div>
+
+            <div class="item-row" data-category="الأشجار المثمرة" data-type="الزيتون" data-name="شملال" data-price="65">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Olea_europaea_L._%28fruit%29.jpg/320px-Olea_europaea_L._%28fruit%29.jpg" alt="زيتون - شملال">
+              <div class="item-meta">
+                <h4>زيتون — شملال</h4>
+                <p>صنف محلي مقاوم للظروف.</p>
+                <span class="price">65 د.ج</span>
+              </div>
+              <div class="item-actions">
+                <button class="btn-add">أضف</button>
+              </div>
+            </div>
+
+            <div class="item-row" data-category="الأشجار المثمرة" data-type="الزيتون" data-name="ملكة العرب" data-price="75">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Olive_tree_%28Olea_europaea%29.jpg/320px-Olive_tree_%28Olea_europaea%29.jpg" alt="زيتون - ملكة العرب">
+              <div class="item-meta">
+                <h4>زيتون — ملكة العرب</h4>
+                <p>صنف عالي الإنتاجية.</p>
+                <span class="price">75 د.ج</span>
+              </div>
+              <div class="item-actions">
+                <button class="btn-add">أضف</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- لوحة الأصناف للحمضيات -->
+          <div id="items-citrus" class="items-panel">
+            <div class="item-row" data-category="الأشجار المثمرة" data-type="الحمضيات" data-name="برتقال" data-price="45">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Citrus_sinensis_%28fruit%29.jpg/320px-Citrus_sinensis_%28fruit%29.jpg" alt="برتقال">
+              <div class="item-meta">
+                <h4>برتقال</h4>
+                <p>صنف طازج ومناسب للحدائق المنزلية.</p>
+                <span class="price">45 د.ج</span>
+              </div>
+              <div class="item-actions"><button class="btn-add">أضف</button></div>
+            </div>
+            <div class="item-row" data-category="الأشجار المثمرة" data-type="الحمضيات" data-name="ليمون" data-price="50">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Citrus_limon_%28Lemon%29.jpg/320px-Citrus_limon_%28Lemon%29.jpg" alt="ليمون">
+              <div class="item-meta">
+                <h4>ليمون</h4>
+                <p>مفيد ومتعدد الاستخدامات.</p>
+                <span class="price">50 د.ج</span>
+              </div>
+              <div class="item-actions"><button class="btn-add">أضف</button></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ========== أشجار الحدائق والتسييج ==========
+           نوع: فيكس، سرو  -->
+      <article class="category-card" data-category="أشجار الحدائق والتسييج">
+        <div class="cat-top">
+          <div class="cat-title">
+            <div class="icon">🌲</div>
+            <div>
+              <div style="font-weight:800">أشجار الحدائق والتسييج</div>
+              <div class="cat-sub">فيكس، سرو، أشجار تزيين</div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--muted)">اضغط لعرض الأنواع</div>
+        </div>
+
+        <div class="types">
+          <div class="type-card">
+            <div class="type-info">
+              <div class="type-name">فيكس</div>
+              <div class="cat-sub">فيكس نيتيدا، فيكس بانجامينا</div>
+            </div>
+            <button class="open-items" data-target="items-ficus">عرض الأصناف ▸</button>
+          </div>
+
+          <div id="items-ficus" class="items-panel">
+            <div class="item-row" data-category="أشجار الحدائق والتسييج" data-type="فيكس" data-name="فيكس نيتيدا" data-price="75">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Ficus_benjamina_1.jpg/320px-Ficus_benjamina_1.jpg" alt="فيكس نيتيدا">
+              <div class="item-meta">
+                <h4>فيكس — نيتيدا</h4>
+                <p>نبات تزيين داخلي وخارجي.</p>
+                <span class="price">75 د.ج</span>
+              </div>
+              <div class="item-actions"><button class="btn-add">أضف</button></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ========== الزهور والورود ==========
+           ورد، ياسمين -->
+      <article class="category-card" data-category="الزهور والورود">
+        <div class="cat-top">
+          <div class="cat-title">
+            <div class="icon">🌺</div>
+            <div>
+              <div style="font-weight:800">الزهور والورود</div>
+              <div class="cat-sub">ورد، ياسمين</div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--muted)">أنواع وأصناف جذابة</div>
+        </div>
+
+        <div class="types">
+          <div class="type-card">
+            <div class="type-info"><div class="type-name">الورد</div><div class="cat-sub">ورد أحمر، ورد أبيض</div></div>
+            <button class="open-items" data-target="items-rose">عرض الأصناف ▸</button>
+          </div>
+
+          <div id="items-rose" class="items-panel">
+            <div class="item-row" data-category="الزهور والورود" data-type="الورد" data-name="ورد جوري" data-price="40">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Rose_Bengal.jpg/320px-Rose_Bengal.jpg" alt="ورد جوري">
+              <div class="item-meta">
+                <h4>ورد — جوري</h4>
+                <p>لون غني وعطر مميز.</p>
+                <span class="price">40 د.ج</span>
+              </div>
+              <div class="item-actions"><button class="btn-add">أضف</button></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ========== نباتات الأعشاب الطبية ==========
+           نعناع، حبق -->
+      <article class="category-card" data-category="نباتات الأعشاب الطبية">
+        <div class="cat-top">
+          <div class="cat-title">
+            <div class="icon">🌿</div>
+            <div>
+              <div style="font-weight:800">نباتات الأعشاب الطبية</div>
+              <div class="cat-sub">نعناع، حبق، زعتر</div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--muted)">مفيدة للمطبخ والطب الشعبي</div>
+        </div>
+
+        <div class="types">
+          <div class="type-card">
+            <div class="type-info"><div class="type-name">النعناع</div><div class="cat-sub">نعناع بلدي، نعناع فلفلي</div></div>
+            <button class="open-items" data-target="items-mint">عرض الأصناف ▸</button>
+          </div>
+
+          <div id="items-mint" class="items-panel">
+            <div class="item-row" data-category="نباتات الأعشاب الطبية" data-type="النعناع" data-name="نعناع بلدي" data-price="15">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Mentha_spicata_%28aka%29.JPG/320px-Mentha_spicata_%28aka%29.JPG" alt="نعناع بلدي">
+              <div class="item-meta">
+                <h4>نعناع — بلدي</h4>
+                <p>للاستخدام الطازج والشاي.</p>
+                <span class="price">15 د.ج</span>
+              </div>
+              <div class="item-actions"><button class="btn-add">أضف</button></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ========== الأسمدة ==========
+           سماد عضوي وكيميائي -->
+      <article class="category-card" data-category="الأسمدة">
+        <div class="cat-top">
+          <div class="cat-title">
+            <div class="icon">🧴</div>
+            <div>
+              <div style="font-weight:800">الأسمدة</div>
+              <div class="cat-sub">عضوي وكيميائي</div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--muted)">منتجات لتغذية النباتات</div>
+        </div>
+
+        <div class="types">
+          <div class="type-card">
+            <div class="type-info"><div class="type-name">سماد عضوي</div><div class="cat-sub">كومبوست، سماد روث</div></div>
+            <button class="open-items" data-target="items-compost">عرض الأصناف ▸</button>
+          </div>
+
+          <div id="items-compost" class="items-panel">
+            <div class="item-row" data-category="الأسمدة" data-type="سماد عضوي" data-name="كومبوست" data-price="30">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Compost_pile.jpg/320px-Compost_pile.jpg" alt="كمبوست">
+              <div class="item-meta">
+                <h4>كمبوست</h4>
+                <p>سماد عضوي طبيعي لتحسين التربة.</p>
+                <span class="price">30 د.ج</span>
+              </div>
+              <div class="item-actions"><button class="btn-add">أضف</button></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ========== أدوات الحديقة ==========
+           مجرفة، مقص، جهاز ري -->
+      <article class="category-card" data-category="أدوات الحديقة">
+        <div class="cat-top">
+          <div class="cat-title">
+            <div class="icon">🔧</div>
+            <div>
+              <div style="font-weight:800">أدوات الحديقة</div>
+              <div class="cat-sub">مجرفة، مقص تقليم، خرطوم ري</div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--muted)">أدوات يدوية وكهربائية</div>
+        </div>
+
+        <div class="types">
+          <div class="type-card">
+            <div class="type-info"><div class="type-name">أدوات يدوية</div><div class="cat-sub">مجرفة، مقص تقليم</div></div>
+            <button class="open-items" data-target="items-tools">عرض الأصناف ▸</button>
+          </div>
+
+          <div id="items-tools" class="items-panel">
+            <div class="item-row" data-category="أدوات الحديقة" data-type="أدوات يدوية" data-name="مجرفة" data-price="120">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Shovel_01.jpg/320px-Shovel_01.jpg" alt="مجرفة">
+              <div class="item-meta">
+                <h4>مجرفة</h4>
+                <p>مناسبة لزراعة الشتلات والحفر الصغيرة.</p>
+                <span class="price">120 د.ج</span>
+              </div>
+              <div class="item-actions"><button class="btn-add">أضف</button></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+  <!-- زر السلة العائم (طريقة بديلة لفتح السلة) -->
+  <div class="floating-cart" aria-hidden="false">
+    <button class="floating-open" id="openCartFloating">عرض السلة</button>
   </div>
 
+  <!-- ============= لوحة السلة الجانبية (Modal) =============
+       تحتوي:
+       - قائمة العناصر مع تعديل الكمية وحذف
+       - إجمالي الحساب
+       - نموذج بيانات الزبون (الاسم، الهاتف، العنوان، ملاحظات)
+       - زري إرسال: Google Sheets و WhatsApp
+  -->
+  <aside id="cartPanel" class="cart-panel" role="dialog" aria-modal="true" aria-hidden="true">
+    <header>
+      <div style="font-weight:900">سلة الطلب</div>
+      <div>
+        <button id="closeCartBtn" aria-label="إغلاق السلة">✕</button>
+      </div>
+    </header>
+
+    <!-- عناصر السلة -->
+    <div class="cart-items" id="cartItems">
+      <!-- يتم ملؤها ديناميكياً -->
+    </div>
+
+    <!-- إجمالي السعر -->
+    <div class="total-bar">
+      <div>الإجمالي</div>
+      <div id="cartTotal">0 د.ج</div>
+    </div>
+
+    <!-- نموذج معلومات الزبون -->
+    <form id="customerForm" class="customer-form" onsubmit="return false;">
+      <input id="custName" type="text" placeholder="اسم الزبون (مطلوب)" required>
+      <input id="custPhone" type="tel" placeholder="رقم الهاتف (مطلوب)" required>
+      <input id="custAddress" type="text" placeholder="عنوان التسليم (إن وُجد)">
+      <textarea id="custNote" rows="2" placeholder="ملاحظات إضافية"></textarea>
+
+      <div class="send-buttons">
+        <!-- زر إرسال إلى Google Sheets -->
+        <button class="btn-send gs" id="sendToGS" type="button">إرسال إلى Google Sheets</button>
+        <!-- زر إرسال إلى واتساب -->
+        <button class="btn-send wa" id="sendToWA" type="button">إرسال عبر واتساب</button>
+      </div>
+    </form>
+  </aside>
+
+  <!-- ===========================
+       JavaScript + تعليقات تعليمية شاملة
+       =========================== -->
   <script>
-    /* ==============================
-       إعداد المتغيرات والمصفوفات
-       ============================== */
-    const searchInput = document.getElementById('searchInput'); // حقل البحث
-    const cartBtn = document.getElementById('openCart');         // زر السلة
-    const cartCount = document.getElementById('cartCount');      // عداد المنتجات في السلة
-    let cart = []; // مصفوفة لحفظ الطلبات
+    /**************************************************************************
+     *  ملاحظات عامة للسكربت:
+     *  - كل عنصر 'item-row' يحمل بيانات المنتج داخل سمات data-*
+     *    مثال: data-category, data-type, data-name, data-price
+     *  - عند الضغط زر 'أضف' يتم إضافة عنصر إلى مصفوفة cartItems
+     *  - تُعرض السلة في اللوحة الجانبية مع إمكانية تعديل الكمية أو الحذف
+     *  - عند الإرسال إلى Google Sheets: يتم إرسال POST إلى رابط Google Apps Script
+     *  - عند الإرسال عبر واتساب: يتم فتح رابط wa.me مسبوقاً برسالة مفصّلة
+     *
+     *  مهم: ضع رابط Google Apps Script في المتغيّر GOOGLE_APPS_SCRIPT_URL أسفل هذا الملف
+     *************************************************************************/
 
-    /* ==============================
-       وظيفة البحث
-       ============================== */
+    /* -------------------------
+       المتغيرات والثوابت الأساسية
+       ------------------------- */
+    const GOOGLE_APPS_SCRIPT_URL = 'PUT_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'; // <-- ضع هنا رابطك لاحقًا
+    const WHATSAPP_PHONE_LOCAL = '0697743721'; // رقم الوجهة بصيغة محلية
+    const WHATSAPP_PHONE_INT = '213697743721'; // رقم الوجهة بصيغة دولية (لرابط wa.me)
+
+    // عناصر DOM
+    const searchInput = document.getElementById('searchInput');
+    const openCartBtn = document.getElementById('openCartBtn');
+    const openCartFloating = document.getElementById('openCartFloating');
+    const closeCartBtn = document.getElementById('closeCartBtn');
+    const cartPanel = document.getElementById('cartPanel');
+    const cartCountEl = document.getElementById('cartCount');
+    const cartItemsContainer = document.getElementById('cartItems');
+    const cartTotalEl = document.getElementById('cartTotal');
+    const sendToGSBtn = document.getElementById('sendToGS');
+    const sendToWABtn = document.getElementById('sendToWA');
+
+    // مصفوفة تخزين العناصر في السلة بالشكل:
+    // [{id, category, type, name, price, qty, img}]
+    let cartItems = [];
+
+    /* ============================================
+       دالة مساعدة: تحويل سعر رقمي إلى نص مع وحدة
+       - تضيف 'د.ج' وتنسيق بسيط
+       ============================================ */
+    function formatPrice(val){
+      return val + ' د.ج';
+    }
+
+    /* ============================================
+       وظيفة: فتح/غلق لوحة السلة
+       - نستخدم فئتين CSS (open) لإدارة الحركة
+       - نحدّث aria attributes للولوجية
+       ============================================ */
+    function openCartPanel(){
+      cartPanel.classList.add('open');
+      cartPanel.setAttribute('aria-hidden','false');
+      openCartBtn.setAttribute('aria-expanded','true');
+    }
+    function closeCartPanel(){
+      cartPanel.classList.remove('open');
+      cartPanel.setAttribute('aria-hidden','true');
+      openCartBtn.setAttribute('aria-expanded','false');
+    }
+
+    /* ================================
+       وظيفة: تحديث الواجهة من بيانات السلة
+       - تقوم بإنشاء DOM لعناصر السلة، تحسب الإجمالي، تحدّث عداد السلة
+       ================================ */
+    function renderCart(){
+      cartItemsContainer.innerHTML = ''; // تفريغ العنصر
+      let total = 0;
+
+      if(cartItems.length === 0){
+        cartItemsContainer.innerHTML = '<div style="color:var(--muted);padding:10px;text-align:center">السلة فارغة</div>';
+      }
+
+      cartItems.forEach((it, idx) => {
+        // حساب المجموع الجزئي لهذا الصنف
+        const lineTotal = it.price * it.qty;
+        total += lineTotal;
+
+        // عنصر السطر HTML
+        const row = document.createElement('div');
+        row.className = 'cart-row';
+        row.innerHTML = `
+          <img src="${it.img}" alt="${it.name}">
+          <div class="name">
+            <div style="font-weight:800">${it.name}</div>
+            <div style="font-size:13px;color:var(--muted)">${it.category} — ${it.type}</div>
+            <div style="margin-top:6px;font-weight:700;color:var(--primary-dark)">${formatPrice(it.price)} × ${it.qty} = ${formatPrice(lineTotal)}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div class="qty-controls">
+              <button class="decrease" data-idx="${idx}" aria-label="نقص الكمية">−</button>
+              <div style="min-width:28px;text-align:center;font-weight:800">${it.qty}</div>
+              <button class="increase" data-idx="${idx}" aria-label="زيادة الكمية">+</button>
+            </div>
+            <button class="remove" data-idx="${idx}" style="margin-top:6px;background:transparent;border:none;color:#c62828;cursor:pointer">حذف</button>
+          </div>
+        `;
+        cartItemsContainer.appendChild(row);
+      });
+
+      cartTotalEl.textContent = formatPrice(total);
+      cartCountEl.textContent = cartItems.reduce((s, x) => s + x.qty, 0);
+      // ربط أحداث الزيادة/النقص/الحذف بعد رسم العناصر
+      bindCartControls();
+    }
+
+    /* ===========================
+       ربط أزرار التحكم داخل السلة
+       =========================== */
+    function bindCartControls(){
+      document.querySelectorAll('.increase').forEach(btn=>{
+        btn.onclick = () => {
+          const idx = Number(btn.dataset.idx);
+          cartItems[idx].qty += 1;
+          renderCart();
+        };
+      });
+      document.querySelectorAll('.decrease').forEach(btn=>{
+        btn.onclick = () => {
+          const idx = Number(btn.dataset.idx);
+          if(cartItems[idx].qty > 1){
+            cartItems[idx].qty -= 1;
+          } else {
+            // إن رغبت بحذف العنصر مباشرة عند الوصول للصفر يمكنك إلغاء التعليق التالي:
+            // cartItems.splice(idx,1);
+          }
+          renderCart();
+        };
+      });
+      document.querySelectorAll('.remove').forEach(btn=>{
+        btn.onclick = () => {
+          const idx = Number(btn.dataset.idx);
+          cartItems.splice(idx,1);
+          renderCart();
+        };
+      });
+    }
+
+    /* ============================================
+       وظيفة: عند الضغط زر 'أضف' على صنف
+       - تقرأ بيانات المنتج من سمات العنصر (data-*)
+       - تضيف العنصر للسلة مع qty = 1 إن لم يكن موجوداً
+       - إن كان موجوداً، تزيد الكمية
+       ============================================ */
+    function addItemFromRow(row){
+      // قراءة بيانات المنتج
+      const category = row.dataset.category || '';
+      const type = row.dataset.type || '';
+      const name = row.dataset.name || '';
+      const price = Number(row.dataset.price) || 0;
+      const img = row.querySelector('img') ? row.querySelector('img').src : '';
+
+      // نحاول إيجاد المنتج مسبقاً في السلة بنفس الاسم + النوع
+      const foundIdx = cartItems.findIndex(it => it.name === name && it.type === type && it.category === category);
+
+      if(foundIdx !== -1){
+        cartItems[foundIdx].qty += 1;
+      } else {
+        cartItems.push({
+          id: Date.now() + Math.random(), // معرف بسيط فريد
+          category, type, name, price, qty: 1, img
+        });
+      }
+
+      renderCart();
+      openCartPanel(); // نفتح السلة عند الإضافة لتجربة أفضل خاصة على المحمول
+    }
+
+    /* ============================================
+       وظيفة: تهيئة أزرار 'أضف' لجميع الأصناف المعروضة
+       - تُدعى مرة واحدة عند تحميل الصفحة
+       ============================================ */
+    function bindAddButtons(){
+      document.querySelectorAll('.btn-add').forEach(btn=>{
+        btn.onclick = (e) => {
+          const row = btn.closest('.item-row');
+          addItemFromRow(row);
+        };
+      });
+    }
+
+    /* ============================================
+       وظيفة: عرض أو إخفاء لوحة الأصناف (items-panel)
+       عند الضغط على زر النوع (open-items)
+       - تستخدم سمة data-target التي تحدد id اللوحة
+       ============================================ */
+    function bindTypeOpeners(){
+      document.querySelectorAll('.open-items').forEach(btn=>{
+        btn.onclick = () => {
+          const tgt = document.getElementById(btn.dataset.target);
+          if(!tgt) return;
+          // تبديل الظهور
+          tgt.style.display = (tgt.style.display === 'flex' || tgt.style.display === 'block') ? 'none' : 'flex';
+          // اجعلها عمودية flex عندما تظهر
+          if(tgt.style.display !== 'none') tgt.style.flexDirection = 'column';
+        };
+      });
+    }
+
+    /* ============================================
+       وظيفة: البحث (فلترة الأصناف محلياً)
+       - يبحث في سمات data-name لكل .item-row
+       ============================================ */
     searchInput.addEventListener('input', () => {
-      const query = searchInput.value.toLowerCase(); // تحويل النص لصغير لسهولة المقارنة
-      document.querySelectorAll('.item').forEach(item => {
-        const name = item.dataset.name.toLowerCase();
-        // إظهار أو إخفاء بناءً على تطابق النص
-        item.style.display = name.includes(query) ? 'flex' : 'none';
+      const q = searchInput.value.trim().toLowerCase();
+      document.querySelectorAll('.item-row').forEach(r=>{
+        const name = (r.dataset.name || '').toLowerCase();
+        const type = (r.dataset.type || '').toLowerCase();
+        const category = (r.dataset.category || '').toLowerCase();
+        const match = q === '' || name.includes(q) || type.includes(q) || category.includes(q);
+        r.style.display = match ? 'flex' : 'none';
       });
     });
 
-    /* ==============================
-       إضافة منتج إلى السلة
-       ============================== */
-    document.querySelectorAll('.add').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const productName = btn.closest('.item').dataset.name;
-        cart.push(productName); // إضافة المنتج للمصفوفة
-        cartCount.textContent = cart.length; // تحديث العداد
-      });
-    });
+    /* ===========================
+       حدث فتح/غلق السلة
+       =========================== */
+    openCartBtn.addEventListener('click', openCartPanel);
+    openCartFloating.addEventListener('click', openCartPanel);
+    closeCartBtn.addEventListener('click', closeCartPanel);
 
-    /* ==============================
-       إرسال الطلبية إلى Google Sheets وواتساب
-       ============================== */
-    cartBtn.addEventListener('click', () => {
-      if (cart.length === 0) {
-        alert('السلة فارغة');
+    /* ===========================
+       إرسال الطلب إلى Google Sheets
+       - يجمع بيانات الزبون وبيانات السلة في جسم POST
+       - يتأكد من وجود عناصر وبيانات الزبون المطلوبة
+       - يعرض نتائج مبسطة للمستخدم (يمكن تحسينها لاحقًا)
+       =========================== */
+    sendToGSBtn.addEventListener('click', () => {
+      if(cartItems.length === 0){
+        alert('السلة فارغة. أضف منتجات قبل الإرسال.');
+        return;
+      }
+      // قراءة بيانات الزبون
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      const note = document.getElementById('custNote').value.trim();
+
+      if(!name || !phone){
+        alert('يرجى إدخال اسم الزبون ورقم الهاتف قبل الإرسال.');
         return;
       }
 
-      // تجهيز البيانات
-      const orderDetails = cart.join(', ');
+      // تجهيز نص الطلب: مصفوفة من الأسطر "الصنف (كمية) — السعر"
+      const orderLines = cartItems.map(it => `${it.name} (${it.qty}) — ${it.price} د.ج`);
+      const total = cartItems.reduce((s,i) => s + i.price * i.qty, 0);
 
-      // 1- إرسال البيانات إلى Google Sheets (ضع رابطك هنا)
-      fetch('رابط_Google_Apps_Script_هنا', {
+      // جسم البيانات لإرسالها إلى Google Apps Script
+      const payload = {
+        timestamp: new Date().toISOString(),
+        customer_name: name,
+        customer_phone: phone,
+        customer_address: address,
+        customer_note: note,
+        order_lines: orderLines.join(' | '),
+        total: total,
+        meta: {
+          source: 'PlantShop-Essalam-Compact-Frontend'
+        }
+      };
+
+      // تحقق من وجود الرابط
+      if(!GOOGLE_APPS_SCRIPT_URL || GOOGLE_APPS_SCRIPT_URL.includes('PUT_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE')){
+        alert('لم يتم إعداد رابط Google Apps Script. الرجاء إضافة الرابط في المتغير المخصص داخل الكود.');
+        return;
+      }
+
+      // إرسال POST (JSON) — Apps Script يجب أن يعالج POST بهذا البناء
+      fetch(GOOGLE_APPS_SCRIPT_URL, {
         method: 'POST',
-        body: JSON.stringify({ order: orderDetails }),
-        headers: { 'Content-Type': 'application/json' }
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
       })
-      .then(res => res.text())
-      .then(data => console.log('تم إرسال الطلب إلى Google Sheets:', data))
-      .catch(err => console.error('خطأ في الإرسال:', err));
-
-      // 2- فتح واتساب مع الطلبية
-      const phone = '213697743721'; // رقمك بصيغة دولية (الجزائر 213)
-      const whatsappUrl = `https://wa.me/${phone}?text=طلبية جديدة: ${encodeURIComponent(orderDetails)}`;
-      window.open(whatsappUrl, '_blank');
+      .then(resp => resp.text())
+      .then(txt => {
+        alert('تم إرسال الطلب إلى Google Sheets بنجاح.');
+        // تنظيف السلة إن أردت:
+        cartItems = [];
+        renderCart();
+      })
+      .catch(err => {
+        console.error('خطأ عند إرسال الطلب إلى Google Sheets:', err);
+        alert('حدث خطأ أثناء الإرسال إلى Google Sheets. تحقق من الرابط و اتصال الانترنت.');
+      });
     });
+
+    /* ===========================
+       إرسال الطلب عبر واتساب
+       - ينشئ رسالة نصية تحتوي على: بيانات الزبون + سطور الطلب + الإجمالي
+       - يفتح wa.me بالرابط المشفّر
+       =========================== */
+    sendToWABtn.addEventListener('click', () => {
+      if(cartItems.length === 0){
+        alert('السلة فارغة. أضف منتجات قبل الإرسال.');
+        return;
+      }
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      const note = document.getElementById('custNote').value.trim();
+
+      if(!name || !phone){
+        alert('يرجى إدخال اسم الزبون ورقم الهاتف قبل الإرسال.');
+        return;
+      }
+
+      const total = cartItems.reduce((s,i) => s + i.price * i.qty, 0);
+      const orderLines = cartItems.map(it => `- ${it.name} (${it.qty}) — ${it.price} د.ج`).join('%0A'); // newline encoded
+
+      // بناء رسالة نظيفة للواتساب
+      const text =
+        `طلبية جديدة من المشتل:%0A` +
+        `الزبون: ${encodeURIComponent(name)}%0A` +
+        `الهاتف: ${encodeURIComponent(phone)}%0A` +
+        (address ? `العنوان: ${encodeURIComponent(address)}%0A` : '') +
+        (note ? `ملاحظة: ${encodeURIComponent(note)}%0A` : '') +
+        `%0A` +
+        `الطلب:%0A${orderLines}%0A%0Aالإجمالي: ${encodeURIComponent(total + ' د.ج')}`;
+
+      // فتح رابط واتساب. استخدم رقم دولي هنا (مثال: الجزائر 213)
+      const waUrl = `https://wa.me/${WHATSAPP_PHONE_INT}?text=${text}`;
+      window.open(waUrl, '_blank');
+    });
+
+    /* ===========================
+       تهيئة الواجهة عند تحميل الصفحة
+       - ربط أزرار الإضافة، ربط فتح النوع، وإظهار السلة الأولي
+       =========================== */
+    function init(){
+      bindAddButtons();
+      bindTypeOpeners();
+      renderCart(); // عرض افتراضي للسلة (فارغة)
+    }
+
+    // تنفيذ التهيئة
+    document.addEventListener('DOMContentLoaded', init);
+
+    /* ===========================
+       ملاحظات مطوّر:
+       - لتحسين الأداء لاحقًا: تحميل الصور المصغرة (thumbnails) محليًا أو عبر CDN
+       - لتهيئة Google Apps Script: اجعل الـ Web App يستقبل POST JSON أو form-urlencoded
+       - لتحسين تجربة المستخدم: أضف مؤشرات Loader عند الإرسال، وتعليمات نجاح مرئية
+       - يمكن إضافة ميزة حفظ السلة في localStorage ليستعيدها المستخدم لاحقًا
+       =========================== */
   </script>
 </body>
 </html>
