@@ -1,728 +1,653 @@
-<!--
-  ملف: index.html
-  وصف: الواجهة الرئيسية لمشتلة السلام - تبويبات الفئات، بطاقات الأنواع، سلة عائمة، footer مع روابط تواصل.
-  ملاحظة: هذا الملف يحمّل style.css و script.js (ضعهما مع هذا الملف).
--->
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>مشتلة السلام — المتجر</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>مشتلة السلام — المتجر (نسخة الشراء السريع)</title>
 
-  <!-- ربط ملف CSS -->
-  <link rel="stylesheet" href="style.css">
-<style>
-/* ------------------------------------------------------------------
-   ملف: style.css
-   وصف: تنسيقات الصفحة، ألوان متناسقة، استجابة للشاشات الصغيرة
-   ------------------------------------------------------------------ */
+    <!-- مكتبات الخطوط والرموز -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 
-/* ---------- ألوان ومتغيرات عامة ---------- */
-:root{
-  --bg: #f0f7f2;
-  --card: #ffffff;
-  --primary: #2e7d32;       /* أخضر رئيسي */
-  --primary-dark: #1b5e20;
-  --accent: #ffb74d;        /* لون ثانوي - واتساب/دعوات */
-  --muted: #6b6b6b;
-  --danger: #c62828;
-  --radius: 12px;
-  --shadow: 0 10px 24px rgba(16,63,30,0.08);
-  font-family: "Arial", "Noto Kufi Arabic", sans-serif;
-}
-
-/* ---------- قاعدة عامة ---------- */
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  background:var(--bg);
-  color:#222;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-}
-
-/* ---------- Header ---------- */
-.site-header{
-  padding:14px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  align-items:stretch;
-  background:linear-gradient(90deg,var(--primary),var(--primary-dark));
-  color:white;
-}
-.brand{display:flex;gap:12px;align-items:center}
-.logo{
-  width:56px;height:56px;border-radius:10px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;
-}
-.brand-text h1{margin:0;font-size:18px}
-.tagline{margin:0;font-size:12px;opacity:0.9}
-
-/* ---------- Tabs (navigation) ---------- */
-.tabs{
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  padding:6px 2px;
-}
-.tab{
-  background:transparent;
-  border:none;
-  color:rgba(255,255,255,0.95);
-  padding:8px 12px;
-  border-radius:999px;
-  cursor:pointer;
-  font-weight:700;
-}
-.tab.active{background:rgba(255,255,255,0.18)}
-
-/* ---------- Main content & grid ---------- */
-.main{padding:16px;max-width:1200px;margin:0 auto}
-.category-title{margin:6px 0 14px 0;font-size:18px;color:var(--primary-dark)}
-.cards-grid{display:flex;flex-wrap:wrap;gap:16px}
-
-/* ---------- Product card ---------- */
-.product-card{
-  width:320px;
-  background:var(--card);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-}
-.product-card .product-title{
-  margin:12px 14px 6px 14px;font-size:16px;font-weight:800;color:var(--primary-dark)
-}
-.product-image{
-  width:100%;height:180px;object-fit:cover;border-top-left-radius:var(--radius);border-top-right-radius:var(--radius);
-}
-.variants-short{list-style:none;padding:8px 14px;margin:0;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
-.variants-short li{background:#f6fff6;padding:6px 8px;border-radius:8px;font-size:13px;border:1px solid rgba(0,0,0,0.03)}
-
-/* ---------- card actions & variants panel ---------- */
-.card-actions{padding:12px 14px 18px 14px;display:flex;justify-content:flex-end}
-.btn{padding:10px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
-.btn.small{padding:6px 8px;font-size:13px}
-.btn.primary{background:var(--primary);color:white}
-.btn.accent{background:var(--accent);color:#fff}
-.btn.danger{background:var(--danger);color:#fff}
-
-/* داخل لوحة الأصناف */
-.variants-panel{display:none;padding:10px 14px;border-top:1px solid #f0f5f0;background:linear-gradient(180deg,#fff,#fcfff8)}
-.variant-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px dashed rgba(0,0,0,0.03)}
-.v-meta{display:flex;flex-direction:column}
-.v-name{font-weight:800}
-.v-price{color:var(--primary-dark);font-weight:800}
-.v-controls{display:flex;align-items:center;gap:8px}
-.v-controls input.v-qty{width:70px;padding:6px;border-radius:8px;border:1px solid rgba(0,0,0,0.08);text-align:center}
-
-/* ---------- Floating cart button ---------- */
-.floating-cart{
-  position:fixed;right:18px;bottom:18px;z-index:1200;
-  display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:999px;background:rgba(0,0,0,0.06);cursor:pointer;
-  backdrop-filter: blur(6px);
-}
-.floating-cart.active{background:linear-gradient(90deg,var(--primary),var(--primary-dark));color:#fff}
-.cart-badge{background:var(--card);padding:6px 8px;border-radius:999px;font-weight:900;color:var(--primary-dark)}
-
-/* ---------- Cart panel (side / modal style) ---------- */
-.cart-panel{
-  position:fixed;left:0;bottom:0;right:0;max-height:86vh;background:var(--card);border-top-left-radius:14px;border-top-right-radius:14px;box-shadow:0 -8px 30px rgba(0,0,0,0.12);
-  transform:translateY(110%);transition:transform .28s ease;z-index:1300;padding:12px;display:flex;flex-direction:column;
-}
-.cart-panel.open{transform:translateY(0)}
-.cart-header{display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:1px solid #eef6ee}
-.cart-body{overflow:auto;max-height:40vh;padding:8px 0}
-.cart-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px}
-.cart-item{display:flex;justify-content:space-between;gap:8px;padding:10px;border-radius:10px;border:1px solid #f2f6f2}
-.cart-item .item-left{display:flex;gap:8px;align-items:center}
-.cart-item img{width:64px;height:48px;object-fit:cover;border-radius:8px}
-.qty-controls{display:flex;align-items:center;gap:6px}
-.qty-controls button{width:34px;height:34px;border-radius:8px;border:none;background:#f0f0f0;cursor:pointer}
-
-/* ---------- footer ---------- */
-.site-footer{background:var(--primary-dark);color:white;padding:16px;margin-top:20px}
-.footer-content{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
-.footer-about h4{margin:0}
-.footer-links{display:flex;gap:10px;align-items:center}
-.footer-links a{color:white;text-decoration:none;padding:6px 8px;border-radius:6px;background:rgba(255,255,255,0.06)}
-.footer-map .btn{background:#fff;color:var(--primary-dark}
-
-/* ---------- responsive ---------- */
-@media (min-width:900px){
-  .cart-panel{width:420px;right:18px;left:auto;bottom:18px;border-radius:12px;transform:translateY(110%)}
-  .cart-panel.open{transform:translateY(0)}
-}
-@media (max-width:600px){
-  .product-card{width:92%}
-  .tabs{padding:6px}
-  .brand{align-items:flex-start}
-}
-</style>
+    <style>
+        :root{
+            --primary:#2e7d32;
+            --primary-dark:#1b5e20;
+            --accent:#81c784;
+            --bg:#f5f6f4;
+            --card:#fff;
+            --muted:#6b6b6b;
+            --danger:#c62828;
+            --footer-dark:#163a16;
+            --radius:10px;
+            --wa-green: #25D366;
+        }
+        *{box-sizing:border-box;font-family:'Tajawal', Arial, sans-serif}
+        body{margin:0;background:var(--bg);color:#222;direction:rtl;-webkit-font-smoothing:antialiased}
+        header{background:linear-gradient(90deg,var(--primary),var(--primary-dark));color:#fff;position:sticky;top:0;z-index:1000;padding:14px 12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+        .header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+        .brand{display:flex;gap:12px;align-items:center}
+        .brand h1{margin:0;font-size:20px}
+        nav ul{list-style:none;padding:0;margin:0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+        nav a{color:#fff;text-decoration:none;padding:6px 10px;border-radius:8px;transition:background .15s;font-weight:600}
+        .container{max-width:1200px;margin:18px auto;padding:0 14px 120px 14px}
+        .category{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 6px 18px rgba(16,16,16,0.04);margin-bottom:18px}
+        .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;align-items:stretch}
+        .product{display:flex;flex-direction:column;background:linear-gradient(180deg,#fff,#fbfffb);border-radius:var(--radius);overflow:hidden;transition:transform .18s,box-shadow .18s;min-height:370px}
+        .product:hover{transform:translateY(-6px);box-shadow:0 14px 30px rgba(16,16,16,0.06)}
+        .product img{width:100%;height:200px;object-fit:cover;display:block}
+        .product-info{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+        .product-info h3{margin:0;font-size:16px}
+        .product-info p{margin:0;color:var(--muted);font-size:14px}
+        .price{font-weight:700;color:var(--primary);font-size:15px}
+        .varieties-inline{margin-top:6px;color:#444;font-size:14px;display:flex;flex-direction:column;gap:6px}
+        .varieties-inline .var-item{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f7fff7;padding:8px;border-radius:8px}
+        .varieties-inline .var-label{flex:1;text-align:right}
+        .btn-add-quick{background:var(--primary);color:#fff;border:none;padding:6px 10px;border-radius:8px;cursor:pointer;font-weight:700;white-space:nowrap}
+        /* زر السلة العائم (سيبقى لكن يفتح الشريط الجانبي) */
+        #floatingCartBtn{position:fixed;left:16px;bottom:16px;z-index:1200;background:var(--primary);color:#fff;padding:12px 14px;border-radius:50px;box-shadow:0 10px 26px rgba(0,0,0,0.18);display:flex;gap:10px;align-items:center;cursor:pointer}
+        #floatingCartBtn .count{background:#fff;color:var(--primary);padding:4px 8px;border-radius:12px;font-weight:700}
+        /* الشريط الجانبي */
+        .quickcart{position:fixed;top:0;right:-420px;width:380px;height:100vh;background:var(--card);box-shadow: -8px 0 24px rgba(0,0,0,0.12);z-index:1400;transition:right .28s ease;padding:14px;display:flex;flex-direction:column}
+        .quickcart.open{right:0}
+        .qc-header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:8px;border-bottom:1px solid #eee}
+        .qc-body{overflow:auto;padding:8px 0;flex:1}
+        .qc-item{display:flex;gap:8px;align-items:center;padding:8px;border-radius:8px;border:1px solid #f0f0f0;margin-bottom:8px;background:#fbfff8}
+        .qc-item img{width:64px;height:64px;object-fit:cover;border-radius:6px}
+        .qc-item .info{flex:1}
+        .qc-footer{border-top:1px solid #eee;padding-top:10px;display:flex;flex-direction:column;gap:8px}
+        .qc-actions{display:flex;gap:8px;flex-wrap:wrap}
+        .btn{padding:10px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+        .btn.primary{background:var(--primary);color:#fff}
+        .btn.secondary{background:#f0f0f0;color:#222}
+        .btn.wa{background:var(--wa-green);color:#fff}
+        .small-btn{padding:6px 8px;font-size:14px}
+        .cart-notification{position:fixed;bottom:20px;right:20px;background:#4CAF50;color:white;padding:12px;border-radius:6px;z-index:1500;animation:fadeIn .4s}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        /* فوتر */
+        footer{background:linear-gradient(90deg,var(--footer-dark),#133814);color:#fff;padding:22px 14px;margin-top:18px;border-radius:8px}
+        .footer-inner{max-width:1200px;margin:0 auto;display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;justify-content:space-between}
+        /* responsive */
+        @media(max-width:900px){.products{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}.quickcart{width:100%;max-width:420px}}
+    </style>
 </head>
+
 <body>
+    <!-- الهيدر -->
+    <header>
+        <div class="header-inner">
+            <div class="brand" aria-label="مشتلة السلام">
+                <i class="fas fa-seedling" style="font-size:26px;color:#fff"></i>
+                <div>
+                    <h1>مشتلة السلام</h1>
+                    <p>شراء سريع — النسخة المحسنة</p>
+                </div>
+            </div>
 
-  <!-- =========== رأس الصفحة (شعار وتبويبات الفئات) =========== -->
-  <header class="site-header">
-    <div class="brand">
-      <div class="logo">م</div>
-      <div class="brand-text">
-        <h1>مشتلة السلام</h1>
-        <p class="tagline">شتلات، بذور، أدوات الحديقة</p>
-      </div>
+            <nav aria-label="القائمة الرئيسية">
+                <ul>
+                    <li><a href="#fruit-trees">الأشجار المثمرة</a></li>
+                    <li><a href="#flowers">الورود والزهور</a></li>
+                    <li><a href="#ornamental">تزيين</a></li>
+                    <li><a href="#vegetables">بذور وخضروات</a></li>
+                    <li><a href="#tools">أدوات وأسمدة</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- البحث -->
+    <div style="background:var(--primary-dark);padding:10px;">
+        <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:center;padding:6px 14px;">
+            <div style="width:100%;max-width:640px;position:relative;">
+                <input id="search-input" placeholder="ابحث عن منتج أو صنف..." style="width:100%;padding:12px 48px;border-radius:30px;border:2px solid #fff;font-size:16px;">
+                <button id="search-btn" style="position:absolute;left:6px;top:6px;width:40px;height:40px;border-radius:50%;border:none;background:var(--primary);color:#fff;"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
     </div>
 
-    <!-- شريط تبويبات الفئات -->
-    <nav class="tabs" aria-label="تبويبات الفئات">
-      <!-- أزرار تبويب: عند الضغط تظهر الفئة المقابلة -->
-      <button class="tab active" data-target="cat-fruit">الأشجار المثمرة</button>
-      <button class="tab" data-target="cat-garden">أشجار الحدائق/تسييج</button>
-      <button class="tab" data-target="cat-flowers">الزهور والورود</button>
-      <button class="tab" data-target="cat-herbs">نباتات الأعشاب الطبية</button>
-      <button class="tab" data-target="cat-fertilizers">الأسمدة</button>
-      <button class="tab" data-target="cat-tools">أدوات الحديقة</button>
-    </nav>
-  </header>
+    <!-- المحتوى -->
+    <main class="container">
+        <div id="noResults" style="display:none;text-align:center;padding:20px;color:var(--muted);">
+            <i class="fas fa-search" style="font-size:22px;margin-bottom:8px;"></i>
+            <div>لم يتم العثور على نتائج</div>
+        </div>
 
-  <!-- =========== محتوى الفئات (القسم الرئيسي) =========== -->
-  <main class="main">
-    <!-- ملاحظة: كل فئة تحتوي على عدة بطاقات - كل بطاقة تمثل نوعاً.
-         داخل البطاقة: اسم النوع أعلى، صورة، قائمة أصناف (أسماء فقط) أسفل الصورة،
-         ثم زر 'أضف للسلة' الذي يكشف لوحة منسدلة تعرض الأصناف مع الأسعار وحقل الكمية.
-    -->
+        <!-- ----- قسم أمثلة المنتجات (من الكود الأصلي) ----- -->
+        <section id="fruit-trees" class="category">
+            <div class="category-header"><h2><i class="fas fa-apple-whole"></i> الأشجار المثمرة</h2></div>
+            <div class="products">
+                <div class="product" data-price="60" data-type="زيتون">
+                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zite.jpg" alt="زيتون">
+                    <div class="product-info">
+                        <h3>زيتون لإنتاج الزيت</h3>
+                        <p>صنف ممتاز لإنتاج الزيوت</p>
+                        <div class="varieties">
+                            <ul>
+                                <li>شملال - 60 دج</li>
+                                <li>سيقواز - 65 دج</li>
+                                <li>بيكوال - 70 دج</li>
+                                <li>ملكة العرب - 75 دج</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- ------------------ فئة: الأشجار المثمرة ------------------ -->
-    <section id="cat-fruit" class="category-section active">
-      <h2 class="category-title">الأشجار المثمرة</h2>
+                <div class="product" data-price="55" data-type="زيتون">
+                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zitoun.jpg" alt="زيتون">
+                    <div class="product-info">
+                        <h3>زيتون للترقيد</h3>
+                        <p>من أفضل الأصناف للترقيد</p>
+                        <div class="varieties">
+                            <ul>
+                                <li>فركاني - 55 دج</li>
+                                <li>بيكوال - 60 دج</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-      <div class="cards-grid">
-        <!-- بطاقة نوع: الزيتون -->
-        <article class="product-card" data-category="الأشجار المثمرة" data-type="زيتون">
-          <h3 class="product-title">زيتون</h3>
-          <!-- صورة ترويجية من ويكيبيديا (thumbnail) -->
-          <img class="product-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Olives_on_tree.jpg/640px-Olives_on_tree.jpg" alt="زيتون">
-          <!-- قائمة مختصرة للأصناف (أسماء فقط) -->
-          <ul class="variants-short">
-            <li>بيكوال</li>
-            <li>شملال</li>
-            <li>ملكة العرب</li>
-          </ul>
+                <div class="product" data-price="45" data-type="حمضيات">
+                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/tchina.jpg" alt="برتقال">
+                    <div class="product-info">
+                        <h3>برتقال</h3>
+                        <p>صنف حلو المذاق</p>
+                        <div class="varieties">
+                            <ul>
+                                <li>طومسون - 45 دج</li>
+                                <li>بالنسي - 50 دج</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-          <!-- زر يظهر لوحة اختيار الصنف والكمية -->
-          <div class="card-actions">
-            <button class="btn primary btn-open-variants">أضف للسلة</button>
-          </div>
+                <!-- أضف منتجات إضافية حسب الحاجة بنفس البنية -->
+            </div>
+        </section>
 
-          <!-- لوحة منسدلة داخل البطاقة لعرض الأصناف مع الأسعار وكمية الإدخال -->
-          <div class="variants-panel" aria-hidden="true">
-            <!-- كل صف صنف يحتوي على data-* للمنطق -->
-            <div class="variant-row" data-name="بيكوال" data-price="3000" data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Olea_europaea_%28Fruit%29.jpg/320px-Olea_europaea_%28Fruit%29.jpg">
-              <div class="v-meta">
-                <div class="v-name">بيكوال</div>
-                <div class="v-price">3,000 د.ج</div>
-              </div>
-              <div class="v-controls">
-                <input type="number" min="1" value="1" class="v-qty" />
-                <button class="btn small btn-add-variant">تأكيد إضافة</button>
-              </div>
+        <!-- أقسام أخرى (مقتطفات) -->
+        <section id="flowers" class="category">
+            <div class="category-header"><h2><i class="fas fa-rose"></i> ورود ونباتات</h2></div>
+            <div class="products">
+                <div class="product" data-price="40" data-type="ورود">
+                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/w-djouri.jpg" alt="ورد">
+                    <div class="product-info">
+                        <h3>ورد جوري</h3>
+                        <p>ملكة الزهور</p>
+                        <div class="varieties"><ul><li>جوري أحمر - 40 دج</li><li>جوري وردي - 45 دج</li></ul></div>
+                    </div>
+                </div>
+
+                <div class="product" data-price="35" data-type="ورود">
+                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/w-feell.jpg" alt="ورد فل">
+                    <div class="product-info">
+                        <h3>ورد فل</h3>
+                        <p>رائحة عطرة</p>
+                        <div class="varieties"><ul><li>فل - 35 دج</li></ul></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- يمكنك إبقاء بقية الأقسام كما هي أو إضافة المزيد -->
+    </main>
+
+    <!-- زر السلة العائم -->
+    <button id="floatingCartBtn" aria-label="سلة المشتريات" title="عرض السلة">
+        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+        <span id="cartCount" class="count">0</span>
+    </button>
+
+    <!-- شريط السلة الجانبي (Quick Cart) -->
+    <aside id="quickCart" class="quickcart" aria-hidden="true">
+        <div class="qc-header">
+            <div>
+                <h3 style="margin:0">سلة المشتريات</h3>
+                <div id="qc-subtext" style="font-size:13px;color:var(--muted)">تفاصيل الطلب</div>
+            </div>
+            <div>
+                <button class="btn secondary small-btn" onclick="closeQuickCart()" aria-label="إغلاق"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+
+        <div class="qc-body" id="qcBody">
+            <!-- تظهر هنا العناصر -->
+            <div id="qcEmpty" style="text-align:center;color:var(--muted);padding:18px">السلة فارغة</div>
+        </div>
+
+        <div class="qc-footer">
+            <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;">
+                <div><strong>المجموع:</strong> <span id="qcTotal">0 دج</span></div>
+                <div><small id="qcItemsCount">0 عنصر</small></div>
             </div>
 
-            <div class="variant-row" data-name="شملال" data-price="2500" data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Olea_europaea_L._%28fruit%29.jpg/320px-Olea_europaea_L._%28fruit%29.jpg">
-              <div class="v-meta">
-                <div class="v-name">شملال</div>
-                <div class="v-price">2,500 د.ج</div>
-              </div>
-              <div class="v-controls">
-                <input type="number" min="1" value="1" class="v-qty" />
-                <button class="btn small btn-add-variant">تأكيد إضافة</button>
-              </div>
+            <h4 style="margin:6px 0 0 0">بيانات الزبون</h4>
+            <div style="display:grid;grid-template-columns:1fr;gap:8px">
+                <input id="qcName" placeholder="الاسم الكامل" class="form-input" style="padding:10px;border-radius:8px;border:1px solid #eee">
+                <input id="qcPhone" placeholder="رقم الهاتف (مثال: 0559...)" class="form-input" style="padding:10px;border-radius:8px;border:1px solid #eee">
+                <textarea id="qcAddress" placeholder="عنوان التوصيل" rows="2" class="form-input" style="padding:10px;border-radius:8px;border:1px solid #eee"></textarea>
             </div>
 
-            <div class="variant-row" data-name="ملكة العرب" data-price="4000" data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Olive_tree_%28Olea_europaea%29.jpg/320px-Olive_tree_%28Olea_europaea%29.jpg">
-              <div class="v-meta">
-                <div class="v-name">ملكة العرب</div>
-                <div class="v-price">4,000 د.ج</div>
-              </div>
-              <div class="v-controls">
-                <input type="number" min="1" value="1" class="v-qty" />
-                <button class="btn small btn-add-variant">تأكيد إضافة</button>
-              </div>
+            <div class="qc-actions" style="margin-top:8px">
+                <button id="sendOrderBtn" class="btn primary"><i class="fas fa-paper-plane"></i> إرسال (Sheets)</button>
+                <button id="sendWhatsBtn" class="btn wa"><i class="fab fa-whatsapp"></i> إرسال عبر واتساب</button>
+                <button class="btn secondary" onclick="clearCartConfirm()"><i class="fas fa-trash"></i> إفراغ السلة</button>
             </div>
-          </div>
-        </article>
 
-        <!-- بطاقة نوع: تفاح -->
-        <article class="product-card" data-category="الأشجار المثمرة" data-type="تفاح">
-          <h3 class="product-title">تفاح</h3>
-          <img class="product-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Red_Apple.jpg/640px-Red_Apple.jpg" alt="تفاح">
-          <ul class="variants-short">
-            <li>تفاح أحمر</li>
-            <li>تفاح أصفر</li>
-            <li>تفاح أخضر</li>
-          </ul>
-          <div class="card-actions">
-            <button class="btn primary btn-open-variants">أضف للسلة</button>
-          </div>
+            <div style="font-size:12px;color:var(--muted);margin-top:6px">سيتم حفظ الاسم، العنوان، ورقم الهاتف محليًا في جهازك لسهولة الشراء لاحقًا.</div>
+        </div>
+    </aside>
 
-          <div class="variants-panel" aria-hidden="true">
-            <div class="variant-row" data-name="تفاح أحمر" data-price="3500" data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Red_Apple.jpg/320px-Red_Apple.jpg">
-              <div class="v-meta"><div class="v-name">تفاح أحمر</div><div class="v-price">3,500 د.ج</div></div>
-              <div class="v-controls"><input type="number" min="1" value="1" class="v-qty" /><button class="btn small btn-add-variant">تأكيد إضافة</button></div>
+    <!-- الفوتر -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h4>مشتلة السلام</h4>
+                <p style="margin:6px 0 0 0; color:#dfeede;">أجود أنواع الشتلات — بيع وتوصيل واستشارات</p>
             </div>
-            <div class="variant-row" data-name="تفاح أصفر" data-price="3400" data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Cripps_Pink.jpg/320px-Cripps_Pink.jpg">
-              <div class="v-meta"><div class="v-name">تفاح أصفر</div><div class="v-price">3,400 د.ج</div></div>
-              <div class="v-controls"><input type="number" min="1" value="1" class="v-qty" /><button class="btn small btn-add-variant">تأكيد إضافة</button></div>
+
+            <div class="footer-col">
+                <h4>اتصل بنا</h4>
+                <div style="margin-top:6px;color:#d7f0d7">
+                    <div><i class="fas fa-phone"></i> 0559 219 855</div>
+                    <div style="margin-top:6px"><i class="fas fa-envelope"></i> info@nabatati.com</div>
+                </div>
             </div>
-            <div class="variant-row" data-name="تفاح أخضر" data-price="3600" data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Granny_smith.jpg/320px-Granny_smith.jpg">
-              <div class="v-meta"><div class="v-name">تفاح أخضر</div><div class="v-price">3,600 د.ج</div></div>
-              <div class="v-controls"><input type="number" min="1" value="1" class="v-qty" /><button class="btn small btn-add-variant">تأكيد إضافة</button></div>
+
+            <div class="footer-col">
+                <h4>موقعنا</h4>
+                <p style="margin:6px 0 0 0;"><i class="fas fa-map-marker-alt"></i> الطريق الوطني رقم 24 — سيباو</p>
             </div>
-            <div class="variant-row" data-name="سانتا ماريا" data-price="3800" data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Apple_Santa_Maria.jpg/320px-Apple_Santa_Maria.jpg">
-              <div class="v-meta"><div class="v-name">سانتا ماريا</div><div class="v-price">3,800 د.ج</div></div>
-              <div class="v-controls"><input type="number" min="1" value="1" class="v-qty" /><button class="btn small btn-add-variant">تأكيد إضافة</button></div>
-            </div>
-            <div class="variant-row" data-name="جولدن" data-price="3900" data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Golden_Delicious.jpg/320px-Golden_Delicious.jpg">
-              <div class="v-meta"><div class="v-name">جولدن</div><div class="v-price">3,900 د.ج</div></div>
-              <div class="v-controls"><input type="number" min="1" value="1" class="v-qty" /><button class="btn small btn-add-variant">تأكيد إضافة</button></div>
-            </div>
-          </div>
-        </article>
+        </div>
 
-        <!-- بطاقة نوع: رمان -->
-        <article class="product-card" data-category="الأشجار المثمرة" data-type="رمان">
-          <h3 class="product-title">رمان</h3>
-          <img class="product-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Pomegranate_Seeds.jpg/640px-Pomegranate_Seeds.jpg" alt="رمان">
-          <ul class="variants-short">
-            <li>رمان بلدي</li>
-            <li>رمان وردي</li>
-          </ul>
-          <div class="card-actions">
-            <button class="btn primary btn-open-variants">أضف للسلة</button>
-          </div>
+        <div style="text-align:center;margin-top:12px;opacity:0.95">جميع الحقوق محفوظة &copy; <span id="year"></span> مشتلة السلام</div>
+    </footer>
 
-          <div class="variants-panel" aria-hidden="true">
-            <div class="variant-row" data-name="رمان بلدي" data-price="3000" data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Pomegranate_Burnt.jpg/320px-Pomegranate_Burnt.jpg">
-              <div class="v-meta"><div class="v-name">رمان بلدي</div><div class="v-price">3,000 د.ج</div></div>
-              <div class="v-controls"><input type="number" min="1" value="1" class="v-qty" /><button class="btn small btn-add-variant">تأكيد إضافة</button></div>
-            </div>
-            <div class="variant-row" data-name="رمان وردي" data-price="3200" data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Pomegranate_with_seeds.jpg/320px-Pomegranate_with_seeds.jpg">
-              <div class="v-meta"><div class="v-name">رمان وردي</div><div class="v-price">3,200 د.ج</div></div>
-              <div class="v-controls"><input type="number" min="1" value="1" class="v-qty" /><button class="btn small btn-add-variant">تأكيد إضافة</button></div>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
+    <!-- JavaScript -->
+    <script>
+    /*******************************
+     * إعدادات
+     *******************************/
+    const GOOGLE_SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbzWcIHQLakofoTSQCs8u_NnXyTGUsgrr1srxe0e84GSZT6v4kDep13S4-VoAO73FNdp/exec';
+    const WA_NUMBER_INTERNATIONAL = '213697743721'; // رقمك بدون صفر البداية (الجزائر)
+    const CUSTOMER_KEY = 'nabatati_customer_v2';
+    const CART_KEY = 'nabatati_cart_v2';
 
-    <!-- ------------------ مثال تبويب آخر (أشجار الحدائق) - يمكن تكراره لاحقاً ------------------ -->
-    <section id="cat-garden" class="category-section">
-      <h2 class="category-title">أشجار الحدائق والتسييج</h2>
-      <div class="cards-grid">
-        <article class="product-card" data-category="أشجار الحدائق والتسييج" data-type="فيكس">
-          <h3 class="product-title">فيكس</h3>
-          <img class="product-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Ficus_benjamina_1.jpg/640px-Ficus_benjamina_1.jpg" alt="فيكس">
-          <ul class="variants-short"><li>نيتيدا</li><li>بانجامينا</li></ul>
-          <div class="card-actions"><button class="btn primary btn-open-variants">أضف للسلة</button></div>
+    // حالة السلة
+    let cart = [];
 
-          <div class="variants-panel" aria-hidden="true">
-            <div class="variant-row" data-name="فيكس نيتيدا" data-price="7500" data-img="https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Ficus_benjamina_1.jpg/320px-Ficus_benjamina_1.jpg">
-              <div class="v-meta"><div class="v-name">فيكس نيتيدا</div><div class="v-price">7,500 د.ج</div></div>
-              <div class="v-controls"><input type="number" min="1" value="1" class="v-qty" /><button class="btn small btn-add-variant">تأكيد إضافة</button></div>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
+    // عناصر DOM
+    const floatingCartBtn = document.getElementById('floatingCartBtn');
+    const cartCountEl = document.getElementById('cartCount');
+    const quickCart = document.getElementById('quickCart');
+    const qcBody = document.getElementById('qcBody');
+    const qcTotal = document.getElementById('qcTotal');
+    const qcItemsCount = document.getElementById('qcItemsCount');
+    const qcName = document.getElementById('qcName');
+    const qcPhone = document.getElementById('qcPhone');
+    const qcAddress = document.getElementById('qcAddress');
+    const sendOrderBtn = document.getElementById('sendOrderBtn');
+    const sendWhatsBtn = document.getElementById('sendWhatsBtn');
+    const yearEl = document.getElementById('year');
+    const noResults = document.getElementById('noResults');
+    yearEl.textContent = new Date().getFullYear();
 
-    <!-- بقية الفئات يمكن ملئها بنفس النمط ... -->
-  </main>
-
-  <!-- =========== زر السلة العائم (Badge ديناميكي) =========== -->
-  <button id="floatingCartBtn" class="floating-cart" aria-label="عرض السلة">
-    <span id="floatingCartCount" class="cart-badge">0</span>
-    🛒 سلة المشتريات
-  </button>
-
-  <!-- =========== نافذة السلة (منبثقة داخل الصفحة) =========== -->
-  <div id="cartPanel" class="cart-panel" aria-hidden="true" role="dialog" aria-label="سلة المشتريات">
-    <div class="cart-header">
-      <h3>سلة المشتريات</h3>
-      <div class="cart-actions-top">
-        <button id="clearCartBtn" class="btn small danger">تفريغ السلة</button>
-        <button id="closeCartBtn" class="btn small">إغلاق</button>
-      </div>
-    </div>
-
-    <div class="cart-body">
-      <ul id="cartList" class="cart-list">
-        <!-- عناصر السلة تُضاف هنا ديناميكياً -->
-      </ul>
-    </div>
-
-    <div class="cart-footer">
-      <div class="cart-total">الإجمالي: <span id="cartTotal">0</span> د.ج</div>
-
-      <!-- نموذج بيانات الزبون (مهم قبل الإرسال) -->
-      <div class="customer-form">
-        <input id="custName" type="text" placeholder="اسم الزبون (مطلوب)" />
-        <input id="custPhone" type="tel" placeholder="رقم الهاتف (مطلوب)" />
-        <input id="custAddress" type="text" placeholder="عنوان التسليم (اختياري)" />
-        <textarea id="custNote" placeholder="ملاحظات الطلب (اختياري)"></textarea>
-      </div>
-
-      <div class="cart-send">
-        <button id="sendToGS" class="btn primary">إرسال إلى Google Sheets</button>
-        <button id="sendToWA" class="btn accent">إرسال عبر واتساب</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- =========== Footer (معلومات المشتلة + روابط التواصل) =========== -->
-  <footer class="site-footer">
-    <div class="footer-content">
-      <div class="footer-about">
-        <h4>مشتلة السلام</h4>
-        <p>العنوان: (أضف عنوان المشتلة هنا)</p>
-        <p>الهاتف: <a href="tel:0697743721">0697743721</a></p>
-      </div>
-
-      <div class="footer-links">
-        <!-- روابط التواصل: ضع عناوينك الحقيقية لاحقًا -->
-        <a id="facebookLink" href="#" target="_blank" rel="noopener">فيسبوك</a>
-        <a id="instagramLink" href="#" target="_blank" rel="noopener">إنستغرام</a>
-        <a id="tiktokLink" href="#" target="_blank" rel="noopener">تيك توك</a>
-        <a id="youtubeLink" href="#" target="_blank" rel="noopener">يوتيوب</a>
-        <a id="whatsappLink" href="https://wa.me/213697743721" target="_blank" rel="noopener">واتساب</a>
-      </div>
-
-      <div class="footer-map">
-        <!-- زر التوجيه إلى المشتلة عبر خرائط جوجل (ضع الرابط لاحقًا) -->
-        <a id="mapsLink" class="btn small" href="#" target="_blank" rel="noopener">📍 توجه إلى المشتلة</a>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      © حقوق النسخ محفوظة — مشتلة السلام
-    </div>
-  </footer>
-
-  <!-- ربط ملف JavaScript -->
-  <script>
-/* ------------------------------------------------------------------
-   ملف: script.js
-   وصف: تفاعلات المتجر - تحكم في الفتح/الإغلاق، إدارة السلة، الإرسال
-   ملاحظات:
-   - ضع رابط Google Apps Script في GOOGLE_APPS_SCRIPT_URL
-   - رقم الواتساب مضبوط مسبقاً بصيغة دولية WHATSAPP_PHONE_INT
-   ------------------------------------------------------------------ */
-
-/* ---------------- إعدادات عامة ---------------- */
-// ضع هنا رابط Google Apps Script بعد إنشائه (Web App يستقبل POST JSON)
-const GOOGLE_APPS_SCRIPT_URL = 'PUT_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
-
-// رقم المشتل لواتساب (دولي بدون +) مثال للجزائر: 213697743721
-const WHATSAPP_PHONE_INT = '213697743721';
-
-/* ---------------- عناصر DOM ---------------- */
-const tabs = document.querySelectorAll('.tab');
-const categorySections = document.querySelectorAll('.category-section');
-const openVariantBtns = document.querySelectorAll('.btn-open-variants');
-const floatingCartBtn = document.getElementById('floatingCartBtn');
-const floatingCartCount = document.getElementById('floatingCartCount');
-const cartPanel = document.getElementById('cartPanel');
-const closeCartBtn = document.getElementById('closeCartBtn');
-const clearCartBtn = document.getElementById('clearCartBtn');
-const cartList = document.getElementById('cartList');
-const cartTotalEl = document.getElementById('cartTotal');
-const sendToGSBtn = document.getElementById('sendToGS');
-const sendToWABtn = document.getElementById('sendToWA');
-
-/* عناصر نموذج الزبون */
-const custNameEl = document.getElementById('custName');
-const custPhoneEl = document.getElementById('custPhone');
-const custAddressEl = document.getElementById('custAddress');
-const custNoteEl = document.getElementById('custNote');
-
-/* مصفوفة السلة: تحتوي عناصر بالشكل:
-   { id, category, type, name, price, qty, img }
-*/
-let cart = [];
-
-/* ---------------- وظائف تبويبات الفئات ---------------- */
-tabs.forEach(tab => {
-  tab.addEventListener('click', () => {
-    // تفعيل التبويب
-    tabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-
-    // اظهار القسم المناظر وإخفاء الباقي
-    const target = tab.dataset.target;
-    categorySections.forEach(sec => {
-      if (sec.id === target) sec.classList.add('active');
-      else sec.classList.remove('active');
-    });
-    // تمرير إلى أعلى الصفحة لتجربة مستخدم أفضل على الهواتف
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
-
-/* ---------------- إظهار/إخفاء لوحة الأصناف داخل البطاقة ---------------- */
-/* كل زر 'أضف للسلة' يكشف عنصر .variants-panel المرتبط في نفس البطاقة */
-document.querySelectorAll('.product-card').forEach(card => {
-  const btnOpen = card.querySelector('.btn-open-variants');
-  const panel = card.querySelector('.variants-panel');
-
-  if (!btnOpen || !panel) return;
-
-  btnOpen.addEventListener('click', () => {
-    // إغلاق أي لوحات أخرى مفتوحة أولاً لتحسين التجربة
-    document.querySelectorAll('.variants-panel').forEach(p => {
-      if (p !== panel) p.style.display = 'none';
+    // تحميل البيانات المخزنة
+    window.addEventListener('DOMContentLoaded', () => {
+        try {
+            const savedCart = localStorage.getItem(CART_KEY);
+            if (savedCart) cart = JSON.parse(savedCart) || [];
+        } catch(e){ cart = []; }
+        loadCustomer();
+        transformVarietiesToInline();
+        updateCartDisplay();
     });
 
-    // تبديل العرض للوحة الحالية
-    panel.style.display = (panel.style.display === 'flex' || panel.style.display === 'block') ? 'none' : 'block';
-    panel.style.flexDirection = 'column';
-    // تمرير البطاقة إلى وسط العرض عند الفتح (مفيد للهواتف)
-    if (panel.style.display !== 'none') card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  });
-});
+    /* -------------------------
+       تحويل قائمة الأصناف داخل البطاقات
+       إلى عناصر عرض مباشرة مع زر إضافة سريع
+       ------------------------- */
+    function transformVarietiesToInline(){
+        const productCards = document.querySelectorAll('.product');
+        productCards.forEach(card => {
+            const varContainer = card.querySelector('.varieties');
+            if (!varContainer) return;
+            const ul = varContainer.querySelector('ul');
+            if (!ul) return;
 
-/* ---------------- إضافة صنف إلى السلة ---------------- */
-/* ربط كل زر 'تأكيد إضافة' داخل لوحة الأصناف */
-document.querySelectorAll('.variant-row').forEach(row => {
-  const addBtn = row.querySelector('.btn-add-variant');
-  addBtn.addEventListener('click', () => {
-    const qtyInput = row.querySelector('.v-qty');
-    let qty = parseInt(qtyInput.value);
-    if (!qty || qty < 1) qty = 1;
+            // أنشئ الحاوية الجديدة
+            const inline = document.createElement('div');
+            inline.className = 'varieties-inline';
 
-    // الحصول على البيانات من سمات data-*
-    const name = row.dataset.name;
-    const price = Number(row.dataset.price) || 0;
-    const img = row.dataset.img || '';
-    // تحديد النوع والفئة من العنصر الأب .product-card
-    const productCard = row.closest('.product-card');
-    const type = productCard ? productCard.dataset.type : '';
-    const category = productCard ? productCard.dataset.category : '';
+            // لكل عنصر في الـ ul: أعرض النص وزر إضافة سريع
+            const items = Array.from(ul.children);
+            if (items.length === 0) return;
 
-    // إذا كان العنصر موجودًا بالفعل (بنفس الاسم والنوع والفئة) — زيادة الكمية
-    const foundIdx = cart.findIndex(it => it.name === name && it.type === type && it.category === category);
-    if (foundIdx !== -1) {
-      cart[foundIdx].qty += qty;
-    } else {
-      cart.push({
-        id: Date.now() + Math.random(),
-        category,
-        type,
-        name,
-        price,
-        qty,
-        img
-      });
+            items.forEach(li => {
+                const text = li.textContent.trim();
+                // استخراج الصنف والـ price إن وُجد
+                const priceMatch = text.match(/(\d+)\s*دج/);
+                const price = priceMatch ? priceMatch[1] : (card.dataset.price || '0');
+                // صنف نصي بدون السعر
+                const label = text.replace(/\s*-\s*\d+\s*دج/, '').trim();
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'var-item';
+
+                const lbl = document.createElement('div');
+                lbl.className = 'var-label';
+                lbl.textContent = `${label} — ${toArabicNumber(price)} دج`;
+
+                const btn = document.createElement('button');
+                btn.className = 'btn-add-quick';
+                btn.type = 'button';
+                btn.textContent = 'أضف سريعًا';
+                btn.onclick = () => {
+                    addToCart(card.querySelector('h3').textContent.trim(), label, parseFloat(price) || 0, 1, card.dataset.type || '');
+                };
+
+                itemDiv.appendChild(lbl);
+                itemDiv.appendChild(btn);
+                inline.appendChild(itemDiv);
+            });
+
+            // استبدال العنصر القديم
+            varContainer.innerHTML = '';
+            varContainer.appendChild(inline);
+        });
     }
 
-    // إظهار إشعار بسيط (يمكن تحسينه لاحقًا) وتحديث الواجهة
-    renderCart();
-    updateFloatingCart();
-  });
-});
+    /* -------------------------
+       دوال السلة الأساسية
+       ------------------------- */
+    function persistCart(){ try{ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }catch(e){} }
+    function addToCart(productName, variety = '', price = 0, qty = 1, productType = ''){
+        const idx = cart.findIndex(i => i.productName === productName && i.variety === variety);
+        if (idx > -1) cart[idx].quantity += qty;
+        else cart.push({ productName, variety, price, quantity: qty, type: productType, img: findProductImg(productName) });
+        persistCart();
+        showAddedNotification(productName);
+        openQuickCart();
+        updateCartDisplay();
+    }
+    function findProductImg(productName){
+        // محاولة العثور على صورة في البطاقة المقابلة
+        const cards = document.querySelectorAll('.product');
+        for (let c of cards){
+            const name = c.querySelector('h3')?.textContent?.trim();
+            if (name === productName){
+                const img = c.querySelector('img');
+                if (img) return img.src;
+            }
+        }
+        return '';
+    }
 
-/* ---------------- تحديث واجهة السلة (عرض العناصر، الحساب) ---------------- */
-function renderCart() {
-  cartList.innerHTML = '';
-  let total = 0;
-  if (cart.length === 0) {
-    cartList.innerHTML = '<li style="color:var(--muted);text-align:center;padding:12px">السلة فارغة</li>';
-  } else {
-    cart.forEach((it, idx) => {
-      const lineTotal = it.price * it.qty;
-      total += lineTotal;
+    function removeFromCart(index){
+        if (index>=0 && index < cart.length){
+            cart.splice(index,1);
+            persistCart();
+            updateCartDisplay();
+        }
+    }
+    function changeQty(index, value){
+        const v = parseInt(value) || 1;
+        if (index>=0 && index < cart.length){
+            cart[index].quantity = v;
+            persistCart();
+            updateCartDisplay();
+        }
+    }
 
-      const li = document.createElement('li');
-      li.className = 'cart-item';
-      li.innerHTML = `
-        <div class="item-left">
-          <img src="${it.img}" alt="${it.name}" />
-          <div>
-            <div style="font-weight:800">${it.name}</div>
-            <div style="font-size:13px;color:var(--muted)">${it.category} — ${it.type}</div>
-            <div style="margin-top:6px;font-weight:800;color:var(--primary-dark)">${it.price.toLocaleString()} د.ج</div>
-          </div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
-          <div class="qty-controls">
-            <button class="qty-decrease" data-idx="${idx}">−</button>
-            <div style="min-width:34px;text-align:center;font-weight:800">${it.qty}</div>
-            <button class="qty-increase" data-idx="${idx}">+</button>
-          </div>
-          <button class="btn small" data-idx="${idx}" style="background:transparent;color:var(--danger);border:none;cursor:pointer">حذف</button>
-        </div>
-      `;
-      cartList.appendChild(li);
+    /* -------------------------
+       عرض السلة في الشريط الجانبي
+       ------------------------- */
+    function updateCartDisplay(){
+        // عد العناصر
+        const totalItems = cart.reduce((s,i) => s + (parseInt(i.quantity)||0), 0);
+        cartCountEl.textContent = totalItems;
+        qcItemsCount.textContent = `${totalItems} عنصر`;
+
+        // تفريغ الجسم
+        qcBody.innerHTML = '';
+        if (cart.length === 0){
+            document.getElementById('qcEmpty').style.display = 'block';
+            qcBody.appendChild(document.getElementById('qcEmpty'));
+            qcTotal.textContent = '0 دج';
+            return;
+        }
+
+        // احسب المجموع
+        let subtotal = 0;
+        cart.forEach((item, idx) => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'qc-item';
+
+            const img = document.createElement('img');
+            img.src = item.img || '';
+            img.alt = item.productName;
+
+            const info = document.createElement('div');
+            info.className = 'info';
+            info.innerHTML = `<div style="font-weight:700">${escapeHtml(item.productName)}</div>
+                              <div style="font-size:13px;color:var(--muted)">${escapeHtml(item.variety||'-')}</div>
+                              <div style="margin-top:6px;font-weight:700">${toArabicNumber(formatNumber(item.price))} دج</div>`;
+
+            const actions = document.createElement('div');
+            actions.style.textAlign = 'left';
+            actions.innerHTML = `<div style="display:flex;flex-direction:column;gap:6px;">
+                <input type="number" min="1" value="${item.quantity}" onchange="changeQty(${idx}, this.value)" style="width:76px;padding:6px;border-radius:6px;border:1px solid #eee">
+                <button onclick="removeFromCart(${idx})" class="btn small-btn" style="background:#f44336;color:#fff;border-radius:6px"><i class="fas fa-trash"></i></button>
+            </div>`;
+
+            itemDiv.appendChild(img);
+            itemDiv.appendChild(info);
+            itemDiv.appendChild(actions);
+
+            qcBody.appendChild(itemDiv);
+
+            subtotal += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
+        });
+
+        qcTotal.textContent = `${toArabicNumber(formatNumber(subtotal))} دج`;
+    }
+
+    function openQuickCart(){ quickCart.classList.add('open'); quickCart.setAttribute('aria-hidden','false'); }
+    function closeQuickCart(){ quickCart.classList.remove('open'); quickCart.setAttribute('aria-hidden','true'); }
+    floatingCartBtn.addEventListener('click', () => { openQuickCart(); });
+
+    /* -------------------------
+       إشعارات بسيطة
+       ------------------------- */
+    function showAddedNotification(name){
+        const msg = document.createElement('div');
+        msg.className = 'cart-notification';
+        msg.textContent = `تم إضافة ${name} إلى السلة`;
+        document.body.appendChild(msg);
+        setTimeout(()=> msg.remove(), 2200);
+    }
+
+    /* -------------------------
+       حفظ/تحميل بيانات العميل
+       ------------------------- */
+    function loadCustomer(){
+        try{
+            const raw = localStorage.getItem(CUSTOMER_KEY);
+            if (!raw) return;
+            const data = JSON.parse(raw);
+            if (data.name) qcName.value = data.name;
+            if (data.phone) qcPhone.value = data.phone;
+            if (data.address) qcAddress.value = data.address;
+        }catch(e){}
+    }
+    function persistCustomer(){
+        const obj = { name: qcName.value.trim(), phone: qcPhone.value.trim(), address: qcAddress.value.trim() };
+        try{ localStorage.setItem(CUSTOMER_KEY, JSON.stringify(obj)); }catch(e){}
+    }
+    // حفظ تلقائي عند التغيير
+    [qcName, qcPhone, qcAddress].forEach(el => {
+        el.addEventListener('change', persistCustomer);
+        el.addEventListener('blur', persistCustomer);
     });
-  }
 
-  cartTotalEl.textContent = total.toLocaleString();
-  // ربط أزرار التحكم بعد الإنشاء
-  bindCartItemControls();
-}
+    /* -------------------------
+       التحقق من صحة رقم الهاتف (الجزائر: 05|06|07)
+       ------------------------- */
+    function isValidPhone(phone){
+        return /^0[5-7]\d{8}$/.test(phone);
+    }
 
-/* ---------------- ربط أزرار الزيادة/النقص/الحذف لكل عنصر في السلة ---------------- */
-function bindCartItemControls() {
-  document.querySelectorAll('.qty-increase').forEach(btn => {
-    btn.onclick = () => {
-      const idx = Number(btn.dataset.idx);
-      cart[idx].qty += 1;
-      renderCart();
-      updateFloatingCart();
-    };
-  });
-  document.querySelectorAll('.qty-decrease').forEach(btn => {
-    btn.onclick = () => {
-      const idx = Number(btn.dataset.idx);
-      if (cart[idx].qty > 1) {
-        cart[idx].qty -= 1;
-      } else {
-        // حذف لو الكمية وصلت إلى 1 ثم نقصناها
-        cart.splice(idx, 1);
-      }
-      renderCart();
-      updateFloatingCart();
-    };
-  });
-  document.querySelectorAll('.cart-item .btn').forEach(btn=>{
-    btn.onclick = () => {
-      const idx = Number(btn.dataset.idx);
-      cart.splice(idx,1);
-      renderCart();
-      updateFloatingCart();
-    };
-  });
-}
+    /* -------------------------
+       إرسال الطلب إلى Google Sheets (مثل السابق)
+       ------------------------- */
+    async function sendOrderToGoogleSheets(){
+        if (!navigator.onLine){ alert('لا يوجد اتصال بالإنترنت'); return; }
+        const customer = { name: qcName.value.trim(), phone: qcPhone.value.trim(), address: qcAddress.value.trim() };
+        if (!customer.name || !customer.phone){ alert('الرجاء إدخال الاسم ورقم الهاتف'); return; }
+        if (!isValidPhone(customer.phone)){ alert('رقم الهاتف غير صالح. يجب أن يبدأ بـ 05/06/07 ويتكون من 10 أرقام'); return; }
+        if (cart.length === 0){ alert('السلة فارغة'); return; }
 
-/* ---------------- زر السلة العائم - فتح/إغلاق اللوحة ---------------- */
-floatingCartBtn.addEventListener('click', () => {
-  const isOpen = cartPanel.classList.contains('open');
-  if (isOpen) closeCartPanel();
-  else openCartPanel();
-});
+        persistCustomer();
 
-function openCartPanel() {
-  cartPanel.classList.add('open');
-  cartPanel.setAttribute('aria-hidden','false');
-}
-function closeCartPanel() {
-  cartPanel.classList.remove('open');
-  cartPanel.setAttribute('aria-hidden','true');
-}
+        const items = cart.map(i => ({ product: i.productName, variety: i.variety, qty: i.quantity, unitPrice: i.price, total: (parseFloat(i.price)||0) * (parseInt(i.quantity)||0) }));
+        const subtotal = items.reduce((s,i) => s + (i.total||0), 0);
 
-/* زر الإغلاق داخل اللوحة */
-closeCartBtn.addEventListener('click', () => closeCartPanel());
+        const order = { items, subtotal, customer };
 
-/* زر تفريغ السلة */
-clearCartBtn.addEventListener('click', () => {
-  if (!confirm('هل ترغب بتفريغ السلة؟')) return;
-  cart = [];
-  renderCart();
-  updateFloatingCart();
-});
+        const btn = sendOrderBtn;
+        const old = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+        try{
+            const res = await fetch(GOOGLE_SHEETS_WEBAPP_URL, {
+                method:'POST',
+                headers:{ 'Content-Type':'application/json' },
+                body: JSON.stringify(order)
+            });
+            if (!res.ok) throw new Error('Network response was not ok');
+            alert('تم إرسال الطلب بنجاح! سنتواصل معكم قريبا.');
+            cart = []; persistCart(); updateCartDisplay(); closeQuickCart();
+        }catch(e){
+            console.error(e);
+            alert('حصل خطأ أثناء الإرسال. يرجى المحاولة لاحقًا.');
+        }finally{
+            btn.disabled = false;
+            btn.innerHTML = old;
+        }
+    }
+    sendOrderBtn.addEventListener('click', sendOrderToGoogleSheets);
 
-/* ---------------- تحديث زر السلة العائم (العدد واللون الديناميكي) ---------------- */
-function updateFloatingCart() {
-  const totalQty = cart.reduce((s, i) => s + i.qty, 0);
-  floatingCartCount.textContent = totalQty;
-  if (totalQty > 0) {
-    floatingCartBtn.classList.add('active');
-  } else {
-    floatingCartBtn.classList.remove('active');
-  }
-}
+    /* -------------------------
+       إرسال عبر واتساب
+       ------------------------- */
+    function buildWhatsAppMessage(){
+        const customer = { name: qcName.value.trim(), phone: qcPhone.value.trim(), address: qcAddress.value.trim() };
+        if (!customer.name || !customer.phone){ alert('الرجاء إدخال الاسم ورقم الهاتف'); return null; }
+        if (!isValidPhone(customer.phone)){ alert('رقم الهاتف غير صالح. يجب أن يبدأ بـ 05/06/07 ويتكون من 10 أرقام'); return null; }
+        if (cart.length === 0){ alert('السلة فارغة'); return null; }
 
-/* ---------------- إرسال الطلب إلى Google Sheets ---------------- */
-sendToGSBtn.addEventListener('click', () => {
-  if (cart.length === 0) { alert('السلة فارغة'); return; }
-  const name = custNameEl.value.trim();
-  const phone = custPhoneEl.value.trim();
-  if (!name || !phone) { alert('يرجى إدخال اسم الزبون ورقم الهاتف'); return; }
+        persistCustomer();
 
-  // تجميع سطور الطلب في خانة واحدة مفصولة بفواصل
-  const orderLines = cart.map(it => `${it.type} — ${it.name} (x${it.qty}) @ ${it.price} د.ج`).join(' | ');
-  const total = cart.reduce((s,i)=>s + i.price * i.qty, 0);
+        let lines = [];
+        lines.push('طلب من مشتلة السلام');
+        lines.push(`الاسم: ${customer.name}`);
+        lines.push(`الهاتف: ${customer.phone}`);
+        if (customer.address) lines.push(`العنوان: ${customer.address}`);
+        lines.push('');
+        lines.push('تفاصيل الطلب:');
+        cart.forEach(i => {
+            lines.push(`- ${i.productName} | ${i.variety || '-'} | الكمية: ${i.quantity} | سعر الوحدة: ${toArabicNumber(formatNumber(i.price))} دج`);
+        });
+        const subtotal = cart.reduce((s,i) => s + (parseFloat(i.price)||0) * (parseInt(i.quantity)||0), 0);
+        lines.push('');
+        lines.push(`المجموع: ${toArabicNumber(formatNumber(subtotal))} دج`);
+        lines.push('');
+        lines.push('الرجاء تأكيد الاستلام والمتابعة.');
 
-  const payload = {
-    timestamp: new Date().toISOString(),
-    customer_name: name,
-    customer_phone: phone,
-    customer_address: custAddressEl.value || '',
-    customer_note: custNoteEl.value || '',
-    order_summary: orderLines,
-    total: total
-  };
+        return encodeURIComponent(lines.join('\n'));
+    }
 
-  // تحقق من وجود رابط Apps Script
-  if (!GOOGLE_APPS_SCRIPT_URL || GOOGLE_APPS_SCRIPT_URL.includes('PUT_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE')) {
-    alert('لم يتم إعداد رابط Google Apps Script. ضع الرابط في ملف script.js ضمن المتغير المخصص.');
-    return;
-  }
+    sendWhatsBtn.addEventListener('click', () => {
+        const msg = buildWhatsAppMessage();
+        if (!msg) return;
+        const waUrl = `https://wa.me/${WA_NUMBER_INTERNATIONAL}?text=${msg}`;
+        window.open(waUrl, '_blank');
+    });
 
-  fetch(GOOGLE_APPS_SCRIPT_URL, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(payload)
-  })
-  .then(resp => resp.text())
-  .then(txt => {
-    alert('تم إرسال الطلب إلى المشتل (Google Sheets). شكرًا لك.');
-    // نترك للزبون حرية تعديل السلة بعد الإرسال؛ هنا ننظفها كتجربة افتراضية:
-    cart = [];
-    renderCart();
-    updateFloatingCart();
-    closeCartPanel();
-  })
-  .catch(err => {
-    console.error('خطأ إرسال إلى Google Sheets:', err);
-    alert('خطأ أثناء الإرسال إلى Google Sheets. تحقق من الرابط والاتصال.');
-  });
-});
+    /* -------------------------
+       أدوات مساعدة
+       ------------------------- */
+    function escapeHtml(unsafe){ if(!unsafe) return ''; return unsafe.toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+    function formatNumber(num){ return parseFloat(num || 0).toLocaleString('ar-EG'); }
+    function toArabicNumber(str){
+        const latin = ['0','1','2','3','4','5','6','7','8','9'];
+        const arab = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+        let s = String(str);
+        latin.forEach((d, i) => { s = s.replace(new RegExp(d, 'g'), arab[i]); });
+        return s;
+    }
 
-/* ---------------- إرسال الطلب عبر واتساب ---------------- */
-sendToWABtn.addEventListener('click', () => {
-  if (cart.length === 0) { alert('السلة فارغة'); return; }
-  const name = custNameEl.value.trim();
-  const phone = custPhoneEl.value.trim();
-  if (!name || !phone) { alert('يرجى إدخال اسم الزبون ورقم الهاتف'); return; }
+    /* -------------------------
+       البحث الحي
+       ------------------------- */
+    const searchInput = document.getElementById('search-input');
+    const searchBtn = document.getElementById('search-btn');
+    let searchTimer;
+    function performSearch(){
+        const q = searchInput.value.trim().toLowerCase();
+        const products = document.querySelectorAll('.product');
+        let found = false;
+        if (!q){
+            products.forEach(p => { p.style.display = 'flex'; p.closest('.category').style.display = 'block'; });
+            noResults.style.display = 'none';
+            return;
+        }
+        products.forEach(p => {
+            const name = p.querySelector('h3')?.textContent?.toLowerCase() || '';
+            const desc = p.querySelector('p')?.textContent?.toLowerCase() || '';
+            const type = (p.dataset.type || '').toLowerCase();
+            if (name.includes(q) || desc.includes(q) || type.includes(q)){
+                p.style.display = 'flex';
+                p.closest('.category').style.display = 'block';
+                found = true;
+            } else {
+                p.style.display = 'none';
+            }
+        });
+        noResults.style.display = found ? 'none' : 'block';
+    }
+    searchBtn.addEventListener('click', performSearch);
+    searchInput.addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(performSearch, 250); });
 
-  const total = cart.reduce((s,i)=>s + i.price * i.qty, 0);
-  // رسالة مفصّلة، مع تشفير الأحرف الخاصة
-  const orderLines = cart.map(it => `- ${it.type} — ${it.name} (x${it.qty}) — ${it.price} د.ج`).join('\n');
-  let text = `طلبية جديدة من المشتل:%0Aالزبون: ${encodeURIComponent(name)}%0Aالهاتف: ${encodeURIComponent(phone)}%0A`;
-  if (custAddressEl.value) text += `%0Aالعنوان: ${encodeURIComponent(custAddressEl.value)}`;
-  if (custNoteEl.value) text += `%0Aملاحظة: ${encodeURIComponent(custNoteEl.value)}`;
-  text += `%0A%0Aالطلب:%0A${encodeURIComponent(orderLines)}%0A%0Aالإجمالي: ${encodeURIComponent(total + ' د.ج')}`;
+    /* -------------------------
+       وظائف إفراغ السلة
+       ------------------------- */
+    function clearCartConfirm(){
+        if (cart.length === 0) return;
+        if (!confirm('هل تريد إفراغ السلة؟')) return;
+        cart = []; persistCart(); updateCartDisplay();
+    }
 
-  const waUrl = `https://wa.me/${WHATSAPP_PHONE_INT}?text=${text}`;
-  window.open(waUrl, '_blank');
-});
+    /* -------------------------
+       مساعدة تحويل الأسماء والبحث عن الصور
+       ------------------------- */
+    function findProductImg(productName){
+        const cards = document.querySelectorAll('.product');
+        for (let c of cards){
+            const name = c.querySelector('h3')?.textContent?.trim();
+            if (name === productName){
+                const img = c.querySelector('img');
+                if (img) return img.src;
+            }
+        }
+        return '';
+    }
 
-/* ---------------- تهيئة أولية ---------------- */
-function init() {
-  renderCart();
-  updateFloatingCart();
-
-  // اغلاق أي variants-panel عند النقر خارجها لتحسين التجربة
-  document.addEventListener('click', (e) => {
-    // إذا كان النقرة داخل زر فتح أو داخل لوحة، لا تغلق
-    if (e.target.closest('.btn-open-variants') || e.target.closest('.variants-panel')) return;
-    document.querySelectorAll('.variants-panel').forEach(p => p.style.display = 'none');
-  });
-}
-
-document.addEventListener('DOMContentLoaded', init);
-
-</script>
+    // تعيين وظائف متاحة من نافذة لاستخدامها بواسطة عناصر الـ HTML الديناميكية
+    window.removeFromCart = removeFromCart;
+    window.changeQty = changeQty;
+    </script>
 </body>
+
 </html>
