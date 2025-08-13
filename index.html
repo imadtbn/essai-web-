@@ -1,624 +1,149 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>مشتلة السلام — المتجر (نسخة الشراء السريع)</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>مشتلة السلام — المتجر</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    body { font-family: Arial, sans-serif; direction: rtl; margin:0; }
+    * { font-variant-numeric: latin; }
+    h1,h2 { text-align: center; }
+    .product-card { border: 1px solid #ddd; border-radius: 8px; padding: 10px; margin: 10px; text-align: center; }
+    .product-card img { max-width: 100%; border-radius: 8px; }
+    .product-card button { padding: 5px 8px; margin-top: 5px; font-size: 0.9rem; cursor: pointer; }
 
-    <!-- مكتبات الخطوط والرموز -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-
-    <style>
-        /* متغيرات الألوان والتصميم */
-        :root {
-            --primary: #2e7d32;
-            --primary-dark: #1b5e20;
-            --accent: #81c784;
-            --bg: #f5f6f4;
-            --card: #fff;
-            --muted: #6b6b6b;
-            --danger: #c62828;
-            --footer-dark: #163a16;
-            --radius: 10px;
-            --wa-green: #25D366;
-        }
-        
-        /* تعيينات عامة */
-        * {
-            box-sizing: border-box;
-            font-family: 'Tajawal', Arial, sans-serif
-        }
-        
-        body {
-            margin: 0;
-            background: var(--bg);
-            color: #222;
-            direction: rtl;
-            -webkit-font-smoothing: antialiased
-        }
-        
-        /* تصميم الهيدر */
-        header {
-            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
-            color: #fff;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            padding: 14px 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08)
-        }
-        
-        .header-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px
-        }
-        
-        .brand {
-            display: flex;
-            gap: 12px;
-            align-items: center
-        }
-        
-        .brand h1 {
-            margin: 0;
-            font-size: 20px
-        }
-        
-        /* تصيم القائمة الرئيسية */
-        nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap
-        }
-        
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            padding: 6px 10px;
-            border-radius: 8px;
-            transition: background .15s;
-            font-weight: 600
-        }
-        
-        /* تصميم المحتوى الرئيسي */
-        .container {
-            max-width: 1200px;
-            margin: 18px auto;
-            padding: 0 14px 120px 14px
-        }
-        
-        .category {
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 14px;
-            box-shadow: 0 6px 18px rgba(16, 16, 16, 0.04);
-            margin-bottom: 18px
-        }
-        
-        /* تصميم شبكة المنتجات */
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 14px;
-            align-items: stretch
-        }
-        
-        .product {
-            display: flex;
-            flex-direction: column;
-            background: linear-gradient(180deg, #fff, #fbfffb);
-            border-radius: var(--radius);
-            overflow: hidden;
-            transition: transform .18s, box-shadow .18s;
-            min-height: 370px
-        }
-        
-        .product:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 14px 30px rgba(16, 16, 16, 0.06)
-        }
-        
-        .product img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            display: block
-        }
-        
-        .product-info {
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            flex: 1
-        }
-        
-        .product-info h3 {
-            margin: 0;
-            font-size: 16px
-        }
-        
-        .product-info p {
-            margin: 0;
-            color: var(--muted);
-            font-size: 14px
-        }
-        
-        .price {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 15px
-        }
-        
-        /* تصميم الأصناف داخل البطاقات */
-        .varieties-inline {
-            margin-top: 6px;
-            color: #444;
-            font-size: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px
-        }
-        
-        .varieties-inline .var-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            background: #f7fff7;
-            padding: 8px;
-            border-radius: 8px
-        }
-        
-        .varieties-inline .var-label {
-            flex: 1;
-            text-align: right
-        }
-        
-        /* زر الشراء بدلاً من "أضف سريعًا" */
-        .btn-add-quick {
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            white-space: nowrap
-        }
-        
-        /* زر السلة العائم */
-        #floatingCartBtn {
-            position: fixed;
-            left: 16px;
-            bottom: 16px;
-            z-index: 1200;
-            background: var(--primary);
-            color: #fff;
-            padding: 12px 14px;
-            border-radius: 50px;
-            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            cursor: pointer
-        }
-        
-        #floatingCartBtn .count {
-            background: #fff;
-            color: var(--primary);
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-weight: 700
-        }
-        
-        /* تصميم سلة المشتريات الجانبية */
-        .quickcart {
-            position: fixed;
-            top: 0;
-            right: -420px;
-            width: 380px;
-            height: 100vh;
-            background: var(--card);
-            box-shadow: -8px 0 24px rgba(0, 0, 0, 0.12);
-            z-index: 1400;
-            transition: right .28s ease;
-            padding: 14px;
-            display: flex;
-            flex-direction: column
-        }
-        
-        .quickcart.open {
-            right: 0
-        }
-        
-        .qc-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #eee;
-            position: relative
-        }
-        
-        .qc-body {
-            overflow: auto;
-            padding: 8px 0;
-            flex: 1
-        }
-        
-        .qc-item {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #f0f0f0;
-            margin-bottom: 8px;
-            background: #fbfff8
-        }
-        
-        .qc-item .info {
-            flex: 1
-        }
-        
-        .qc-footer {
-            border-top: 1px solid #eee;
-            padding-top: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px
-        }
-        
-        .qc-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap
-        }
-        
-        /* تصميم الأزرار */
-        .btn {
-            padding: 10px 14px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 700
-        }
-        
-        .btn.primary {
-            background: var(--primary);
-            color: #fff
-        }
-        
-        .btn.secondary {
-            background: #f0f0f0;
-            color: #222
-        }
-        
-        .btn.wa {
-            background: var(--wa-green);
-            color: #fff
-        }
-        
-        .btn.danger {
-            background: var(--danger);
-            color: #fff
-        }
-        
-        .small-btn {
-            padding: 6px 8px;
-            font-size: 14px
-        }
-        
-        /* إشعارات السلة */
-        .cart-notification {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 12px;
-            border-radius: 6px;
-            z-index: 1500;
-            animation: fadeIn .4s
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px)
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
-        
-        /* تصميم الفوتر */
-        footer {
-            background: linear-gradient(90deg, var(--footer-dark), #133814);
-            color: #fff;
-            padding: 22px 14px;
-            margin-top: 18px;
-            border-radius: 8px
-        }
-        
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            align-items: flex-start;
-            justify-content: space-between
-        }
-        
-        /* تصميم متجاوب */
-        @media (max-width:900px) {
-            .products {
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr))
-            }
-            .quickcart {
-                width: 100%;
-                max-width: 420px
-            }
-        }
-        
-        /* تصميم تحكم الكمية الجديد مع أزرار + و - */
-        .qty-control {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-top: 8px
-        }
-        
-        .qty-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: 1px solid #ddd;
-            background: #fff;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .qty-btn:hover {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-        }
-        
-        .qty-input {
-            width: 50px;
-            text-align: center;
-            padding: 6px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 16px;
-        }
-        
-        /* تصميم زر إفراغ السلة في الأعلى */
-        .clear-cart-top {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        /* تخصيصات للأجهزة المحمولة */
-        @media (max-width: 480px) {
-            .header-inner {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            nav ul {
-                margin-top: 10px;
-                justify-content: flex-start;
-            }
-            .qty-control {
-                flex-direction: column;
-            }
-            .qc-actions {
-                flex-direction: column;
-            }
-        }
-    </style>
+    /* السلة الجانبية */
+    #cartSidebar {
+      position: fixed;
+      top: 0; right: 0;
+      width: 300px;
+      height: 100vh;
+      background: #fff;
+      border-left: 1px solid #ccc;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+    }
+    #cartSidebar.open { transform: translateX(0); }
+    #cartContent { flex: 1; overflow-y: auto; padding: 10px; }
+    #cartFooter {
+      padding: 8px; border-top: 1px solid #ccc;
+      display: flex; gap: 5px; justify-content: space-around;
+      background: #fafafa;
+    }
+    .cart-btn { flex: 1; padding: 6px; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 5px; border: none; border-radius: 5px; cursor: pointer; }
+    .btn-whatsapp { background: #25d366; color: #fff; }
+    .btn-google { background: #4285f4; color: #fff; }
+    #closeCart { position: absolute; top: 10px; left: 10px; cursor: pointer; }
+  </style>
 </head>
-
 <body>
-    <!-- الهيدر -->
-    <header>
-        <div class="header-inner">
-            <div class="brand" aria-label="مشتلة السلام">
-                <i class="fas fa-seedling" style="font-size:26px;color:#fff"></i>
-                <div>
-                    <h1>مشتلة السلام</h1>
-                    <p>شراء سريع — النسخة المحسنة</p>
-                </div>
-            </div>
 
-            <nav aria-label="القائمة الرئيسية">
-                <ul>
-                    <li><a href="#fruit-trees">الأشجار المثمرة</a></li>
-                    <li><a href="#flowers">الورود والزهور</a></li>
-                    <li><a href="#ornamental">تزيين</a></li>
-                    <li><a href="#vegetables">بذور وخضروات</a></li>
-                    <li><a href="#tools">أدوات وأسمدة</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+<h1>مشتلة السلام</h1>
 
-    <!-- البحث -->
-    <div style="background:var(--primary-dark);padding:10px;">
-        <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:center;padding:6px 14px;">
-            <div style="width:100%;max-width:640px;position:relative;">
-                <input id="search-input" placeholder="ابحث عن منتج أو صنف..." style="width:100%;padding:12px 48px;border-radius:30px;border:2px solid #fff;font-size:16px;">
-                <button id="search-btn" style="position:absolute;left:6px;top:6px;width:40px;height:40px;border-radius:50%;border:none;background:var(--primary);color:#fff;"><i class="fas fa-search"></i></button>
-            </div>
-        </div>
-    </div>
+<h2>الزهور</h2>
+<div class="product-card" data-name="وردة حمراء" data-price="150">
+  <img src="https://via.placeholder.com/200x150?text=%D9%88%D8%B1%D8%AF%D8%A9" alt="وردة">
+  <h3>وردة حمراء</h3>
+  <p>150 د.ج</p>
+  <button class="addToCart">إضافة للسلة</button>
+</div>
 
-    <!-- المحتوى -->
-    <main class="container">
-        <div id="noResults" style="display:none;text-align:center;padding:20px;color:var(--muted);">
-            <i class="fas fa-search" style="font-size:22px;margin-bottom:8px;"></i>
-            <div>لم يتم العثور على نتائج</div>
-        </div>
+<h2>الأشجار</h2>
+<div class="product-card" data-name="شجرة زيتون" data-price="2500">
+  <img src="https://via.placeholder.com/200x150?text=%D8%B2%D9%8A%D8%AA%D9%88%D9%86" alt="شجرة زيتون">
+  <h3>شجرة زيتون</h3>
+  <p>2500 د.ج</p>
+  <button class="addToCart">إضافة للسلة</button>
+</div>
 
-        <!-- قسم الأشجار المثمرة -->
-        <section id="fruit-trees" class="category">
-            <div class="category-header"><h2><i class="fas fa-apple-whole"></i> الأشجار المثمرة</h2></div>
-            <div class="products">
-                <div class="product" data-price="60" data-type="زيتون">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zite.jpg" alt="زيتون">
-                    <div class="product-info">
-                        <h3>زيتون لإنتاج الزيت</h3>
-                        <p>صنف ممتاز لإنتاج الزيوت</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>شملال - 60 دج</li>
-                                <li>سيقواز - 65 دج</li>
-                                <li>بيكوال - 70 دج</li>
-                                <li>ملكة العرب - 75 دج</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+<!-- السلة الجانبية -->
+<div id="cartSidebar">
+  <span id="closeCart"><i class="fas fa-times"></i></span>
+  <div id="cartContent">
+    <h3>سلة المشتريات</h3>
+    <ul id="cartItems"></ul>
+    <hr>
+    <label>الاسم: <input id="custName"></label><br>
+    <label>العنوان: <input id="custAddr"></label><br>
+    <label>الهاتف: <input id="custPhone" type="tel"></label>
+  </div>
+  <div id="cartFooter">
+    <button class="cart-btn btn-whatsapp" id="sendWhatsApp"><i class="fab fa-whatsapp"></i> طلب</button>
+    <button class="cart-btn btn-google" id="sendGoogle"><i class="fab fa-google"></i> طلب</button>
+  </div>
+</div>
 
-                <div class="product" data-price="55" data-type="زيتون">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zitoun.jpg" alt="زيتون">
-                    <div class="product-info">
-                        <h3>زيتون للترقيد</h3>
-                        <p>من أفضل الأصناف للترقيد</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>فركاني - 55 دج</li>
-                                <li>بيكوال - 60 دج</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+<script>
+  const sidebar = document.getElementById('cartSidebar');
+  const cartItems = document.getElementById('cartItems');
+  let cart = [];
 
-                <div class="product" data-price="45" data-type="حمضيات">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/tchina.jpg" alt="برتقال">
-                    <div class="product-info">
-                        <h3>برتقال</h3>
-                        <p>صنف حلو المذاق</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>طومسون - 45 دج</li>
-                                <li>بالنسي - 50 دج</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  document.querySelectorAll('.addToCart').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const card = btn.closest('.product-card');
+      const name = card.dataset.name;
+      const price = parseFloat(card.dataset.price);
+      const existing = cart.find(it=>it.name===name);
+      if(existing) { existing.qty += 1; }
+      else { cart.push({name, price, qty: 1}); }
+      updateCart();
+      sidebar.classList.add('open');
+    });
+  });
 
-        <!-- قسم الورود والنباتات -->
-        <section id="flowers" class="category">
-            <div class="category-header"><h2><i class="fas fa-rose"></i> ورود ونباتات</h2></div>
-            <div class="products">
-                <div class="product" data-price="40" data-type="ورود">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/w-djouri.jpg" alt="ورد">
-                    <div class="product-info">
-                        <h3>ورد جوري</h3>
-                        <p>ملكة الزهور</p>
-                        <div class="varieties"><ul><li>جوري أحمر - 40 دج</li><li>جوري وردي - 45 دج</li></ul></div>
-                    </div>
-                </div>
+  document.getElementById('closeCart').onclick = ()=> sidebar.classList.remove('open');
 
-                <div class="product" data-price="35" data-type="ورود">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/w-feell.jpg" alt="ورد فل">
-                    <div class="product-info">
-                        <h3>ورد فل</h3>
-                        <p>رائحة عطرة</p>
-                        <div class="varieties"><ul><li>فل - 35 دج</li></ul></div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  function updateCart(){
+    cartItems.innerHTML = '';
+    cart.forEach((item)=>{
+      const li = document.createElement('li');
+      li.textContent = `${item.name} × ${item.qty} — ${item.price*item.qty} د.ج`;
+      cartItems.appendChild(li);
+    });
+    saveCustomerData();
+  }
 
-        <!-- أقسام أخرى -->
-        <section id="ornamental" class="category">
-            <div class="category-header"><h2><i class="fas fa-tree"></i> نباتات تزيينية</h2></div>
-            <div class="products">
-                <div class="product" data-price="30" data-type="تزيين">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/ornamental1.jpg" alt="نبات تزييني">
-                    <div class="product-info">
-                        <h3>نبات البوتس</h3>
-                        <p>نبات داخلي جميل</p>
-                        <div class="varieties"><ul><li>أخضر - 30 دج</li><li>متنوع - 35 دج</li></ul></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+  function saveCustomerData(){
+    localStorage.setItem('custName', document.getElementById('custName').value);
+    localStorage.setItem('custAddr', document.getElementById('custAddr').value);
+    localStorage.setItem('custPhone', document.getElementById('custPhone').value);
+  }
 
-    <!-- زر السلة العائم -->
-    <button id="floatingCartBtn" aria-label="سلة المشتريات" title="عرض السلة">
-        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
-        <span id="cartCount" class="count">0</span>
-    </button>
+  function loadCustomerData(){
+    document.getElementById('custName').value = localStorage.getItem('custName') || '';
+    document.getElementById('custAddr').value = localStorage.getItem('custAddr') || '';
+    document.getElementById('custPhone').value = localStorage.getItem('custPhone') || '';
+  }
+  loadCustomerData();
 
-    <!-- شريط السلة الجانبي (Quick Cart) -->
-    <aside id="quickCart" class="quickcart" aria-hidden="true">
-        <div class="qc-header">
-            <div>
-                <h3 style="margin:0">سلة المشتريات</h3>
-                <div id="qc-subtext" style="font-size:13px;color:var(--muted)">تفاصيل الطلب</div>
-            </div>
-            <div>
-                <button class="clear-cart-top" onclick="clearCartConfirm()" title="إفراغ السلة">
-                    <i class="fas fa-trash"></i> إفراغ
-                </button>
-                <button class="btn secondary small-btn" onclick="closeQuickCart()" aria-label="إغلاق"><i class="fas fa-times"></i></button>
-            </div>
-        </div>
+  document.getElementById('sendWhatsApp').addEventListener('click', ()=>{
+    const name = document.getElementById('custName').value;
+    const addr = document.getElementById('custAddr').value;
+    const phone = document.getElementById('custPhone').value;
+    let msg = `طلب جديد:\nالاسم: ${name}\nالعنوان: ${addr}\nالهاتف: ${phone}\n`;
+    cart.forEach(it=> msg += `\n${it.name} × ${it.qty} — ${it.price*it.qty} د.ج`);
+    const url = `https://wa.me/213697743721?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+  });
 
-        <div class="qc-body" id="qcBody">
-            <!-- تظهر هنا العناصر -->
-            <div id="qcEmpty" style="text-align:center;color:var(--muted);padding:18px">السلة فارغة</div>
-        </div>
+  document.getElementById('sendGoogle').addEventListener('click', ()=>{
+    const GOOGLE_SHEETS_WEBAPP_URL = "ضع_رابط_الويب_آب_هنا";
+    const orderData = {
+      name: document.getElementById('custName').value,
+      addr: document.getElementById('custAddr').value,
+      phone: document.getElementById('custPhone').value,
+      items: JSON.stringify(cart)
+    };
+    fetch(GOOGLE_SHEETS_WEBAPP_URL, {
+      method: 'POST',
+      body: new URLSearchParams(orderData)
+    }).then(r=>alert("تم إرسال الطلب إلى Google Sheets"));
+  });
+</script>
 
-        <div class="qc-footer">
-            <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;">
-                <div><strong>المجموع:</strong> <span id="qcTotal">0 دج</span></div>
-                <div><small id="qcItemsCount">0 عنصر</small></div>
-            </div>
-
-            <h4 style="margin:6px 0 0 0">بيانات الزبون</h4>
-            <div style="display:grid;grid-template-columns:1fr;gap:8px">
-                <input id="qcName" placeholder="الاسم الكامل" class="form-input" style="padding:10px;border-radius:8px;border:1px solid #eee">
-                <input id="qcPhone" placeholder="رقم الهاتف (مثال: 0559...)" class="form-input" style="padding:10px;border-radius:8px;border:1px solid #eee">
-                <textarea id="qcAddress" placeholder="عنوان التوصيل" rows="2" class="form-input" style="padding:10px;border-radius:8px;border:1px solid #eee"></textarea>
-            </div>
-
-            <div class="qc-actions" style="margin-top:8px">
-                <button id="sendOr
+</body>
+</html>
