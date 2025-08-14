@@ -515,17 +515,32 @@
     closeSendDialog.addEventListener('click', ()=> sendDialog.style.display='none');
 
     /**************** السحب لإغلاق الفاتورة (أسفل/يمين/يسار) ****************/
-    function attachSwipeToClose(backdrop){
-      let startX=0,startY=0,dx=0,dy=0,swiping=false;
-      const start=(e)=>{swiping=true;const t=e.touches?e.touches[0]:e;startX=t.clientX;startY=t.clientY}
-      const move=(e)=>{if(!swiping)return;const t=e.touches?e.touches[0]:e;dx=t.clientX-startX;dy=t.clientY-startY}
-      const end=()=>{if(!swiping)return;swiping=false; if(Math.abs(dy)>80 || Math.abs(dx)>80){ closeCartModal(); }}
-      backdrop.addEventListener('touchstart',start,{passive:true});
-      backdrop.addEventListener('touchmove',move,{passive:true});
-      backdrop.addEventListener('touchend',end);
-      // allow click on backdrop to close
-      backdrop.addEventListener('click',(e)=>{ if(e.target === backdrop) closeCartModal(); });
+let startX, startY;
+const invoiceModal = document.getElementById("invoiceModal");
+
+// بداية اللمس
+invoiceModal.addEventListener("touchstart", function(e) {
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+}, false);
+
+// نهاية اللمس
+invoiceModal.addEventListener("touchend", function(e) {
+    const touch = e.changedTouches[0];
+    let endX = touch.clientX;
+    let endY = touch.clientY;
+
+    let diffX = endX - startX;
+    let diffY = endY - startY;
+
+    // تحقق من المسافة والاتجاه
+    if (Math.abs(diffY) > 100 || Math.abs(diffX) > 100) {
+        // إذا كان السحب للأسفل أو اليمين أو اليسار
+        closeInvoice();
     }
+}, false);
+
 
     /**************** إرسال عبر واتساب ****************/
     function collectOrder(){
@@ -669,3 +684,4 @@ ${lines.join('\n')}
   </script>
 </body>
 </html>
+
