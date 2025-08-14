@@ -10,28 +10,38 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
 
   <style>
+    /*========================================
+      أساسيات التصميم (محافظة على الألوان والهيكل)
+      ========================================*/
     :root{
       --primary:#2e7d32;--primary-dark:#1b5e20;--accent:#81c784;--bg:#f5f6f4;
       --card:#fff;--muted:#6b6b6b;--danger:#c62828;--footer-dark:#163a16;--radius:10px
     }
     *{box-sizing:border-box;font-family:'Tajawal',Arial,sans-serif}
     html,body{height:100%}
-    body{margin:0;background:var(--bg);color:#222;-webkit-font-smoothing:antialiased}
+    body{
+      margin:0;background:var(--bg);color:#222;-webkit-font-smoothing:antialiased;
+      /* إجبار الأرقام اللاتينية 0-9 في كامل الصفحة */
+      font-variant-numeric: lining-nums;
+      -moz-font-feature-settings: "lnum" 1;
+      -webkit-font-feature-settings: "lnum" 1;
+      font-feature-settings: "lnum" 1;
+    }
+    /* لا تأثيرات hover وفق طلبك */
 
-    /* الهيدر الأصلي */
+    /* الهيدر (كما هو) */
     header{background:linear-gradient(90deg,var(--primary),var(--primary-dark));color:#fff;position:sticky;top:0;z-index:1000;padding:14px 12px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
     .header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
     .brand{display:flex;gap:12px;align-items:center}
     .brand h1{margin:0;font-size:20px}
     .brand p{margin:0;font-size:13px;opacity:.95}
     nav ul{list-style:none;padding:0;margin:0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    nav a{color:#fff;text-decoration:none;padding:6px 10px;border-radius:8px;font-weight:600;transition:background .15s}
-    nav a:hover{background:rgba(255,255,255,.08)}
+    nav a{color:#fff;text-decoration:none;padding:6px 10px;border-radius:8px;font-weight:700}
 
-    /* الحاوية الأصلية */
+    /* الحاوية العامة */
     .container{max-width:1200px;margin:18px auto;padding:0 14px 80px 14px}
 
-    /* الأقسام والبطاقات (كما هي) */
+    /* الأقسام والبطاقات */
     .category{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 6px 18px rgba(16,16,16,.04);margin-bottom:18px}
     .category-header{display:flex;align-items:center;gap:12px;border-bottom:1px solid #eee;padding-bottom:10px;margin-bottom:14px}
     .category-header h2{margin:0;font-size:18px;display:flex;gap:10px;align-items:center}
@@ -39,7 +49,6 @@
 
     .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;align-items:stretch}
     .product{display:flex;flex-direction:column;background:linear-gradient(180deg,#fff,#fbfffb);border-radius:var(--radius);overflow:hidden;transition:transform .18s,box-shadow .18s;min-height:370px}
-    .product:hover{transform:translateY(-6px);box-shadow:0 14px 30px rgba(16,16,16,.06)}
     .product img{width:100%;height:200px;object-fit:cover;display:block}
     .product-info{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
     .product-info h3{margin:0;font-size:16px}
@@ -50,16 +59,13 @@
     .cart-btn{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;justify-content:center;margin-top:auto;background:var(--primary);color:#fff;border:none;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:700}
     .cart-btn i{font-size:14px}
 
-    /* محرك البحث (محافظ عليه) + عداد نتائج وإبراز */
+    /* محرك البحث + عدّاد النتائج + إبراز */
     .search-container{width:100%;padding:10px 14px;background:var(--primary-dark)}
     .search-bar{display:flex;margin:0 auto;max-width:700px;width:100%;position:relative;gap:10px;align-items:center}
-    #search-input{padding:12px 16px;width:100%;border:2px solid #fff;border-radius:30px;font-size:16px;outline:none;transition:all .3s;background:rgba(255,255,255,.92)}
-    #search-input:focus{border-color:var(--accent);background:#fff}
-    #search-btn{position:absolute;left:6px;top:6px;background:var(--primary);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;transition:all .25s}
-    #search-btn:hover{background:var(--primary-dark)}
+    #search-input{padding:12px 16px;width:100%;border:2px solid #fff;border-radius:30px;font-size:16px;outline:none;background:rgba(255,255,255,.92)}
+    #search-btn{position:absolute;left:6px;top:6px;background:var(--primary);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer}
     .results-counter{color:#d7f0d7;font-weight:700;margin-right:auto}
     mark.hl{background:#ffe08a;padding:0 .2em;border-radius:.2em}
-
     .no-results{grid-column:1/-1;text-align:center;padding:20px;color:var(--muted);display:none}
 
     /* شريط السلة الثابت تحت البحث */
@@ -71,48 +77,71 @@
     .btn.primary{background:var(--primary);color:#fff}
     .btn.secondary{background:#f0f0f0;color:#222}
     .btn.danger{background:var(--danger);color:#fff}
+    .btn.whatsapp{background:#25D366;color:#fff}
+    .btn.google{background:#1976d2;color:#fff}
 
-    /* زر السلة العائم (موجود سابقاً) */
+    /* زر السلة العائم */
     #floatingCartBtn{position:fixed;left:16px;bottom:16px;z-index:1200;background:var(--primary);color:#fff;padding:12px 14px;border-radius:50px;box-shadow:0 10px 26px rgba(0,0,0,.18);display:flex;gap:10px;align-items:center;cursor:pointer}
     #floatingCartBtn .count{background:#fff;color:var(--primary);padding:4px 8px;border-radius:12px;font-weight:700}
     .pulse{animation:pulse 1.5s infinite}
     @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
 
-    /* نافذة الفاتورة — ملء الشاشة على الهاتف + أزرار بالأحمر */
+    /* نافذة الفاتورة — تصميم احترافي ومتجاوب */
     .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:1300;align-items:center;justify-content:center;padding:12px}
-    .modal{background:#fff;width:100%;max-width:980px;border-radius:12px;overflow:auto;max-height:92vh}
-    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #eee}
+    .modal{background:#fff;width:100%;max-width:980px;border-radius:16px;overflow:auto;max-height:92vh;display:flex;flex-direction:column}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #eee;gap:10px}
     .modal-header .head-actions{display:flex;gap:8px}
     .modal-header .btn{padding:8px 10px;border-radius:8px}
-    .modal-body{padding:16px}
+    .modal-body{padding:0}
+    .invoice-grid{display:grid;grid-template-columns:2fr 1fr;gap:0}
+    .invoice-left{padding:12px 16px}
+    .invoice-right{border-right:1px solid #f3f3f3;background:#fcfffb;padding:12px 16px}
     .modal-footer{padding:12px 16px;border-top:1px solid #eee;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
 
-    /* جدول الفاتورة مع أسهم الكمية */
-    .invoice-table{width:100%;border-collapse:collapse;margin-bottom:12px;font-size:14px}
-    .invoice-table th,.invoice-table td{padding:10px;border-bottom:1px solid #f0f0f0;text-align:right;vertical-align:middle}
-    .invoice-table th{background:#fbfff8;color:var(--muted);font-weight:700}
+    /* جدول الفاتورة */
+    .table-wrap{overflow:auto;border:1px solid #eee;border-radius:12px}
+    .invoice-table{width:100%;border-collapse:separate;border-spacing:0;min-width:720px}
+    .invoice-table th,.invoice-table td{padding:12px;border-bottom:1px solid #f0f0f0;text-align:right;vertical-align:middle;background:#fff}
+    .invoice-table th{background:#fbfff8;color:#555;font-weight:700;position:sticky;top:0;z-index:1}
+    .invoice-table tr:last-child td{border-bottom:none}
     .qty-wrap{display:inline-flex;align-items:center;border:1px solid #e6e6e6;border-radius:10px;overflow:hidden}
-    .qty-btn{background:#fff;border:none;width:34px;height:34px;cursor:pointer;font-weight:900}
-    .qty-input{width:64px;border:none;border-left:1px solid #e6e6e6;border-right:1px solid #e6e6e6;text-align:center;outline:none}
+    .qty-btn{background:#fff;border:none;width:36px;height:36px;cursor:pointer;font-weight:900}
+    .qty-input{width:70px;border:none;border-left:1px solid #e6e6e6;border-right:1px solid #e6e6e6;text-align:center;outline:none}
 
-    /* نافذة تأكيد الطلب (منبثقة) */
+    /* قسم معلومات الزبون (احترافي + أيقونات) */
+    .customer-card{background:#fff;border:1px solid #eee;border-radius:12px;padding:12px;display:grid;grid-template-columns:1fr;gap:10px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .form-item{display:flex;flex-direction:column;gap:6px}
+    .form-label{font-weight:700;color:#333;display:flex;align-items:center;gap:8px}
+    .form-input,.form-textarea{
+      width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;background:#fff;outline:none;font-size:15px
+    }
+    .form-textarea{resize:vertical}
+
+    /* صندوق الإجماليات */
+    .summary-box{background:#fff;border:1px solid #eee;border-radius:12px;padding:12px;display:grid;gap:8px}
+    .summary-row{display:flex;justify-content:space-between;align-items:center}
+    .summary-row b{color:#222}
+    .summary-total{font-size:18px;color:var(--primary);font-weight:800}
+
+    /* نافذة الإرسال المنبثقة */
     .dialog{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:1400;align-items:center;justify-content:center;padding:16px}
-    .dialog-card{background:#fff;border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.12);width:min(520px,92vw);overflow:hidden}
+    .dialog-card{background:#fff;border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.12);width:min(520px,92vw);overflow:hidden}
     .dialog-head{padding:12px 14px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between}
     .dialog-body{padding:14px}
-    .dialog-actions{display:flex;gap:10px;flex-wrap:wrap;padding:0 14px 14px}
-    .btn.whatsapp{background:#25D366;color:#fff}
-    .btn.google{background:#1976d2;color:#fff}
+    .dialog-actions{display:flex;gap:10px;flex-wrap:wrap;padding:0 14px 14px;justify-content:flex-end}
 
     /* إشعار إضافة للسلة */
     .cart-notification{position:fixed;bottom:20px;right:20px;background:#4CAF50;color:#fff;padding:14px;border-radius:8px;z-index:1500;animation:fadeIn .35s,fadeOut .35s 2.6s}
     @keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
     @keyframes fadeOut{from{opacity:1}to{opacity:0}}
 
-    /* هواتف: الفاتورة ملء الشاشة والسحب للإغلاق */
+    /* هواتف: الفاتورة ملء الشاشة والسحب للإغلاق، توزيع عمودي */
+    @media (max-width:992px){ .invoice-grid{grid-template-columns:1fr} .invoice-right{border-right:none;border-top:1px solid #f3f3f3} }
     @media (max-width:768px){
       .modal{max-width:none;width:100%;height:94vh;border-radius:0}
       .modal-body{height:calc(94vh - 140px);overflow:auto}
+      .form-row{grid-template-columns:1fr}
     }
 
     /* فوتر (كما هو) */
@@ -167,14 +196,13 @@
     </div>
   </div>
 
-  <!-- المحتوى الأصلي (ضع منتجاتك كما هي — أمثلة للإبقاء على التصميم) -->
+  <!-- المحتوى الأصلي: ضع منتجاتك وأقسامك كما هي (هذا مثال قابل للاستبدال) -->
   <main class="container" id="contentRoot">
     <div class="no-results" id="noResults">
       <i class="fas fa-search" style="font-size:24px;margin-bottom:10px"></i>
       <p>لم يتم العثور على نتائج مطابقة للبحث</p>
     </div>
 
-    <!-- مثال قسم (يمكنك الإبقاء على أقسامك كما هي؛ البنية لم تتغير) -->
     <section id="fruit-trees" class="category" aria-labelledby="h-fruit-trees">
       <div class="category-header">
         <h2 id="h-fruit-trees"><i class="fas fa-apple-whole"></i> الأشجار المثمرة</h2>
@@ -216,11 +244,10 @@
       </div>
     </section>
 
-    <!-- يمكنك إبقاء بقية الأقسام/المنتجات كما هي في ملفك -->
-
+    <!-- أبقِ بقية الأقسام/المنتجات كما هي في ملفك -->
   </main>
 
-  <!-- زر السلة العائم (كما هو) -->
+  <!-- زر السلة العائم -->
   <button id="floatingCartBtn" aria-label="سلة المشتريات" title="عرض السلة">
     <i class="fas fa-shopping-cart"></i>
     <span id="cartCount" class="count">0</span>
@@ -238,34 +265,65 @@
       </div>
 
       <div class="modal-body">
-        <table class="invoice-table" id="invoiceTable" role="table" aria-label="قائمة المشتريات">
-          <thead>
-          <tr>
-            <th>الصنف</th>
-            <th>النوع/الصنف الفرعي</th>
-            <th>الكمية</th>
-            <th>سعر الوحدة</th>
-            <th>المجموع</th>
-            <th>إجراء</th>
-          </tr>
-          </thead>
-          <tbody id="invoiceRows"><tr><td colspan="6" style="text-align:center;padding:18px;color:#777;">السلة فارغة</td></tr></tbody>
-        </table>
+        <div class="invoice-grid">
+          <!-- يسار: جدول الفاتورة -->
+          <div class="invoice-left">
+            <div class="table-wrap">
+              <table class="invoice-table" id="invoiceTable" role="table" aria-label="قائمة المشتريات">
+                <thead>
+                <tr>
+                  <th>الصنف</th>
+                  <th>النوع/الصنف الفرعي</th>
+                  <th>الكمية</th>
+                  <th>سعر الوحدة</th>
+                  <th>المجموع</th>
+                  <th>إجراء</th>
+                </tr>
+                </thead>
+                <tbody id="invoiceRows"><tr><td colspan="6" style="text-align:center;padding:18px;color:#777;">السلة فارغة</td></tr></tbody>
+              </table>
+            </div>
+          </div>
 
-        <div style="display:flex;justify-content:flex-end;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
-          <div><strong>المجموع الفرعي:</strong> <span id="modalSubtotal">0 دج</span></div>
-          <div style="display:none;"><strong>التوصيل:</strong> <span id="modalDelivery">0 دج</span></div>
-          <div><strong>المجموع الكلي:</strong> <span id="modalTotal">0 دج</span></div>
-        </div>
+          <!-- يمين: ملخص + معلومات الزبون -->
+          <aside class="invoice-right">
+            <div class="summary-box" style="margin-bottom:12px">
+              <div class="summary-row"><span>المجموع الفرعي</span><b id="modalSubtotal">0 دج</b></div>
+              <div class="summary-row" style="display:none"><span>التوصيل</span><b id="modalDelivery">0 دج</b></div>
+              <div class="summary-row summary-total"><span>الإجمالي</span><b id="modalTotal">0 دج</b></div>
+            </div>
 
-        <h4 style="margin:6px 0 8px 0;">معلومات الزبون</h4>
-        <div class="customer-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
-          <div><label>الاسم الكامل</label><input id="custName" class="form-input" type="text" placeholder="الاسم الكامل" required></div>
-          <div><label>رقم الهاتف</label><input id="custPhone" class="form-input" type="tel" placeholder="مثال: 0559123456" required></div>
-          <div><label>الولاية</label><input id="custWilaya" class="form-input" type="text" placeholder="الولاية"></div>
-          <div><label>البلدية</label><input id="custMunicip" class="form-input" type="text" placeholder="البلدية"></div>
-          <div style="grid-column:1/-1"><label>عنوان التوصيل</label><textarea id="custAddress" class="form-input" rows="2" placeholder="العنوان"></textarea></div>
-          <div style="grid-column:1/-1"><label>ملاحظات</label><textarea id="custNotes" class="form-input" rows="2" placeholder="ملاحظات"></textarea></div>
+            <div class="customer-card">
+              <div class="form-item">
+                <label class="form-label" for="custName"><i class="fa-solid fa-user"></i> الاسم الكامل</label>
+                <input id="custName" class="form-input" type="text" placeholder="الاسم الكامل" required>
+              </div>
+              <div class="form-row">
+                <div class="form-item">
+                  <label class="form-label" for="custPhone"><i class="fa-solid fa-phone"></i> رقم الهاتف</label>
+                  <input id="custPhone" class="form-input" type="tel" inputmode="numeric" placeholder="مثال: 0559123456" required>
+                </div>
+                <div class="form-item">
+                  <label class="form-label" for="custWilaya"><i class="fa-solid fa-location-dot"></i> الولاية</label>
+                  <input id="custWilaya" class="form-input" type="text" placeholder="الولاية">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-item">
+                  <label class="form-label" for="custMunicip"><i class="fa-solid fa-city"></i> البلدية</label>
+                  <input id="custMunicip" class="form-input" type="text" placeholder="البلدية">
+                </div>
+                <div class="form-item">
+                  <label class="form-label" for="custAddress"><i class="fa-solid fa-map"></i> العنوان</label>
+                  <input id="custAddress" class="form-input" type="text" placeholder="العنوان">
+                </div>
+              </div>
+              <div class="form-item">
+                <label class="form-label" for="custNotes"><i class="fa-regular fa-note-sticky"></i> ملاحظات</label>
+                <textarea id="custNotes" class="form-textarea" rows="2" placeholder="ملاحظات"></textarea>
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
 
@@ -285,7 +343,7 @@
         <button class="btn secondary" id="closeSendDialog" title="إغلاق"><i class="fas fa-times"></i></button>
       </div>
       <div class="dialog-body">
-        <p style="margin:0">اختر طريقة الإرسال:</p>
+        <p style="margin:0">اختر وسيلة الإرسال المناسبة:</p>
       </div>
       <div class="dialog-actions">
         <button class="btn whatsapp" id="btnSendWhatsApp"><i class="fab fa-whatsapp"></i> إرسال عبر واتساب</button>
@@ -294,7 +352,7 @@
     </div>
   </div>
 
-  <!-- فوتر (كما هو، إن كان لديك فوتر مختلف أبقه مكانه) -->
+  <!-- فوتر -->
   <footer>
     <div class="footer-inner">
       <div class="footer-col">
@@ -321,8 +379,11 @@
   <script>
     /*************** إعدادات ***************/
     const WHATSAPP_NUMBER = '213697743721'; // رقمك 0697743721 مع مفتاح الجزائر 213
-    const GOOGLE_WEBAPP_URL = ''; // ضع هنا رابط الويب آب الخاص بـ Google Apps Script (إن وُجد)
+    const GOOGLE_WEBAPP_URL = ''; // ضع رابط Google Apps Script Web App هنا إذا رغبت
     const ENABLE_PERSIST_CART = true;
+
+    // إجبار الأرقام اللاتينية في كل مخرجات الجافاسكربت
+    const formatNumber = (n)=> (parseFloat(n)||0).toLocaleString('en-US');
 
     let cart = [];
     const yearEl = document.getElementById('year'); yearEl.textContent = new Date().getFullYear();
@@ -358,12 +419,10 @@
 
     /*************** تحميل السلة ***************/
     window.addEventListener('DOMContentLoaded', () => {
-      if (ENABLE_PERSIST_CART) {
-        try {
-          const saved = localStorage.getItem('nabatati_cart_v3');
-          if (saved) cart = JSON.parse(saved) || [];
-        } catch(e){ cart = []; }
-      }
+      try {
+        const saved = ENABLE_PERSIST_CART ? localStorage.getItem('nabatati_cart_v4') : null;
+        if (saved) cart = JSON.parse(saved) || [];
+      } catch(e){ cart = []; }
       updateCartIndicators();
     });
 
@@ -434,15 +493,15 @@
 
     function persistCart(){
       if(ENABLE_PERSIST_CART){
-        try{ localStorage.setItem('nabatati_cart_v3', JSON.stringify(cart)); }catch(e){}
+        try{ localStorage.setItem('nabatati_cart_v4', JSON.stringify(cart)); }catch(e){}
       }
     }
 
     function updateCartIndicators(){
       const count = cart.reduce((s,i)=>s+(parseInt(i.quantity)||1),0);
       const total = cart.reduce((s,i)=>s+((parseFloat(i.price)||0)*(parseInt(i.quantity)||1)),0);
-      cartCountEl.textContent = count;
-      miniCountEl.textContent = count;
+      cartCountEl.textContent = count.toString();
+      miniCountEl.textContent = count.toString();
       miniTotalEl.textContent = formatNumber(total);
       floatingCartBtn.classList.toggle('pulse', count>0);
     }
@@ -487,10 +546,9 @@
     btnClearTop.addEventListener('click', clearAll);
     btnClearBottom.addEventListener('click', clearAll);
 
-    btnConfirm.addEventListener('click', ()=>{
-      // افتح نافذة الإرسال
-      sendDialog.style.display='flex';
-    });
+    // زر تأكيد الطلب يفتح مباشرة نافذة الإرسال
+    btnConfirm.addEventListener('click', ()=>{ sendDialog.style.display='flex'; });
+
     document.getElementById('closeSendDialog').addEventListener('click', ()=> sendDialog.style.display='none');
 
     /*************** إرسال الطلب ***************/
@@ -520,7 +578,7 @@
       if(!isValidPhone(order.customer.phone)){ alert('رقم الهاتف يجب أن يبدأ بـ 05/06/07 ويتكون من 10 أرقام.'); return; }
       if(!order.items.length){ alert('السلة فارغة.'); return; }
 
-      const lines = order.items.map((it,i)=>`${i+1}- ${it.product} (${it.variety||'-'}) × ${it.qty} = ${formatNumber(it.total)} دج`);
+      const lines = order.items.map((it,i)=>`${(i+1).toString()}- ${it.product} (${it.variety||'-'}) × ${it.qty} = ${formatNumber(it.total)} دج`);
       const msg =
 `طلب جديد — مشتلة السلام
 العميل: ${order.customer.name}
@@ -553,11 +611,11 @@ ${lines.join('\n')}
         sendDialog.style.display='none';
         closeCartModal(); clearCart();
       }catch(e){
-        alert('تعذر إرسال الطلب. حاول لاحقاً.');
+        alert('تعذّر إرسال الطلب. حاول لاحقًا.');
       }
     });
 
-    /*************** اختيار الصنف (نوافذ خفيفة) ***************/
+    /*************** اختيار الصنف ***************/
     function showVarietySelection(productName, btnElement){
       const card = btnElement.closest('.product');
       const productType = card.dataset.type || '';
@@ -670,14 +728,10 @@ ${lines.join('\n')}
 
     /*************** أدوات عامة ***************/
     function escapeHtml(s){ if(!s) return ''; return s.toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
-    function formatNumber(n){ return (parseFloat(n)||0).toLocaleString('ar-EG'); }
     function toastAdded(productName){
       const d=document.createElement('div'); d.className='cart-notification'; d.textContent=`تم إضافة ${productName} إلى السلة`;
       document.body.appendChild(d); setTimeout(()=>d.remove(), 3000);
     }
-
-    /*************** أمثلة ربط للأزرار الموجودة في البطاقات بدون أصناف ***************/
-    // مثال: addToCart('ورد فل','',35);
   </script>
 </body>
 </html>
