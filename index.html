@@ -1,71 +1,83 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>متجري — سلة المشتريات</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>متجري</title>
+
+<!-- أيقونات FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
 <style>
-/* ========== تصميم عام ========== */
+/* =========================
+   CSS - التصميم الحالي
+   ========================= */
 body {
     font-family: Arial, sans-serif;
-    background: #f7f7f7;
     margin: 0;
-    padding: 0;
+    background: #f5f5f5;
 }
 header {
     background: #2e7d32;
     color: white;
-    padding: 15px;
+    padding: 10px;
     text-align: center;
 }
 .container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
     padding: 15px;
 }
 .card {
     background: white;
-    width: 250px;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
+    border-radius: 8px;
+    overflow: hidden;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
 }
 .card img {
     width: 100%;
-    border-radius: 10px;
+    height: 200px;
+    object-fit: cover;
 }
-.card h3 {
-    margin: 10px 0;
+.card-content {
+    padding: 10px;
+    flex: 1;
 }
-button {
+.card-content h3 {
+    margin: 0 0 5px;
+    font-size: 18px;
+}
+.card-content p {
+    margin: 0 0 10px;
+    color: #555;
+}
+.card-content button {
     background: #2e7d32;
     color: white;
-    padding: 8px 12px;
     border: none;
-    border-radius: 5px;
+    padding: 8px;
+    width: 100%;
     cursor: pointer;
+    border-radius: 4px;
 }
-button:hover {
+.card-content button:hover {
     background: #1b5e20;
 }
-
-/* زر السلة العائم */
 #floatingCartBtn {
     position: fixed;
-    bottom: 20px;
-    left: 20px;
+    bottom: 15px;
+    left: 15px;
     background: #2e7d32;
     color: white;
     border: none;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    font-size: 24px;
+    padding: 15px;
+    font-size: 20px;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
 }
 #floatingCartBtn .count {
     background: red;
@@ -77,46 +89,40 @@ button:hover {
     top: 5px;
     right: 5px;
 }
-
-/* نافذة الفاتورة */
 .modal {
     display: none;
     position: fixed;
-    z-index: 999;
     top: 0; left: 0;
     width: 100%; height: 100%;
     background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
 }
 .modal-content {
     background: white;
-    margin: 10% auto;
     padding: 20px;
+    border-radius: 8px;
     width: 90%;
     max-width: 500px;
-    border-radius: 10px;
-    position: relative;
 }
-.close {
-    position: absolute;
-    top: 10px; left: 15px;
-    font-size: 20px;
-    cursor: pointer;
-    color: red;
-}
-.cart-items {
-    max-height: 200px;
-    overflow-y: auto;
-    margin: 10px 0;
-}
-.cart-items div {
+.modal-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+.modal-header h2 {
+    margin: 0;
+}
+.close {
+    cursor: pointer;
+    font-size: 20px;
+}
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
     border-bottom: 1px solid #ddd;
     padding: 5px 0;
-}
-.total {
-    font-weight: bold;
-    margin-top: 10px;
 }
 </style>
 </head>
@@ -126,82 +132,97 @@ button:hover {
     <h1>متجري</h1>
 </header>
 
-<div class="container">
-    <div class="card">
-        <img src="https://via.placeholder.com/250x150" alt="منتج">
-        <h3>منتج 1</h3>
-        <p>1000 دج</p>
-        <button onclick="addToCart('منتج 1', 1000)">أضف للسلة</button>
-    </div>
-    <div class="card">
-        <img src="https://via.placeholder.com/250x150" alt="منتج">
-        <h3>منتج 2</h3>
-        <p>1500 دج</p>
-        <button onclick="addToCart('منتج 2', 1500)">أضف للسلة</button>
-    </div>
+<div class="container" id="productList">
+    <!-- المنتجات ستُنشأ تلقائيًا -->
 </div>
 
 <!-- زر السلة العائم -->
-<button id="floatingCartBtn" title="عرض السلة">
-    🛒
-    <span class="count" id="cartCount">0</span>
+<button id="floatingCartBtn">
+    <i class="fas fa-shopping-cart"></i>
+    <span id="cartCount" class="count">0</span>
 </button>
 
 <!-- نافذة الفاتورة -->
-<div id="invoiceModal" class="modal">
+<div class="modal" id="cartModal">
     <div class="modal-content">
-        <span class="close" id="closeModal">&times;</span>
-        <h2>فاتورة المشتريات</h2>
-        <div class="cart-items" id="cartItems"></div>
-        <div class="total" id="totalPrice">المجموع: 0 دج</div>
+        <div class="modal-header">
+            <h2>فاتورة المشتريات</h2>
+            <span class="close" id="closeModal">&times;</span>
+        </div>
+        <div id="cartItems"></div>
+        <h3>الإجمالي: <span id="totalPrice">0</span> دج</h3>
     </div>
 </div>
 
 <script>
+/* =========================
+   JavaScript - السلة والمنتجات
+   ========================= */
+const products = [
+    {id:1, name:"منتج 1", price:1500, img:"https://via.placeholder.com/300x200"},
+    {id:2, name:"منتج 2", price:2000, img:"https://via.placeholder.com/300x200"},
+    {id:3, name:"منتج 3", price:2500, img:"https://via.placeholder.com/300x200"}
+];
+
 let cart = [];
 
-// إضافة للسلة
-function addToCart(name, price) {
-    cart.push({ name, price });
+function renderProducts() {
+    const container = document.getElementById("productList");
+    container.innerHTML = "";
+    products.forEach(p => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+            <img src="${p.img}" alt="${p.name}">
+            <div class="card-content">
+                <h3>${p.name}</h3>
+                <p>${p.price} دج</p>
+                <button onclick="addToCart(${p.id})">أضف للسلة</button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    cart.push(product);
     updateCartCount();
 }
 
-// تحديث عدد المنتجات في الزر
 function updateCartCount() {
     document.getElementById("cartCount").textContent = cart.length;
 }
 
-// عرض الفاتورة
-function openInvoice() {
-    const cartItemsDiv = document.getElementById("cartItems");
-    const totalPriceDiv = document.getElementById("totalPrice");
-    cartItemsDiv.innerHTML = "";
+function openCartModal() {
+    const modal = document.getElementById("cartModal");
+    const itemsContainer = document.getElementById("cartItems");
+    itemsContainer.innerHTML = "";
     let total = 0;
-
     cart.forEach(item => {
-        const div = document.createElement("div");
-        div.innerHTML = `<span>${item.name}</span> <span>${item.price} دج</span>`;
-        cartItemsDiv.appendChild(div);
         total += item.price;
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `<span>${item.name}</span> <span>${item.price} دج</span>`;
+        itemsContainer.appendChild(div);
     });
-
-    totalPriceDiv.textContent = `المجموع: ${total} دج`;
-    document.getElementById("invoiceModal").style.display = "block";
+    document.getElementById("totalPrice").textContent = total;
+    modal.style.display = "flex";
 }
 
-// إغلاق الفاتورة
-function closeInvoice() {
-    document.getElementById("invoiceModal").style.display = "none";
-}
-
-// أحداث الأزرار
-document.getElementById("floatingCartBtn").addEventListener("click", openInvoice);
-document.getElementById("closeModal").addEventListener("click", closeInvoice);
-window.addEventListener("click", function(e) {
-    if (e.target == document.getElementById("invoiceModal")) {
-        closeInvoice();
-    }
+document.getElementById("floatingCartBtn").addEventListener("click", openCartModal);
+document.getElementById("closeModal").addEventListener("click", () => {
+    document.getElementById("cartModal").style.display = "none";
 });
+
+window.onclick = function(e) {
+    const modal = document.getElementById("cartModal");
+    if (e.target === modal) {
+        modal.style.display = "none";
+    }
+}
+
+renderProducts();
 </script>
 
 </body>
