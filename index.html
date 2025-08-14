@@ -1,1265 +1,208 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>مشتلة السلام — المتجر</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>متجري — سلة المشتريات</title>
+<style>
+/* ========== تصميم عام ========== */
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+header {
+    background: #2e7d32;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 15px;
+}
+.card {
+    background: white;
+    width: 250px;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.card img {
+    width: 100%;
+    border-radius: 10px;
+}
+.card h3 {
+    margin: 10px 0;
+}
+button {
+    background: #2e7d32;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background: #1b5e20;
+}
 
-  <!-- أيقونات وخط -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+/* زر السلة العائم */
+#floatingCartBtn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+#floatingCartBtn .count {
+    background: red;
+    color: white;
+    font-size: 14px;
+    padding: 2px 6px;
+    border-radius: 50%;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
 
-   <style>
-    /* ===========================
-       قاعدة التصميم + فرض الأرقام اللاتينية
-       =========================== */
-    :root{
-      --primary:#2e7d32; --primary-dark:#1b5e20; --accent:#81c784;
-      --bg:#f5f6f4; --card:#fff; --muted:#6b6b6b; --danger:#c62828;
-      --radius:10px;
-    }
-    *{box-sizing:border-box;font-family:'Tajawal',Arial,sans-serif}
-    html,body{height:100%}
-    body{
-      margin:0;background:var(--bg);color:#222;-webkit-font-smoothing:antialiased;
-      /* فرض الأرقام اللاتينية في واجهة العرض */
-      font-variant-numeric: lining-nums;
-      -moz-font-feature-settings: "lnum" 1;
-      -webkit-font-feature-settings: "lnum" 1;
-      font-feature-settings: "lnum" 1;
-    }
-
-    /* تأكيد الأرقام اللاتينية في كل العناصر */
-    body, input, td, th, .count, .total, .price, .summary-row {
-      font-variant-numeric: lining-nums;
-      -moz-font-feature-settings: "lnum" 1;
-      -webkit-font-feature-settings: "lnum" 1;
-      font-feature-settings: "lnum" 1;
-    }
-
-    /* --- الهيدر (محفوظ كما هو) --- */
-    header{background:linear-gradient(90deg,var(--primary),var(--primary-dark));color:#fff;position:sticky;top:0;z-index:1000;padding:14px 12px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-    .header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .brand{display:flex;gap:12px;align-items:center}
-    .brand h1{margin:0;font-size:20px}
-    .brand p{margin:0;font-size:13px;opacity:.95}
-    nav ul{list-style:none;padding:0;margin:0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    nav a{color:#fff;text-decoration:none;padding:6px 10px;border-radius:8px;font-weight:700}
-
-    .container{max-width:1200px;margin:18px auto;padding:0 14px 80px 14px}
-
-    /* منتجات — كما هي */
-    .category{background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 6px 18px rgba(16,16,16,.04);margin-bottom:18px}
-    .category-header{display:flex;align-items:center;gap:12px;border-bottom:1px solid #eee;padding-bottom:10px;margin-bottom:14px}
-    .category-header h2{margin:0;font-size:18px;display:flex;gap:10px;align-items:center}
-    .products{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;align-items:stretch}
-    .product{display:flex;flex-direction:column;background:linear-gradient(180deg,#fff,#fbfffb);border-radius:var(--radius);overflow:hidden;min-height:370px}
-    .product img{width:100%;height:200px;object-fit:cover;display:block}
-    .product-info{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
-    .cart-btn{display:inline-flex;align-items:center;gap:8px;justify-content:center;margin-top:auto;background:var(--primary);color:#fff;border:none;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:700}
-
-    /* بحث + عداد نتائج + إبراز */
-    .search-container{width:100%;padding:10px 14px;background:var(--primary-dark)}
-    .search-bar{display:flex;margin:0 auto;max-width:700px;width:100%;position:relative;gap:10px;align-items:center}
-    #search-input{padding:12px 16px;width:100%;border:2px solid #fff;border-radius:30px;font-size:16px;outline:none;background:rgba(255,255,255,.92)}
-    #search-btn{position:absolute;left:6px;top:6px;background:var(--primary);color:#fff;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer}
-    .results-counter{color:#d7f0d7;font-weight:700;margin-right:auto}
-    mark.hl{background:#ffe08a;padding:0 .2em;border-radius:.2em}
-    .no-results{grid-column:1/-1;text-align:center;padding:20px;color:var(--muted);display:none}
-
-    /* شريط السلة الثابت تحت البحث */
-    .sticky-cart-bar{position:sticky;top:64px;background:#fff;border-bottom:1px solid #eaeaea;z-index:900}
-    .sticky-cart-inner{max-width:1200px;margin:0 auto;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .mini-cart{display:flex;align-items:center;gap:14px;font-weight:700}
-    .mini-cart .total{color:var(--primary)}
-    .btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
-    .btn.primary{background:var(--primary);color:#fff}
-    .btn.secondary{background:#f0f0f0;color:#222}
-    .btn.danger{background:var(--danger);color:#fff}
-    .btn.whatsapp{background:#25D366;color:#fff}
-
-    /* زر سلة عائم */
-    #floatingCartBtn{position:fixed;left:16px;bottom:16px;z-index:1200;background:var(--primary);color:#fff;padding:12px 14px;border-radius:50px;box-shadow:0 10px 26px rgba(0,0,0,.18);display:flex;gap:10px;align-items:center;cursor:pointer}
-    #floatingCartBtn .count{background:#fff;color:var(--primary);padding:4px 8px;border-radius:12px;font-weight:700}
-    .pulse{animation:pulse 1.5s infinite}
-    @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
-
-    /* =========================
-       نافذة الفاتورة (تصميم احترافي ومتجاوب)
-       ========================= */
-    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:1300;align-items:center;justify-content:center;padding:12px}
-    .modal{background:#fff;width:100%;max-width:980px;border-radius:16px;overflow:hidden;max-height:92vh;display:flex;flex-direction:column}
-    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid #eee;gap:10px}
-    .modal-header .head-actions{display:flex;gap:8px}
-    .modal-body{padding:12px;flex:1;overflow:auto}
-    .modal-footer{padding:12px 16px;border-top:1px solid #eee;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
-
-    /* شبكة الفاتورة: عمودين على الديسكتوب، عمود واحد على الهاتف */
-    .invoice-grid{display:grid;grid-template-columns:2fr 1fr;gap:12px}
-    .invoice-left{min-width:0}
-    .invoice-right{background:#fbfff8;padding:12px;border-radius:12px;border:1px solid #f0f0f0}
-
-    /* جدول الفاتورة */
-    .table-wrap{overflow:auto;border:1px solid #eee;border-radius:12px}
-    .invoice-table{width:100%;border-collapse:collapse;min-width:680px}
-    .invoice-table th,.invoice-table td{padding:12px;border-bottom:1px solid #f0f0f0;text-align:right;vertical-align:middle;background:#fff}
-    .invoice-table th{background:#fff9eb;color:#555;font-weight:700;position:sticky;top:0}
-    .qty-wrap{display:inline-flex;align-items:center;border:1px solid #e6e6e6;border-radius:10px;overflow:hidden}
-    .qty-btn{background:#fff;border:none;width:36px;height:36px;cursor:pointer;font-weight:900}
-    .qty-input{width:70px;border:none;border-left:1px solid #e6e6e6;border-right:1px solid #e6e6e6;text-align:center;outline:none}
-
-    /* معلومات الزبون (مصممة احترافياً) */
-    .customer-card{display:grid;gap:10px}
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .form-item{display:flex;flex-direction:column;gap:6px}
-    .form-label{font-weight:700;color:#333;display:flex;align-items:center;gap:8px}
-    .form-input,.form-textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;background:#fff;outline:none;font-size:15px}
-
-    .summary-box{background:#fff;border:1px solid #eee;border-radius:12px;padding:12px;display:grid;gap:8px;margin-bottom:12px}
-    .summary-row{display:flex;justify-content:space-between;align-items:center}
-    .summary-total{font-size:18px;color:var(--primary);font-weight:800}
-
-    /* أزرار الدفع الجديدة */
-    .google-pay {
-      background: #4285F4;
-      color: white;
-      border: none;
-      padding: 12px 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-      justify-content: center;
-    }
-
-    .payment-buttons {
-      display: none;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 10px;
-      justify-content: space-between;
-      margin-top: 15px;
-    }
-
-    /* نافذة الإرسال (واتساب فقط) */
-    .dialog{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:1400;align-items:center;justify-content:center;padding:16px}
-    .dialog-card{background:#fff;border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.12);width:min(520px,92vw);overflow:hidden}
-    .dialog-head{padding:12px 14px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between}
-    .dialog-body{padding:14px}
-    .dialog-actions{display:flex;gap:10px;flex-wrap:wrap;padding:0 14px 14px;justify-content:flex-end}
-
-    .btn.whatsapp{background:#25D366;color:#fff;padding:12px 16px;border-radius:10px;border:none;display:inline-flex;align-items:center;gap:10px;font-weight:800}
-
-    /* إشعار إضافة للسلة */
-    .cart-notification{position:fixed;bottom:20px;right:20px;background:#4CAF50;color:#fff;padding:14px;border-radius:8px;z-index:1500;animation:fadeIn .35s,fadeOut .35s 2.6s}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes fadeOut{from{opacity:1}to{opacity:0}}
-
-    /* تعديلات الفوتر */
-    footer {
-      background: linear-gradient(90deg, #1b5e20, #133814);
-      color: #fff;
-      padding: 22px 14px;
-      margin-top: 30px;
-      border-radius: 8px 8px 0 0;
-    }
-
-    .footer-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-
-    .footer-col h4 {
-      margin: 0 0 15px 0;
-      font-size: 18px;
-      color: #fff;
-    }
-
-    .footer-links a {
-      color: #d7f0d7;
-      text-decoration: none;
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    .footer-bottom {
-      margin-top: 20px;
-      text-align: center;
-      padding-top: 20px;
-      border-top: 1px solid rgba(255,255,255,0.1);
-      font-size: 14px;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width:992px){ 
-      .invoice-grid{grid-template-columns:1fr} 
-      .invoice-right{border-right:none;border-top:1px solid #f3f3f3} 
-    }
-    @media (max-width:768px){
-      .modal{max-width:none;width:100%;height:94vh;border-radius:0}
-      .modal-body{height:calc(94vh - 140px);overflow:auto}
-      .form-row{grid-template-columns:1fr}
-      .invoice-table{min-width:0}
-      .action-buttons {
-        flex-direction: column;
-      }
-    }
-  </style>
+/* نافذة الفاتورة */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background: white;
+    margin: 10% auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+    position: relative;
+}
+.close {
+    position: absolute;
+    top: 10px; left: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    color: red;
+}
+.cart-items {
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 10px 0;
+}
+.cart-items div {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding: 5px 0;
+}
+.total {
+    font-weight: bold;
+    margin-top: 10px;
+}
+</style>
 </head>
 <body>
 
-  <!-- الهيدر -->
-  <header>
-    <div class="header-inner">
-      <div class="brand" aria-label="مشتلة السلام">
-        <i class="fas fa-seedling" style="font-size:26px;color:#fff"></i>
-        <div>
-          <h1>مشتلة السلام</h1>
-          <p>أجود أنواع شتلات الأشجار والفواكه والخضروات</p>
-        </div>
-      </div>
-      <nav aria-label="القائمة الرئيسية">
-        <ul>
-          <li><a href="#fruit-trees">الأشجار المثمرة</a></li>
-          <li><a href="#flowers">الورود والزهور</a></li>
-          <li><a href="#ornamental">أشجار التزيين</a></li>
-          <li><a href="#vegetables">بذور وخضروات</a></li>
-          <li><a href="#tools">أدوات وأسمدة</a></li>
-        </ul>
-      </nav>
+<header>
+    <h1>متجري</h1>
+</header>
+
+<div class="container">
+    <div class="card">
+        <img src="https://via.placeholder.com/250x150" alt="منتج">
+        <h3>منتج 1</h3>
+        <p>1000 دج</p>
+        <button onclick="addToCart('منتج 1', 1000)">أضف للسلة</button>
     </div>
-  </header>
-
-  <!-- محرك البحث + عدّاد النتائج -->
-  <div class="search-container">
-    <div class="search-bar">
-      <span class="results-counter" id="resultsCounter" aria-live="polite"></span>
-      <input type="text" id="search-input" placeholder="ابحث عن نباتات أو منتجات...">
-      <button id="search-btn" title="بحث"><i class="fas fa-search"></i></button>
+    <div class="card">
+        <img src="https://via.placeholder.com/250x150" alt="منتج">
+        <h3>منتج 2</h3>
+        <p>1500 دج</p>
+        <button onclick="addToCart('منتج 2', 1500)">أضف للسلة</button>
     </div>
-  </div>
+</div>
 
-  <!-- شريط السلة الثابت تحت البحث -->
-  <div class="sticky-cart-bar">
-    <div class="sticky-cart-inner">
-      <div class="mini-cart">
-        <span><i class="fa-solid fa-bag-shopping"></i> العناصر: <b id="miniCount">0</b></span>
-        <span class="total">الإجمالي: <span id="miniTotal">0</span> دج</span>
-      </div>
-      <button id="quickOpenCart" class="btn primary"><i class="fa-solid fa-receipt"></i> عرض الفاتورة</button>
+<!-- زر السلة العائم -->
+<button id="floatingCartBtn" title="عرض السلة">
+    🛒
+    <span class="count" id="cartCount">0</span>
+</button>
+
+<!-- نافذة الفاتورة -->
+<div id="invoiceModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h2>فاتورة المشتريات</h2>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="total" id="totalPrice">المجموع: 0 دج</div>
     </div>
-  </div>
-
-  <!-- المحتوى (أبقِ بقية الصفحة كما هي) -->
-    <main class="container">
-        <!-- رسالة عدم وجود نتائج -->
-        <div class="no-results" id="noResults">
-            <i class="fas fa-search" style="font-size: 24px; margin-bottom: 10px;"></i>
-            <p>لم يتم العثور على نتائج مطابقة للبحث</p>
-        </div>
-
-        <!-- قسم الأشجار المثمرة (يتضمن الزيتون بأصنافه) -->
-        <section id="fruit-trees" class="category" aria-labelledby="h-fruit-trees">
-            <div class="category-header">
-                <h2 id="h-fruit-trees"><i class="fas fa-apple-whole" aria-hidden="true"></i> الأشجار المثمرة</h2>
-            </div>
-
-            <div class="products">
-                <!-- المنتج 1: زيتون لإنتاج الزيت -->
-                <div class="product" data-price="60" data-type="زيتون">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zite.jpg"
-                        alt="زيتون لإنتاج الزيت">
-                    <div class="product-info">
-                        <h3>زيتون لإنتاج الزيت</h3>
-                        <p>صنف ممتاز لإنتاج الزيوت</p>
-                        <div class="varieties">
-                            <strong>الأصناف المتاحة:</strong>
-                            <ul>
-                                <li>شملال - 60 دج</li>
-                                <li>سيقواز - 65 دج</li>
-                                <li>بيكوال - 70 دج</li>
-                                <li>ملكة العرب - 75 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('زيتون لإنتاج الزيت', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <!-- المنتج 2: زيتون لإنتاج الزيت والترقيد -->
-                <div class="product" data-price="55" data-type="زيتون">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zitoun.jpg"
-                        alt="زيتون للترقيد">
-                    <div class="product-info">
-                        <h3>زيتون لإنتاج الزيت والترقيد</h3>
-                        <p>من أفضل الأصناف للترقيد</p>
-                        <div class="varieties">
-                            <strong>الأصناف المتاحة:</strong>
-                            <ul>
-                                <li>فركاني - 55 دج</li>
-                                <li>بيكوال - 60 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('زيتون لإنتاج الزيت والترقيد', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <!-- المنتج 3: زيتون للتخليل والترقيد -->
-                <div class="product" data-price="65" data-type="زيتون">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zmerager.jpg"
-                        alt="زيتون للتخليل">
-                    <div class="product-info">
-                        <h3>زيتون للتخليل والترقيد</h3>
-                        <p>صنف مميز لإنتاج الزيت والتخليل</p>
-                        <div class="varieties">
-                            <strong>الأصناف المتاحة:</strong>
-                            <ul>
-                                <li>فركاني - 65 دج</li>
-                                <li>بيكوال - 70 دج</li>
-                                <li>شملال - 75 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('زيتون للتخليل والترقيد', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <!-- الحمضيات -->
-                <div class="product" data-price="45" data-type="حمضيات">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/tchina.jpg"
-                        alt="برتقال">
-                    <div class="product-info">
-                        <h3>برتقال</h3>
-                        <p>صنف حلو المذاق وعالي الجودة</p>
-                        <div class="varieties">
-                            <strong>الأصناف المتاحة:</strong>
-                            <ul>
-                                <li>طومسون - 45 دج</li>
-                                <li>بالنسي - 50 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('برتقال', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <div class="product" data-price="50" data-type="حمضيات">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/limoun.jpg"
-                        alt="ليمون">
-                    <div class="product-info">
-                        <h3>ليمون</h3>
-                        <p>ليمون حمضي طازج وعالي الجودة</p>
-                        <div class="varieties">
-                            <strong>الأصناف المتاحة:</strong>
-                            <ul>
-                                <li>بنزهير - 50 دج</li>
-                                <li>أربعة فصول - 55 دج</li>
-                                <li>ليمون أصفر - 60 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('ليمون', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <div class="product" data-price="55" data-type="حمضيات">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/mendarin.jpg"
-                        alt="مندرين">
-                    <div class="product-info">
-                        <h3>مندرين</h3>
-                        <p>فاكهة لذيذة سهلة التقشير</p>
-                        <div class="varieties">
-                            <strong>الأصناف المتاحة:</strong>
-                            <ul>
-                                <li>مندرين - 55 دج</li>
-                                <li>كليمنتين - 60 دج</li>
-                                <li>مندرين قزمية - 65 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('مندرين', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <!-- فواكه بالنواة: خوخ، مشمش، برقوق، رمان -->
-                <div class="product" data-price="65" data-type="فواكه بالنواة">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/khokh.jpg"
-                        alt="خوخ">
-                    <div class="product-info">
-                        <h3>خوخ</h3>
-                        <p>أشجار خوخ حلوة المذاق وعالية الإنتاج</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>خوخ مبكر - 65 دج</li>
-                                <li>خوخ كعب الغزال - 70 دج</li>
-                                <li>خوخ أبيض - 75 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('خوخ', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <div class="product" data-price="70" data-type="فواكه بالنواة">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/mechmech.jpg"
-                        alt="مشمش">
-                    <div class="product-info">
-                        <h3>مشمش</h3>
-                        <p>أشجار مشمش عالية الجودة والإنتاج</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>مشمش حلواني - 70 دج</li>
-                                <li>مشمش كانينو - 75 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('مشمش', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <div class="product" data-price="70" data-type="فواكه بالنواة">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/bargog.jpg"
-                        alt="برقوق">
-                    <div class="product-info">
-                        <h3>برقوق</h3>
-                        <p>أشجار برقوق مثمرة وعالية الجودة</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>برقوق أصفر - 70 دج</li>
-                                <li>برقوق أحمر - 75 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('برقوق', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <div class="product" data-price="60" data-type="فواكه بالنواة">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/romman.jpg"
-                        alt="رمان">
-                    <div class="product-info">
-                        <h3>رمان</h3>
-                        <p>أشجار رمان عالية الجودة والإنتاج</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>رمان حلواني - 60 دج</li>
-                                <li>رمان مانجولاتي - 65 دج</li>
-                                <li>رمان بلدي - 70 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('رمان', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <!-- كروم -->
-                <div class="product" data-price="70" data-type="كروم">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/3ineb.jpg"
-                        alt="عنب">
-                    <div class="product-info">
-                        <h3>عنب</h3>
-                        <p>أصناف عنب ممتازة</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>عنب أحمر - 70 دج</li>
-                                <li>عنب أبيض - 75 دج</li>
-                                <li>عنب أسود - 80 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('عنب', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <div class="product" data-price="65" data-type="كروم">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/tout.jpg"
-                        alt="توت">
-                    <div class="product-info">
-                        <h3>توت</h3>
-                        <p>أشجار توت مثمرة</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>توت أسود - 65 دج</li>
-                                <li>توت أبيض - 70 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('توت', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <div class="product" data-price="65" data-type="كروم">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/fig.jpg"
-                        alt="تين">
-                    <div class="product-info">
-                        <h3>تين</h3>
-                        <p>أشجار تين مثمرة</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>تين أسود - 65 دج</li>
-                                <li>تين أبيض - 70 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('تين', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <!-- تفاحيات -->
-                <div class="product" data-price="80" data-type="تفاح">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/teffah.jpg" alt="تفاح">
-                    <div class="product-info">
-                        <h3>تفاح</h3>
-                        <p>أشجار تفاح عالية الجودة</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>أحمر – 80 دج</li>
-                                <li>أصفر – 85 دج</li>
-                                <li>أخضر – 90 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('تفاح', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <div class="product" data-price="85" data-type="تفاح">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/endjaas.jpg" alt="إجاص">
-                    <div class="product-info">
-                        <h3>إجاص</h3>
-                        <p>أشجار إجاص مثمرة عالية الجودة</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>أصفر – 85 دج</li>
-                                <li>أخضر – 90 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('إجاص', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-            </div> <!-- نهاية المنتجات في قسم الأشجار المثمرة -->
-        </section>
-
-        <!-- قسم الورود والزهور -->
-        <section id="flowers" class="category" aria-labelledby="h-flowers">
-            <div class="category-header">
-                <h2 id="h-flowers"><i class="fas fa-rose"></i> ورود، زهور ونباتات</h2>
-            </div>
-
-            <div class="products">
-                <div class="product" data-price="40" data-type="ورود">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/w-djouri.jpg"
-                        alt="ورد جوري">
-                    <div class="product-info">
-                        <h3>ورد جوري</h3>
-                        <p>ملكة الزهور برائحتها العطرة</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>جوري أحمر - 40 دج</li>
-                                <li>جوري وردي - 45 دج</li>
-                                <li>جوري أبيض - 50 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('ورد جوري', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <div class="product" data-price="35" data-type="ورود">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/w-feell.jpg"
-                        alt="ورد فل">
-                    <div class="product-info">
-                        <h3>ورد فل</h3>
-                        <p>رائحته فواحة وأزهاره بيضاء</p>
-                        <div class="price">سعر الشتلة: 35 دج</div>
-                        <button class="cart-btn" onclick="addToCart('ورد فل','','35')"><i class="fas fa-cart-plus"></i>
-                            أضف للسلة</button>
-                    </div>
-                </div>
-
-                <!-- يمكنك إضافة منتجات أخرى هنا بنفس البنية -->
-            </div>
-
-        </section>
-
-        <!-- قسم التزيين والتسييج -->
-        <section id="ornamental" class="category" aria-labelledby="h-ornamental">
-            <div class="category-header">
-                <h2 id="h-ornamental"><i class="fas fa-tree"></i> أشجار التزيين والتسييج</h2>
-            </div>
-
-            <div class="products">
-                <div class="product" data-price="75" data-type="تزيين">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zina.jpeg"
-                        alt="فيكس">
-                    <div class="product-info">
-                        <h3>فيكس</h3>
-                        <p>شجرة زينة دائمة الخضرة</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>فيكس نتدا - 75 دج</li>
-                                <li>فيكس بنجامينا - 80 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('فيكس', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <div class="product" data-price="50" data-type="تسييج">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/siyadj.jpeg"
-                        alt="تسييج">
-                    <div class="product-info">
-                        <h3>أشجار التسييج</h3>
-                        <p>لتغطية الجدران والأسوار</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>صنوبر - 50 دج</li>
-                                <li>كازارينا - 55 دج</li>
-                                <li>صفصاف - 60 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('أشجار التسييج', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- بذور وشتلات -->
-        <section id="vegetables" class="category" aria-labelledby="h-vegetables">
-            <div class="category-header">
-                <h2 id="h-vegetables"><i class="fas fa-seedling"></i> بذور وشتلات الخضروات</h2>
-            </div>
-
-            <div class="products">
-                <div class="product" data-price="15" data-type="بذور">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/bodour.jpeg"
-                        alt="بذور طماطم">
-                    <div class="product-info">
-                        <h3>بذور طماطم</h3>
-                        <p>بذور عالية الجودة</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>طماطم شيري - 15 دج</li>
-                                <li>طماطم بلدي - 20 دج</li>
-                                <li>طماطم هجين - 25 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('بذور طماطم', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <div class="product" data-price="25" data-type="شتلات">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/chetlat.jpg"
-                        alt="شتلات طماطم">
-                    <div class="product-info">
-                        <h3>شتلات طماطم</h3>
-                        <p>شتلات جاهزة للزراعة</p>
-                        <div class="price">سعر الشتلة: 25 دج</div>
-                        <button class="cart-btn" onclick="addToCart('شتلات طماطم','','25')"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- أدوات وأسمدة -->
-        <section id="tools" class="category" aria-labelledby="h-tools">
-            <div class="category-header">
-                <h2 id="h-tools"><i class="fas fa-wrench"></i> أدوات زراعية وأسمدة</h2>
-            </div>
-
-            <div class="products">
-                <div class="product" data-price="30" data-type="أسمدة">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/composte.jpeg"
-                        alt="أسمدة">
-                    <div class="product-info">
-                        <h3>أسمدة عضوية</h3>
-                        <p>لتعزيز نمو النباتات</p>
-                        <div class="varieties">
-                            <ul>
-                                <li>سماد دودي - 30 دج</li>
-                                <li>كمبوست - 35 دج</li>
-                                <li>سماد بلدي - 40 دج</li>
-                            </ul>
-                        </div>
-                        
-                        <button class="cart-btn" onclick="showVarietySelection('أسمدة عضوية', this)"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-
-                <div class="product" data-price="120" data-type="أدوات">
-                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/mekass.jpeg"
-                        alt="أدوات">
-                    <div class="product-info">
-                        <h3>أدوات زراعية</h3>
-                        <p>مجموعة متكاملة للعناية بالنباتات</p>
-                        <div class="price">السعر: 120 دج للمجموعة</div>
-                        <button class="cart-btn" onclick="addToCart('أدوات زراعية','','120')"><i
-                                class="fas fa-cart-plus"></i> أضف للسلة</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-        <!-- الفوتر -->
-    <footer>
-        <div class="footer-inner">
-            <div class="footer-col">
-                <h4>مشتلة السلام</h4>
-                <p style="margin:6px 0 0 0; color:#dfeede;">أجود أنواع الشتلات والخدمات الزراعية — بيع وتوصيل واستشارات
-                    زراعية.</p>
-            </div>
-
-            <div class="footer-col">
-                <h4>اتصل بنا</h4>
-                <div class="footer-links">
-                    <a href="tel:0559219855"><i class="fas fa-phone"></i> 0559 219 855</a>
-                    <a href="tel:0799686060"><i class="fas fa-phone"></i> 0799 686 060</a>
-                    <a href="mailto:info@nabatati.com"><i class="fas fa-envelope"></i> info@nabatati.com</a>
-                </div>
-            </div>
-
-            <div class="footer-col">
-                <h4>موقعنا</h4>
-                <p style="margin:6px 0 0 0;"><i class="fas fa-map-marker-alt"></i> الطريق الوطني رقم 24، سيباو - بغلية،
-                    ولاية بومرداس</p>
-                <a href="https://maps.app.goo.gl/vwdRQ8Jun1TDyk627" target="_blank"
-                    style="color:#d7f0d7; display:inline-block; margin-top:8px;"><i class="fas fa-map-marked-alt"></i>
-                    التوجّه إلى المشتلة</a>
-            </div>
-        </div>
-
-        <div class="footer-bottom">جميع الحقوق محفوظة &copy; <span id="year"></span> مشتلة السلام</div>
-    </footer>
-<script>
-document.getElementById("year").textContent = new Date().getFullYear();
-</script>
-
-
-  <!-- زر السلة العائم -->
-  <button id="floatingCartBtn" aria-label="سلة المشتريات" title="عرض السلة">
-    <i class="fas fa-shopping-cart"></i>
-    <span id="cartCount" class="count">0</span>
-  </button>
-
-  <!-- نافذة الفاتورة (مُحسّنة ومتجاوبة) -->
-  <div class="modal-backdrop" id="cartModal" aria-hidden="true" style="display:none;align-items:flex-end;">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="invoiceTitle" style="margin:0;">
-      <div class="modal-header">
-        <h3 id="invoiceTitle">فاتورة المشتريات</h3>
-        <div class="head-actions">
-          <button class="btn danger" id="btnClearTop"><i class="fas fa-trash"></i> إفراغ السلة</button>
-          <button class="btn danger" id="btnCloseTop"><i class="fas fa-times"></i> إغلاق</button>
-        </div>
-      </div>
-
-      <div class="modal-body">
-        <div class="invoice-grid">
-          <!-- يسار: جدول الفاتورة -->
-          <div class="invoice-left">
-            <div class="table-wrap">
-              <table class="invoice-table" id="invoiceTable" role="table" aria-label="قائمة المشتريات">
-                <thead>
-                <tr>
-                  <th>الصنف</th>
-                  <th>النوع/الصنف الفرعي</th>
-                  <th>الكمية</th>
-                  <th>سعر الوحدة</th>
-                  <th>المجموع</th>
-                  <th>إجراء</th>
-                </tr>
-                </thead>
-                <tbody id="invoiceRows"><tr><td colspan="6" style="text-align:center;padding:18px;color:#777;">السلة فارغة</td></tr></tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- يمين: ملخص + معلومات الزبون -->
-          <aside class="invoice-right">
-            <div class="summary-box">
-              <div class="summary-row"><span>المجموع الفرعي</span><b id="modalSubtotal">0 دج</b></div>
-              <div class="summary-row" style="display:none"><span>التوصيل</span><b id="modalDelivery">0 دج</b></div>
-              <div class="summary-row summary-total"><span>الإجمالي</span><b id="modalTotal">0 دج</b></div>
-            </div>
-
-            <div class="customer-card" aria-label="معلومات الزبون">
-              <div class="form-item">
-                <label class="form-label" for="custName"><i class="fa-solid fa-user"></i> الاسم الكامل</label>
-                <input id="custName" class="form-input" type="text" placeholder="الاسم الكامل" required>
-              </div>
-
-              <div class="form-row">
-                <div class="form-item">
-                  <label class="form-label" for="custPhone"><i class="fa-solid fa-phone"></i> رقم الهاتف</label>
-                  <input id="custPhone" class="form-input" type="tel" inputmode="numeric" placeholder="مثال: 0559123456" required>
-                </div>
-                <div class="form-item">
-                  <label class="form-label" for="custWilaya"><i class="fa-solid fa-location-dot"></i> الولاية</label>
-                  <input id="custWilaya" class="form-input" type="text" placeholder="الولاية">
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-item">
-                  <label class="form-label" for="custMunicip"><i class="fa-solid fa-city"></i> البلدية</label>
-                  <input id="custMunicip" class="form-input" type="text" placeholder="البلدية">
-                </div>
-                <div class="form-item">
-                  <label class="form-label" for="custAddress"><i class="fa-solid fa-map"></i> العنوان</label>
-                  <input id="custAddress" class="form-input" type="text" placeholder="العنوان">
-                </div>
-              </div>
-
-              <div class="form-item">
-                <label class="form-label" for="custNotes"><i class="fa-regular fa-note-sticky"></i> ملاحظات</label>
-                <textarea id="custNotes" class="form-textarea" rows="2" placeholder="ملاحظات"></textarea>
-              </div>
-            </div>
-          </aside>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn danger" id="btnCancel"><i class="fas fa-ban"></i> إلغاء</button>
-        <!-- زر التأكيد يفتح نافذة الإرسال (واتساب فقط) -->
-        <button class="btn primary" id="btnConfirm"><i class="fas fa-check"></i> تأكيد الطلب</button>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- نافذة الإرسال (واتساب فقط) -->
-  <div class="dialog" id="sendDialog" aria-hidden="true">
-    <div class="dialog-card">
-      <div class="dialog-head">
-        <strong>إرسال الطلب</strong>
-        <button class="btn secondary" id="closeSendDialog" title="إغلاق"><i class="fas fa-times"></i></button>
-      </div>
-      <div class="dialog-body">
-        <p style="margin:0">سوف يتم فتح واتساب مع نص الطلب لتحقّق وإرسال.</p>
-      </div>
-      <div class="dialog-actions" style="padding:14px;">
-        <button class="btn whatsapp" id="btnSendWhatsApp"><i class="fab fa-whatsapp"></i> إرسال عبر واتساب</button>
-      </div>
-    </div>
-  </div>
+</div>
 
 <script>
-    /**************** الإعدادات ****************/
-    const WHATSAPP_NUMBER = '213697743721'; // رقمك 0697743721 مع مفتاح الجزائر 213
-    const ENABLE_PERSIST_CART = true;
+let cart = [];
 
-    // فرض تنسيق الأرقام باللاتينية في إخراج الجافاسكربت
-    const formatNumber = (n) => (parseFloat(n)||0).toLocaleString('en-US') + ' دج';
+// إضافة للسلة
+function addToCart(name, price) {
+    cart.push({ name, price });
+    updateCartCount();
+}
 
-    // عناصر DOM الأساسية
-    const cartCountEl = document.getElementById('cartCount');
-    const miniCountEl = document.getElementById('miniCount');
-    const miniTotalEl = document.getElementById('miniTotal');
-    const floatingCartBtn = document.getElementById('floatingCartBtn');
-    const quickOpenCart = document.getElementById('quickOpenCart');
-    const cartModal = document.getElementById('cartModal');
-    const invoiceRows = document.getElementById('invoiceRows');
-    const modalSubtotal = document.getElementById('modalSubtotal');
-    const modalTotal = document.getElementById('modalTotal');
+// تحديث عدد المنتجات في الزر
+function updateCartCount() {
+    document.getElementById("cartCount").textContent = cart.length;
+}
 
-    const btnClearTop = document.getElementById('btnClearTop');
-    const btnCloseTop = document.getElementById('btnCloseTop');
-    const btnCancel = document.getElementById('btnCancel');
-    const btnConfirmOrder = document.getElementById('btnConfirmOrder');
-    const btnWhatsApp = document.getElementById('btnWhatsApp');
-    const btnGooglePay = document.getElementById('btnGooglePay');
+// عرض الفاتورة
+function openInvoice() {
+    const cartItemsDiv = document.getElementById("cartItems");
+    const totalPriceDiv = document.getElementById("totalPrice");
+    cartItemsDiv.innerHTML = "";
+    let total = 0;
 
-    const searchInput = document.getElementById('search-input');
-    const searchBtn = document.getElementById('search-btn');
-    const resultsCounter = document.getElementById('resultsCounter');
-    const noResults = document.getElementById('noResults');
-    const contentRoot = document.querySelector('main.container');
-
-    const customerInfoSection = document.getElementById('customerInfoSection');
-    const paymentButtons = document.getElementById('paymentButtons');
-
-    // السنة في الفوتر
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    /**************** حالة السلة ****************/
-    let cart = [];
-    window.addEventListener('DOMContentLoaded', () => {
-      if (ENABLE_PERSIST_CART) {
-        try {
-          const saved = localStorage.getItem('nabatati_cart_final_v1');
-          if (saved) cart = JSON.parse(saved) || [];
-        } catch(e){ cart = []; }
-      }
-      updateCartIndicators();
+    cart.forEach(item => {
+        const div = document.createElement("div");
+        div.innerHTML = `<span>${item.name}</span> <span>${item.price} دج</span>`;
+        cartItemsDiv.appendChild(div);
+        total += item.price;
     });
 
-    function persistCart(){ if(ENABLE_PERSIST_CART){ try{ localStorage.setItem('nabatati_cart_final_v1', JSON.stringify(cart)); }catch(e){} } }
+    totalPriceDiv.textContent = `المجموع: ${total} دج`;
+    document.getElementById("invoiceModal").style.display = "block";
+}
 
-    function addToCart(productName, variety='', price=0, qty=1, productType=''){
-      const idx = cart.findIndex(i=>i.productName===productName && i.variety===variety);
-      if(idx>-1){ cart[idx].quantity += qty; } 
-      else { cart.push({productName,variety,price:parseFloat(price)||0,quantity:qty,type:productType}); }
-      persistCart(); 
-      updateCartIndicators(); 
-      toastAdded(productName);
+// إغلاق الفاتورة
+function closeInvoice() {
+    document.getElementById("invoiceModal").style.display = "none";
+}
+
+// أحداث الأزرار
+document.getElementById("floatingCartBtn").addEventListener("click", openInvoice);
+document.getElementById("closeModal").addEventListener("click", closeInvoice);
+window.addEventListener("click", function(e) {
+    if (e.target == document.getElementById("invoiceModal")) {
+        closeInvoice();
     }
-
-    function removeFromCart(index){
-      if(index>=0 && index<cart.length){
-        if(confirm('هل تريد حذف هذا المنتج؟')){ 
-          cart.splice(index,1); 
-          persistCart(); 
-          updateCartIndicators(); 
-          updateInvoice(); 
-        }
-      }
-    }
-
-    function changeQty(index, newVal){
-      const v = Math.max(1, parseInt(newVal)||1);
-      if(index>=0 && index<cart.length){ 
-        cart[index].quantity = v; 
-        persistCart(); 
-        updateCartIndicators(); 
-        updateInvoice(); 
-      }
-    }
-
-    function stepQty(index, delta){
-      if(index>=0 && index<cart.length){
-        const v = Math.max(1, (parseInt(cart[index].quantity)||1) + delta);
-        cart[index].quantity = v; 
-        persistCart(); 
-        updateCartIndicators(); 
-        updateInvoice();
-      }
-    }
-
-    function clearCart(){
-      cart = []; 
-      persistCart(); 
-      updateCartIndicators(); 
-      updateInvoice();
-    }
-
-    function updateCartIndicators(){
-      const count = cart.reduce((s,i)=>s+(parseInt(i.quantity)||1),0);
-      const total = cart.reduce((s,i)=>s+((parseFloat(i.price)||0)*(parseInt(i.quantity)||1)),0);
-      cartCountEl.textContent = count.toString();
-      miniCountEl.textContent = count.toString();
-      miniTotalEl.textContent = formatNumber(total);
-      floatingCartBtn.classList.toggle('pulse', count>0);
-    }
-
-    function updateInvoice(){
-      if(!invoiceRows) return;
-      if(cart.length===0){
-        invoiceRows.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:18px;color:#777;">السلة فارغة</td></tr>';
-        modalSubtotal.textContent = modalTotal.textContent = formatNumber(0);
-        return;
-      }
-      invoiceRows.innerHTML='';
-      let subtotal=0;
-      cart.forEach((item,idx)=>{
-        const unit = parseFloat(item.price)||0;
-        const qty = parseInt(item.quantity)||1;
-        const line = unit*qty; 
-        subtotal+=line;
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${escapeHtml(item.productName)}</td>
-          <td>${escapeHtml(item.variety||'-')}</td>
-          <td>
-            <span class="qty-wrap">
-              <button class="qty-btn" onclick="stepQty(${idx},-1)">−</button>
-              <input class="qty-input" type="number" min="1" value="${qty}" onchange="changeQty(${idx}, this.value)"/>
-              <button class="qty-btn" onclick="stepQty(${idx},1)">+</button>
-            </span>
-          </td>
-          <td>${formatNumber(unit)}</td>
-          <td>${formatNumber(line)}</td>
-          <td><button class="btn secondary" onclick="removeFromCart(${idx})" title="حذف"><i class="fas fa-trash"></i></button></td>
-        `;
-        invoiceRows.appendChild(tr);
-      });
-      modalSubtotal.textContent = formatNumber(subtotal);
-      modalTotal.textContent = formatNumber(subtotal);
-    }
-
-    /**************** فتح/إغلاق الفاتورة ****************/
-    function openCartModal(){
-      updateInvoice();
-      customerInfoSection.style.display = 'none';
-      paymentButtons.style.display = 'none';
-      btnConfirmOrder.style.display = 'block';
-      document.getElementById('cartModal').style.display='flex';
-      document.body.style.overflow='hidden';
-    }
-
-    function closeCartModal(){ 
-      document.getElementById('cartModal').style.display='none'; 
-      document.body.style.overflow=''; 
-    }
-
-    floatingCartBtn.addEventListener('click', openCartModal);
-    quickOpenCart.addEventListener('click', openCartModal);
-    btnCloseTop.addEventListener('click', closeCartModal);
-    btnCancel.addEventListener('click', closeCartModal);
-
-    btnClearTop.addEventListener('click', ()=>{ 
-      if(cart.length && confirm('هل أنت متأكد من إفراغ السلة؟')) clearCart(); 
-    });
-
-    /**************** تأكيد الطلب وطرق الدفع ****************/
-    btnConfirmOrder.addEventListener('click', function(){
-      if(cart.length === 0){
-        alert('السلة فارغة، يرجى إضافة منتجات أولاً');
-        return;
-      }
-      customerInfoSection.style.display = 'block';
-      paymentButtons.style.display = 'flex';
-      this.style.display = 'none';
-    });
-
-    btnGooglePay.addEventListener('click', function(){
-      const order = collectOrder();
-      if(!validateCustomerInfo(order.customer)) return;
-      
-      alert('سيتم توجيهك إلى صفحة الدفع عبر Google Pay');
-      // هنا يمكنك إضافة منطق الدفع الفعلي عبر Google Pay
-    });
-
-    btnWhatsApp.addEventListener('click', function(){
-      const order = collectOrder();
-      if(!validateCustomerInfo(order.customer)) return;
-      
-      const lines = order.items.map((it,i)=>`${(i+1).toString()}- ${it.product} (${it.variety||'-'}) × ${it.qty} = ${formatNumber(it.total)}`);
-      const msg = `طلب جديد — مشتلة السلام
-العميل: ${order.customer.name}
-الهاتف: ${order.customer.phone}
-الولاية/البلدية: ${order.customer.wilaya} / ${order.customer.municipality}
-العنوان: ${order.customer.address}
-ملاحظات: ${order.customer.notes}
-
-المنتجات:
-${lines.join('\n')}
-
-الإجمالي: ${formatNumber(order.subtotal)} دج`;
-
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
-    });
-
-    /**************** أدوات مساعدة ****************/
-    function collectOrder(){
-      const items = cart.map(i=>({ 
-        product:i.productName, 
-        variety:i.variety||'', 
-        qty:parseInt(i.quantity)||1, 
-        unitPrice:parseFloat(i.price)||0, 
-        total: (parseFloat(i.price)||0)*(parseInt(i.quantity)||1) 
-      }));
-      const subtotal = items.reduce((s,it)=>s+it.total,0);
-      const customer = {
-        name: document.getElementById('custName').value.trim(),
-        phone: document.getElementById('custPhone').value.trim(),
-        wilaya: document.getElementById('custWilaya').value.trim(),
-        municipality: document.getElementById('custMunicip').value.trim(),
-        address: document.getElementById('custAddress').value.trim(),
-        notes: document.getElementById('custNotes').value.trim()
-      };
-      return {items, subtotal, customer};
-    }
-
-    function validateCustomerInfo(customer){
-      if(!customer.name || !customer.phone){
-        alert('يرجى إدخال الاسم الكامل ورقم الهاتف.');
-        return false;
-      }
-      if(!/^0[5-7]\d{8}$/.test(customer.phone)){
-        alert('رقم الهاتف يجب أن يبدأ بـ 05/06/07 ويتكون من 10 أرقام.');
-        return false;
-      }
-      return true;
-    }
-
-    function escapeHtml(s){ 
-      if(!s) return ''; 
-      return s.toString()
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;')
-        .replace(/"/g,'&quot;')
-        .replace(/'/g,'&#039;'); 
-    }
-
-    function toastAdded(productName){ 
-      const d=document.createElement('div'); 
-      d.className='cart-notification'; 
-      d.textContent=`تم إضافة ${productName} إلى السلة`; 
-      document.body.appendChild(d); 
-      setTimeout(()=>d.remove(), 3000); 
-    }
-
-    /**************** البحث المحسّن + إبراز ****************/
-    let searchTimer;
-    function clearHighlights(){
-      const marks = contentRoot.querySelectorAll('mark.hl');
-      marks.forEach(m=>{
-        const parent = m.parentNode;
-        parent.replaceChild(document.createTextNode(m.textContent), m);
-        parent.normalize();
-      });
-    }
-
-    function highlightInElement(el, term){
-      if(!term || !el) return;
-      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null, false);
-      const texts = [];
-      while(walker.nextNode()) texts.push(walker.currentNode);
-      texts.forEach(node=>{
-        const t = node.nodeValue;
-        const idx = t.toLowerCase().indexOf(term.toLowerCase());
-        if(idx>-1){
-          const before = t.slice(0,idx);
-          const match  = t.slice(idx, idx+term.length);
-          const after  = t.slice(idx+term.length);
-          const frag = document.createDocumentFragment();
-          if(before) frag.appendChild(document.createTextNode(before));
-          const mark = document.createElement('mark'); mark.className='hl'; mark.textContent = match;
-          frag.appendChild(mark);
-          if(after) frag.appendChild(document.createTextNode(after));
-          node.parentNode.replaceChild(frag,node);
-        }
-      });
-    }
-
-    function performSearch(){
-      const term = searchInput.value.trim();
-      clearHighlights();
-      const products = contentRoot.querySelectorAll('.product');
-      let visibleCount = 0;
-      if(term===''){
-        products.forEach(p=>{ p.style.display='flex'; p.closest('.category').style.display='block'; });
-        resultsCounter.textContent = '';
-        noResults.style.display='none';
-        return;
-      }
-      products.forEach(p=>{
-        const name = p.querySelector('h3')?.textContent || '';
-        const desc = p.querySelector('p')?.textContent || '';
-        const type = (p.dataset.type||'');
-        const hay = (name+' '+desc+' '+type).toLowerCase();
-        if(hay.includes(term.toLowerCase())){
-          p.style.display='flex';
-          highlightInElement(p.querySelector('.product-info'), term);
-          visibleCount++;
-        }else{ p.style.display='none'; }
-      });
-      const categories = contentRoot.querySelectorAll('.category');
-      categories.forEach(cat=>{
-        const vis = cat.querySelectorAll('.product:not([style*="display: none"])').length;
-        cat.style.display = vis? 'block' : 'none';
-      });
-      resultsCounter.textContent = visibleCount ? `النتائج: ${visibleCount}` : 'لا نتائج';
-      noResults.style.display = visibleCount? 'none' : 'block';
-    }
-
-    searchBtn.addEventListener('click', performSearch);
-    searchInput.addEventListener('input', ()=>{ 
-      clearTimeout(searchTimer); 
-      searchTimer=setTimeout(performSearch,300); 
-    });
-
-    /**************** اختيار صنف (نافذة صغيرة) ****************/
-    function showVarietySelection(productName, btnElement){
-      const card = btnElement.closest('.product');
-      const productType = card.dataset.type || '';
-      const lis = card.querySelectorAll('.varieties li');
-      if(!lis.length){
-        const price = card.dataset.price || '0';
-        addToCart(productName,'',price,1,productType);
-        return;
-      }
-      const overlay = document.createElement('div');
-      overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:1500';
-      const box = document.createElement('div');
-      box.style.cssText='background:#fff;padding:20px;border-radius:12px;width:min(420px,92vw);text-align:center';
-      box.innerHTML = `<h3 style="margin-top:0;color:#006233">اختر الصنف: ${escapeHtml(productName)}</h3>`;
-      const select = document.createElement('select'); 
-      select.style.cssText='width:100%;padding:8px;margin:10px 0 16px 0;border-radius:8px;border:1px solid #ccc';
-      lis.forEach(li=>{ 
-        const opt = document.createElement('option'); 
-        opt.textContent = li.textContent.trim(); 
-        select.appendChild(opt); 
-      });
-      const ok = document.createElement('button'); 
-      ok.className='btn primary'; 
-      ok.textContent='تأكيد';
-      const cancel = document.createElement('button'); 
-      cancel.className='btn secondary'; 
-      cancel.style.marginRight='8px'; 
-      cancel.textContent='إلغاء';
-      ok.onclick = ()=>{ 
-        const text = select.value; 
-        const m = text.match(/(\d+)\s*دج/); 
-        const price = m? m[1] : '0'; 
-        const variety = text.replace(/\s*-\s*\d+\s*دج/,'').trim(); 
-        addToCart(productName, variety, price, 1, productType); 
-        document.body.removeChild(overlay); 
-      };
-      cancel.onclick = ()=> document.body.removeChild(overlay);
-      box.appendChild(select); 
-      box.appendChild(ok); 
-      box.appendChild(cancel);
-      overlay.appendChild(box); 
-      document.body.appendChild(overlay);
-      overlay.addEventListener('click',(e)=>{ 
-        if(e.target===overlay) document.body.removeChild(overlay); 
-      });
-    }
+});
 </script>
 
 </body>
 </html>
-
-
