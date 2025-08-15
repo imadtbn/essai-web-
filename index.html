@@ -323,472 +323,181 @@
 
         <!-- قسم الأشجار المثمرة (يتضمن الزيتون بأصنافه) -->
         <section id="fruit-trees" class="category" aria-labelledby="h-fruit-trees">
-          <div class="category-header">
-              <h2 id="h-fruit-trees"><i class="fas fa-apple-whole" aria-hidden="true"></i> الأشجار المثمرة</h2>
-          </div>
+            <div class="category-header">
+                <h2 id="h-fruit-trees"><i class="fas fa-apple-whole" aria-hidden="true"></i> الأشجار المثمرة</h2>
+            </div>
 
-          <div class="products">
-              <!-- المنتج 1: زيتون لإنتاج الزيت -->
-              <div class="product" data-price="60" data-type="زيتون">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zite.jpg"
-                      alt="زيتون لإنتاج الزيت">
-                  <div class="product-info">
-                      <h3>زيتون لإنتاج الزيت</h3>
-                      <p>صنف ممتاز لإنتاج الزيوت</p>
-                      <div class="varieties">
-                          <strong>الأصناف المتاحة:</strong>
-                          <ul>
-                              <li>شملال - 60 دج</li>
-                              <li>سيقواز - 65 دج</li>
-                              <li>بيكوال - 70 دج</li>
-                              <li>ملكة العرب - 75 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('زيتون لإنتاج الزيت', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
+            <div class="products">
+                <!-- المنتج 1: زيتون لإنتاج الزيت -->
+                <div class="product" data-price="60" data-type="زيتون">
+                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zite.jpg"
+                        alt="زيتون لإنتاج الزيت">
+                    <div class="product-info">
+                        <h3>زيتون لإنتاج الزيت</h3>
+                        <p>صنف ممتاز لإنتاج الزيوت</p>
+                        <div class="varieties">
+                            <strong>الأصناف المتاحة:</strong>
+                            <ul>
+                                <li>شملال - 60 دج</li>
+                                <li>سيقواز - 65 دج</li>
+                                <li>بيكوال - 70 دج</li>
+                                <li>ملكة العرب - 75 دج</li>
+                            </ul>
+                        </div>
+                        
+                        <button class="cart-btn" onclick="showVarietySelection('زيتون لإنتاج الزيت', this)"><i
+                                class="fas fa-cart-plus"></i> أضف للسلة</button>
+                    </div>
+                </div>
+              <!-- منتجات إضافية للتوضيح -->
+              <div class="product" data-price="45" data-type="تفاح">
+                <img src="https://via.placeholder.com/300x200?text=شجرة+تفاح" alt="شجرة تفاح">
+                <div class="product-info">
+                  <h3>شجرة تفاح</h3>
+                  <p>صنف ممتاز من التفاح</p>
+                  <div class="varieties">
+                    <strong>الأصناف المتاحة:</strong>
+                    <ul>
+                      <li>تفاح أحمر - 45 دج</li>
+                      <li>تفاح أخضر - 50 دج</li>
+                    </ul>
                   </div>
+                  <button class="cart-btn" onclick="showVarietySelection('شجرة تفاح', this)"><i
+                      class="fas fa-cart-plus"></i> أضف للسلة</button>
+                </div>
               </div>
+            </div> <!-- نهاية المنتجات في قسم الأشجار المثمرة -->
+        </section>
 
-              <!-- المنتج 2: زيتون لإنتاج الزيت والترقيد -->
-              <div class="product" data-price="55" data-type="زيتون">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zitoun.jpg"
-                      alt="زيتون للترقيد">
+        <!-- قسم الورود والزهور -->
+        <section id="flowers" class="category" aria-labelledby="h-flowers">
+            <div class="category-header">
+                <h2 id="h-flowers"><i class="fas fa-rose"></i> ورود، زهور ونباتات</h2>
+            </div>
+
+            <div class="products">
+                <div class="product" data-price="40" data-type="ورود">
+                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/w-djouri.jpg"
+                        alt="ورد جوري">
+                    <div class="product-info">
+                        <h3>ورد جوري</h3>
+                        <p>ملكة الزهور برائحتها العطرة</p>
+                        <div class="varieties">
+                            <ul>
+                                <li>جوري أحمر - 40 دج</li>
+                                <li>جوري وردي - 45 دج</li>
+                                <li>جوري أبيض - 50 دج</li>
+                            </ul>
+                        </div>
+                        
+                        <button class="cart-btn" onclick="showVarietySelection('ورد جوري', this)"><i
+                                class="fas fa-cart-plus"></i> أضف للسلة</button>
+                    </div>
+                </div>
+                <!-- يمكنك إضافة منتجات أخرى هنا بنفس البنية -->
+                <div class="product" data-price="35" data-type="زهور">
+                  <img src="https://via.placeholder.com/300x200?text=زهور+صيفية" alt="زهور صيفية">
                   <div class="product-info">
-                      <h3>زيتون لإنتاج الزيت والترقيد</h3>
-                      <p>من أفضل الأصناف للترقيد</p>
-                      <div class="varieties">
-                          <strong>الأصناف المتاحة:</strong>
-                          <ul>
-                              <li>فركاني - 55 دج</li>
-                              <li>بيكوال - 60 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('زيتون لإنتاج الزيت والترقيد', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
+                    <h3>زهور صيفية</h3>
+                    <p>زهور ملونة تتحمل حرارة الصيف</p>
+                    <div class="varieties">
+                      <ul>
+                        <li>مجموعة متنوعة - 35 دج</li>
+                        <li>مجموعة خاصة - 40 دج</li>
+                      </ul>
+                    </div>
+                    <button class="cart-btn" onclick="showVarietySelection('زهور صيفية', this)"><i
+                        class="fas fa-cart-plus"></i> أضف للسلة</button>
                   </div>
-              </div>
+                </div>
+            </div>
 
-              <!-- المنتج 3: زيتون للتخليل والترقيد -->
-              <div class="product" data-price="65" data-type="زيتون">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zmerager.jpg"
-                      alt="زيتون للتخليل">
-                  <div class="product-info">
-                      <h3>زيتون للتخليل والترقيد</h3>
-                      <p>صنف مميز لإنتاج الزيت والتخليل</p>
-                      <div class="varieties">
-                          <strong>الأصناف المتاحة:</strong>
-                          <ul>
-                              <li>فركاني - 65 دج</li>
-                              <li>بيكوال - 70 دج</li>
-                              <li>شملال - 75 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('زيتون للتخليل والترقيد', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
+        </section>
 
-              <!-- الحمضيات -->
-              <div class="product" data-price="45" data-type="حمضيات">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/tchina.jpg"
-                      alt="برتقال">
-                  <div class="product-info">
-                      <h3>برتقال</h3>
-                      <p>صنف حلو المذاق وعالي الجودة</p>
-                      <div class="varieties">
-                          <strong>الأصناف المتاحة:</strong>
-                          <ul>
-                              <li>طومسون - 45 دج</li>
-                              <li>بالنسي - 50 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('برتقال', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
+        <!-- قسم التزيين والتسييج -->
+        <section id="ornamental" class="category" aria-labelledby="h-ornamental">
+            <div class="category-header">
+                <h2 id="h-ornamental"><i class="fas fa-tree"></i> أشجار التزيين والتسييج</h2>
+            </div>
 
-              <div class="product" data-price="50" data-type="حمضيات">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/limoun.jpg"
-                      alt="ليمون">
-                  <div class="product-info">
-                      <h3>ليمون</h3>
-                      <p>ليمون حمضي طازج وعالي الجودة</p>
-                      <div class="varieties">
-                          <strong>الأصناف المتاحة:</strong>
-                          <ul>
-                              <li>بنزهير - 50 دج</li>
-                              <li>أربعة فصول - 55 دج</li>
-                              <li>ليمون أصفر - 60 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('ليمون', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
+            <div class="products">
+                <div class="product" data-price="75" data-type="تزيين">
+                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zina.jpeg"
+                        alt="فيكس">
+                    <div class="product-info">
+                        <h3>فيكس</h3>
+                        <p>شجرة زينة دائمة الخضرة</p>
+                        <div class="varieties">
+                            <ul>
+                                <li>فيكس نتدا - 75 دج</li>
+                                <li>فيكس بنجامينا - 80 دج</li>
+                            </ul>
+                        </div>
+                        
+                        <button class="cart-btn" onclick="showVarietySelection('فيكس', this)"><i
+                                class="fas fa-cart-plus"></i> أضف للسلة</button>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-              <div class="product" data-price="55" data-type="حمضيات">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/mendarin.jpg"
-                      alt="مندرين">
-                  <div class="product-info">
-                      <h3>مندرين</h3>
-                      <p>فاكهة لذيذة سهلة التقشير</p>
-                      <div class="varieties">
-                          <strong>الأصناف المتاحة:</strong>
-                          <ul>
-                              <li>مندرين - 55 دج</li>
-                              <li>كليمنتين - 60 دج</li>
-                              <li>مندرين قزمية - 65 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('مندرين', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
+        <!-- بذور وشتلات -->
+        <section id="vegetables" class="category" aria-labelledby="h-vegetables">
+            <div class="category-header">
+                <h2 id="h-vegetables"><i class="fas fa-seedling"></i> بذور وشتلات الخضروات</h2>
+            </div>
 
-              <!-- فواكه بالنواة: خوخ، مشمش، برقوق، رمان -->
-              <div class="product" data-price="65" data-type="فواكه بالنواة">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/khokh.jpg"
-                      alt="خوخ">
-                  <div class="product-info">
-                      <h3>خوخ</h3>
-                      <p>أشجار خوخ حلوة المذاق وعالية الإنتاج</p>
-                      <div class="varieties">
-                          <ul>
-                              <li>خوخ مبكر - 65 دج</li>
-                              <li>خوخ كعب الغزال - 70 دج</li>
-                              <li>خوخ أبيض - 75 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('خوخ', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
+            <div class="products">
+                <div class="product" data-price="15" data-type="بذور">
+                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/bodour.jpeg"
+                        alt="بذور طماطم">
+                    <div class="product-info">
+                        <h3>بذور طماطم</h3>
+                        <p>بذور عالية الجودة</p>
+                        <div class="varieties">
+                            <ul>
+                                <li>طماطم شيري - 15 دج</li>
+                                <li>طماطم بلدي - 20 دج</li>
+                                <li>طماطم هجين - 25 دج</li>
+                            </ul>
+                        </div>
+                        
+                        <button class="cart-btn" onclick="showVarietySelection('بذور طماطم', this)"><i
+                                class="fas fa-cart-plus"></i> أضف للسلة</button>
+                    </div>
+                </div>
 
-              <div class="product" data-price="70" data-type="فواكه بالنواة">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/mechmech.jpg"
-                      alt="مشمش">
-                  <div class="product-info">
-                      <h3>مشمش</h3>
-                      <p>أشجار مشمش عالية الجودة والإنتاج</p>
-                      <div class="varieties">
-                          <ul>
-                              <li>مشمش حلواني - 70 دج</li>
-                              <li>مشمش كانينو - 75 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('مشمش', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
+            </div>
+        </section>
 
-              <div class="product" data-price="70" data-type="فواكه بالنواة">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/bargog.jpg"
-                      alt="برقوق">
-                  <div class="product-info">
-                      <h3>برقوق</h3>
-                      <p>أشجار برقوق مثمرة وعالية الجودة</p>
-                      <div class="varieties">
-                          <ul>
-                              <li>برقوق أصفر - 70 دج</li>
-                              <li>برقوق أحمر - 75 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('برقوق', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
+        <!-- أدوات وأسمدة -->
+        <section id="tools" class="category" aria-labelledby="h-tools">
+            <div class="category-header">
+                <h2 id="h-tools"><i class="fas fa-wrench"></i> أدوات زراعية وأسمدة</h2>
+            </div>
 
-              <div class="product" data-price="60" data-type="فواكه بالنواة">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/romman.jpg"
-                      alt="رمان">
-                  <div class="product-info">
-                      <h3>رمان</h3>
-                      <p>أشجار رمان عالية الجودة والإنتاج</p>
-                      <div class="varieties">
-                          <ul>
-                              <li>رمان حلواني - 60 دج</li>
-                              <li>رمان مانجولاتي - 65 دج</li>
-                              <li>رمان بلدي - 70 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('رمان', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
+            <div class="products">
+                <div class="product" data-price="30" data-type="أسمدة">
+                    <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/composte.jpeg"
+                        alt="أسمدة">
+                    <div class="product-info">
+                        <h3>أسمدة عضوية</h3>
+                        <p>لتعزيز نمو النباتات</p>
+                        <div class="varieties">
+                            <ul>
+                                <li>سماد دودي - 30 دج</li>
+                                <li>كمبوست - 35 دج</li>
+                                <li>سماد بلدي - 40 دج</li>
+                            </ul>
+                        </div>
+                        
+                        <button class="cart-btn" onclick="showVarietySelection('أسمدة عضوية', this)"><i
+                                class="fas fa-cart-plus"></i> أضف للسلة</button>
+                    </div>
+                </div>
 
-              <!-- كروم -->
-              <div class="product" data-price="70" data-type="كروم">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/3ineb.jpg"
-                      alt="عنب">
-                  <div class="product-info">
-                      <h3>عنب</h3>
-                      <p>أصناف عنب ممتازة</p>
-                      <div class="varieties">
-                          <ul>
-                              <li>عنب أحمر - 70 دج</li>
-                              <li>عنب أبيض - 75 دج</li>
-                              <li>عنب أسود - 80 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('عنب', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
-
-              <div class="product" data-price="65" data-type="كروم">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/tout.jpg"
-                      alt="توت">
-                  <div class="product-info">
-                      <h3>توت</h3>
-                      <p>أشجار توت مثمرة</p>
-                      <div class="varieties">
-                          <ul>
-                              <li>توت أسود - 65 دج</li>
-                              <li>توت أبيض - 70 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('توت', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
-
-              <div class="product" data-price="65" data-type="كروم">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/fig.jpg"
-                      alt="تين">
-                  <div class="product-info">
-                      <h3>تين</h3>
-                      <p>أشجار تين مثمرة</p>
-                      <div class="varieties">
-                          <ul>
-                              <li>تين أسود - 65 دج</li>
-                              <li>تين أبيض - 70 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('تين', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
-
-              <!-- تفاحيات -->
-              <div class="product" data-price="80" data-type="تفاح">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/teffah.jpg" alt="تفاح">
-                  <div class="product-info">
-                      <h3>تفاح</h3>
-                      <p>أشجار تفاح عالية الجودة</p>
-                      <div class="varieties">
-                          <ul>
-                              <li>أحمر – 80 دج</li>
-                              <li>أصفر – 85 دج</li>
-                              <li>أخضر – 90 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('تفاح', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
-
-              <div class="product" data-price="85" data-type="تفاح">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/endjaas.jpg" alt="إجاص">
-                  <div class="product-info">
-                      <h3>إجاص</h3>
-                      <p>أشجار إجاص مثمرة عالية الجودة</p>
-                      <div class="varieties">
-                          <ul>
-                              <li>أصفر – 85 دج</li>
-                              <li>أخضر – 90 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('إجاص', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
-
-          </div> <!-- نهاية المنتجات في قسم الأشجار المثمرة -->
-      </section>
-
-      <!-- قسم الورود والزهور -->
-      <section id="flowers" class="category" aria-labelledby="h-flowers">
-          <div class="category-header">
-              <h2 id="h-flowers"><i class="fas fa-rose"></i> ورود، زهور ونباتات</h2>
-          </div>
-
-          <div class="products">
-              <div class="product" data-price="40" data-type="ورود">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/w-djouri.jpg"
-                      alt="ورد جوري">
-                  <div class="product-info">
-                      <h3>ورد جوري</h3>
-                      <p>ملكة الزهور برائحتها العطرة</p>
-                      <div class="varieties">
-                          <ul>
-                              <li>جوري أحمر - 40 دج</li>
-                              <li>جوري وردي - 45 دج</li>
-                              <li>جوري أبيض - 50 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('ورد جوري', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
-
-              <div class="product" data-price="35" data-type="ورود">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/w-feell.jpg"
-                      alt="ورد فل">
-                  <div class="product-info">
-                      <h3>ورد فل</h3>
-                      <p>رائحته فواحة وأزهاره بيضاء</p>
-                      <div class="price">سعر الشتلة: 35 دج</div>
-                      <button class="cart-btn" onclick="addToCart('ورد فل','','35')"><i class="fas fa-cart-plus"></i>
-                          أضف للسلة</button>
-                  </div>
-              </div>
-
-              <!-- يمكنك إضافة منتجات أخرى هنا بنفس البنية -->
-          </div>
-
-      </section>
-
-      <!-- قسم التزيين والتسييج -->
-      <section id="ornamental" class="category" aria-labelledby="h-ornamental">
-          <div class="category-header">
-              <h2 id="h-ornamental"><i class="fas fa-tree"></i> أشجار التزيين والتسييج</h2>
-          </div>
-
-          <div class="products">
-              <div class="product" data-price="75" data-type="تزيين">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/zina.jpeg"
-                      alt="فيكس">
-                  <div class="product-info">
-                      <h3>فيكس</h3>
-                      <p>شجرة زينة دائمة الخضرة</p>
-                      <div class="varieties">
-                          <ul>
-                              <li>فيكس نتدا - 75 دج</li>
-                              <li>فيكس بنجامينا - 80 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('فيكس', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
-
-              <div class="product" data-price="50" data-type="تسييج">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/siyadj.jpeg"
-                      alt="تسييج">
-                  <div class="product-info">
-                      <h3>أشجار التسييج</h3>
-                      <p>لتغطية الجدران والأسوار</p>
-                      <div class="varieties">
-                          <ul>
-                              <li>صنوبر - 50 دج</li>
-                              <li>كازارينا - 55 دج</li>
-                              <li>صفصاف - 60 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('أشجار التسييج', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
-          </div>
-      </section>
-
-      <!-- بذور وشتلات -->
-      <section id="vegetables" class="category" aria-labelledby="h-vegetables">
-          <div class="category-header">
-              <h2 id="h-vegetables"><i class="fas fa-seedling"></i> بذور وشتلات الخضروات</h2>
-          </div>
-
-          <div class="products">
-              <div class="product" data-price="15" data-type="بذور">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/bodour.jpeg"
-                      alt="بذور طماطم">
-                  <div class="product-info">
-                      <h3>بذور طماطم</h3>
-                      <p>بذور عالية الجودة</p>
-                      <div class="varieties">
-                          <ul>
-                              <li>طماطم شيري - 15 دج</li>
-                              <li>طماطم بلدي - 20 دج</li>
-                              <li>طماطم هجين - 25 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('بذور طماطم', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
-
-              <div class="product" data-price="25" data-type="شتلات">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/chetlat.jpg"
-                      alt="شتلات طماطم">
-                  <div class="product-info">
-                      <h3>شتلات طماطم</h3>
-                      <p>شتلات جاهزة للزراعة</p>
-                      <div class="price">سعر الشتلة: 25 دج</div>
-                      <button class="cart-btn" onclick="addToCart('شتلات طماطم','','25')"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
-          </div>
-      </section>
-
-      <!-- أدوات وأسمدة -->
-      <section id="tools" class="category" aria-labelledby="h-tools">
-          <div class="category-header">
-              <h2 id="h-tools"><i class="fas fa-wrench"></i> أدوات زراعية وأسمدة</h2>
-          </div>
-
-          <div class="products">
-              <div class="product" data-price="30" data-type="أسمدة">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/composte.jpeg"
-                      alt="أسمدة">
-                  <div class="product-info">
-                      <h3>أسمدة عضوية</h3>
-                      <p>لتعزيز نمو النباتات</p>
-                      <div class="varieties">
-                          <ul>
-                              <li>سماد دودي - 30 دج</li>
-                              <li>كمبوست - 35 دج</li>
-                              <li>سماد بلدي - 40 دج</li>
-                          </ul>
-                      </div>
-                      
-                      <button class="cart-btn" onclick="showVarietySelection('أسمدة عضوية', this)"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
-
-              <div class="product" data-price="120" data-type="أدوات">
-                  <img src="https://raw.githubusercontent.com/imadtbn/PlantShop-Essalam/refs/heads/main/images/mekass.jpeg"
-                      alt="أدوات">
-                  <div class="product-info">
-                      <h3>أدوات زراعية</h3>
-                      <p>مجموعة متكاملة للعناية بالنباتات</p>
-                      <div class="price">السعر: 120 دج للمجموعة</div>
-                      <button class="cart-btn" onclick="addToCart('أدوات زراعية','','120')"><i
-                              class="fas fa-cart-plus"></i> أضف للسلة</button>
-                  </div>
-              </div>
-          </div>
-      </section>
+            </div>
+        </section>
 
     </main>
         <!-- الفوتر -->
@@ -845,7 +554,6 @@ document.getElementById("year").textContent = new Date().getFullYear();
 
       <div class="modal-body">
         <div class="invoice-grid">
-
           <!-- يسار: جدول الفاتورة -->
           <div class="invoice-left">
             <div class="table-wrap">
@@ -945,7 +653,7 @@ document.getElementById("year").textContent = new Date().getFullYear();
 <script>
     /**************** الإعدادات ****************/
     const WHATSAPP_NUMBER = '213697743721'; // رقمك 0697743721 مع مفتاح الجزائر 213
-    const GOOGLE_FORM_URL = 'https://docs.google.com/spreadsheets/d/1ZqsC5xgEZDcmtTvFIOg9jWAjs8bKtNNxi2WheGwqtjA/edit?usp=sharing'; // رابط جوجل شيت الخاص بك
+    const GOOGLE_FORM_URL = 'https://forms.google.com/your-form-link'; // رابط جوجل شيت الخاص بك
     const ENABLE_PERSIST_CART = true;
 
     // فرض تنسيق الأرقام باللاتينية في إخراج الجافاسكربت
@@ -1170,18 +878,14 @@ ${lines.join('\n')}
     function sendViaGoogleSheet(){
       const order = collectOrder();
       if(!validateCustomerInfo(order.customer)) return;
-
       
       const formData = new FormData();
-        // استبدل بمفاتيح حقولك الفعلية
-formData.append('entry.1095295109', order.customer.name);         // الاسم
-formData.append('entry.456318645', order.customer.phone);        // الهاتف
-formData.append('entry.1066636445', order.customer.wilaya);       // الولاية
-formData.append('entry.921324105', order.customer.municipality); // البلدية
-formData.append('entry.87289143', order.customer.address);      // العنوان
-formData.append('entry.1394998101', order.customer.products);     // المنتجات
-formData.append('entry.2096956726', order.customer.total);        // المجموع
-formData.append('entry.1984444015', order.customer.notes);        // الملاحظات
+      formData.append('entry.123456789', order.customer.name); // استبدل بمفاتيح حقولك الفعلية
+      formData.append('entry.987654321', order.customer.phone);
+      formData.append('entry.456789123', order.customer.wilaya);
+      formData.append('entry.321654987', order.customer.municipality);
+      formData.append('entry.654987321', order.customer.address);
+      formData.append('entry.789123456', order.customer.notes);
       
       // إضافة المنتجات
       order.items.forEach((item, index) => {
@@ -1388,67 +1092,7 @@ formData.append('entry.1984444015', order.customer.notes);        // الملا�
         if(e.target===overlay) document.body.removeChild(overlay); 
       });
     }
-
-        // 0. إرسال إلى واتساب و جوجل
-function sendViaWhatsApp() {
-  const order = collectOrder();
-  if (!validateCustomerInfo(order.customer)) return;
-
-  // 1. إرسال إلى واتساب
-  const whatsappMsg = `طلب جديد — مشتلة السلام
-العميل: ${order.customer.name}
-الهاتف: ${order.customer.phone}
-المنتجات: ${order.items.map(item => `${item.product} (${item.variety}) × ${item.qty}`).join(', ')}
-الإجمالي: ${formatNumber(order.subtotal)} دج`;
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
-
-// 1. إرسال إلى Google Form
-const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLScwK9-P502slA0KY7VduL7JAz0HhRIZfsO35wFdOtzVOjXiOg/formResponse";
-
-const formData = new FormData();
-formData.append('entry.1095295109', order.customer.name);         // الاسم
-formData.append('entry.456318645', order.customer.phone);         // الهاتف
-formData.append('entry.1066636445', order.customer.wilaya);       // الولاية
-formData.append('entry.921324105', order.customer.municipality);  // البلدية
-formData.append('entry.87289143', order.customer.address);        // العنوان
-formData.append('entry.1394998101', order.items.map(item => `${item.product} (${item.variety}) × ${item.qty}`).join('\n')); // المنتجات
-formData.append('entry.2096956726', order.subtotal);               // المجموع
-formData.append('entry.1984444015', order.customer.notes);        // الملاحظات
-
-fetch(formUrl, {
-  method: 'POST',
-  mode: 'no-cors',
-  body: formData
-}).catch(e => console.error("Error sending to Google Form:", e));
-
-// 2. إرسال إلى Google Sheets
-const scriptUrl = "https://script.google.com/macros/s/AKfycbwzdBKXFaK5gexMDxl1JXhTnqu0LrsbpeBBJVNBjswtVx8LBu2b_aoYJXuZh6dpQKFN/exec";
-
-fetch(scriptUrl, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    name: order.customer.name,
-    phone: order.customer.phone,
-    wilaya: order.customer.wilaya,
-    municipality: order.customer.municipality,
-    address: order.customer.address,
-    products: order.items.map(item => `${item.product} (${item.variety}) × ${item.qty}`).join('\n'),
-    total: order.subtotal,
-    notes: order.customer.notes
-  })
-}).catch(e => console.error("Error sending to Google Sheets:", e));
-
-clearCart();
-closeCartModal();
-
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
