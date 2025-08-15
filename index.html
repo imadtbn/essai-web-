@@ -1384,6 +1384,40 @@ ${lines.join('\n')}
         if(e.target===overlay) document.body.removeChild(overlay); 
       });
     }
+
+        // 0. إرسال إلى واتساب و جوجل
+  function sendViaWhatsApp() {
+  const order = collectOrder();
+  if (!validateCustomerInfo(order.customer)) return;
+
+  // 1. إرسال إلى واتساب
+  const whatsappMsg = `طلب جديد — مشتلة السلام
+العميل: ${order.customer.name}
+الهاتف: ${order.customer.phone}
+المنتجات: ${order.items.map(item => `${item.product} (${item.variety}) × ${item.qty}`).join(', ')}
+الإجمالي: ${formatNumber(order.subtotal)} دج`;
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
+
+  // 2. إرسال إلى Google Sheets
+  const scriptUrl = "https://script.google.com/macros/s/AKfycbwh5kMCQopdoEm8NbHdDphznyxC6ryyZtPyOxLS1a6lR2QT6z_aMMfEaG4qQtCzDv0O/exec"; // استبدل برابط الويب أب
+  fetch(scriptUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: order.customer.name,
+      phone: order.customer.phone,
+      wilaya: order.customer.wilaya,
+      municipality: order.customer.municipality,
+      address: order.customer.address,
+      products: order.items.map(item => `${item.product} (${item.variety}) × ${item.qty}`).join('\n'),
+      total: order.subtotal,
+      notes: order.customer.notes
+    })
+  }).catch(e => console.error("Error sending to Google Sheets:", e));
+
+  clearCart();
+  closeCartModal();
+}
 </script>
 
 </body>
