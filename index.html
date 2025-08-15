@@ -1402,30 +1402,51 @@ function sendViaWhatsApp() {
 الإجمالي: ${formatNumber(order.subtotal)} دج`;
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
 
-  // 2. إرسال إلى Google Sheets
-  const scriptUrl = "https://script.google.com/macros/s/AKfycbwzdBKXFaK5gexMDxl1JXhTnqu0LrsbpeBBJVNBjswtVx8LBu2b_aoYJXuZh6dpQKFN/exec"; // استبدل برابط الويب أب
-  fetch(scriptUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name: order.customer.name,
-      phone: order.customer.phone,
-      wilaya: order.customer.wilaya,
-      municipality: order.customer.municipality,
-      address: order.customer.address,
-      products: order.items.map(item => `${item.product} (${item.variety}) × ${item.qty}`).join('\n'),
-      total: order.subtotal,
-      notes: order.customer.notes
-    })
-  }).catch(e => console.error("Error sending to Google Sheets:", e));
+// 1. إرسال إلى Google Form
+const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLScwK9-P502slA0KY7VduL7JAz0HhRIZfsO35wFdOtzVOjXiOg/formResponse";
 
-  clearCart();
-  closeCartModal();
-}
+const formData = new FormData();
+formData.append('entry.1095295109', order.customer.name);         // الاسم
+formData.append('entry.456318645', order.customer.phone);         // الهاتف
+formData.append('entry.1066636445', order.customer.wilaya);       // الولاية
+formData.append('entry.921324105', order.customer.municipality);  // البلدية
+formData.append('entry.87289143', order.customer.address);        // العنوان
+formData.append('entry.1394998101', order.items.map(item => `${item.product} (${item.variety}) × ${item.qty}`).join('\n')); // المنتجات
+formData.append('entry.2096956726', order.subtotal);               // المجموع
+formData.append('entry.1984444015', order.customer.notes);        // الملاحظات
+
+fetch(formUrl, {
+  method: 'POST',
+  mode: 'no-cors',
+  body: formData
+}).catch(e => console.error("Error sending to Google Form:", e));
+
+// 2. إرسال إلى Google Sheets
+const scriptUrl = "https://script.google.com/macros/s/AKfycbwzdBKXFaK5gexMDxl1JXhTnqu0LrsbpeBBJVNBjswtVx8LBu2b_aoYJXuZh6dpQKFN/exec";
+
+fetch(scriptUrl, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    name: order.customer.name,
+    phone: order.customer.phone,
+    wilaya: order.customer.wilaya,
+    municipality: order.customer.municipality,
+    address: order.customer.address,
+    products: order.items.map(item => `${item.product} (${item.variety}) × ${item.qty}`).join('\n'),
+    total: order.subtotal,
+    notes: order.customer.notes
+  })
+}).catch(e => console.error("Error sending to Google Sheets:", e));
+
+clearCart();
+closeCartModal();
+
 </script>
 
 </body>
 </html>
+
 
 
 
