@@ -1170,14 +1170,15 @@ ${lines.join('\n')}
     function sendViaGoogleSheet(){
       const order = collectOrder();
       if(!validateCustomerInfo(order.customer)) return;
+
       
       const formData = new FormData();
-      formData.append('entry.123456789', order.customer.name); // استبدل بمفاتيح حقولك الفعلية
-      formData.append('entry.987654321', order.customer.phone);
-      formData.append('entry.456789123', order.customer.wilaya);
-      formData.append('entry.321654987', order.customer.municipality);
-      formData.append('entry.654987321', order.customer.address);
-      formData.append('entry.789123456', order.customer.notes);
+      formData.append('entry.1095295109', order.customer.name); // استبدل بمفاتيح حقولك الفعلية
+      formData.append('entry.456318645', order.customer.phone);
+      formData.append('entry.1066636445', order.customer.wilaya);
+      formData.append('entry.921324105', order.customer.municipality);
+      formData.append('entry.2096956726', order.customer.address);
+      formData.append('entry.1984444015', order.customer.notes);
       
       // إضافة المنتجات
       order.items.forEach((item, index) => {
@@ -1422,5 +1423,6 @@ function sendViaWhatsApp() {
 
 </body>
 </html>
+
 
 
