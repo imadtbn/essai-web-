@@ -1173,12 +1173,15 @@ ${lines.join('\n')}
 
       
       const formData = new FormData();
-      formData.append('entry.1095295109', order.customer.name); // استبدل بمفاتيح حقولك الفعلية
-      formData.append('entry.456318645', order.customer.phone);
-      formData.append('entry.1066636445', order.customer.wilaya);
-      formData.append('entry.921324105', order.customer.municipality);
-      formData.append('entry.2096956726', order.customer.address);
-      formData.append('entry.1984444015', order.customer.notes);
+        // استبدل بمفاتيح حقولك الفعلية
+formData.append('entry.1095295109', order.customer.name);         // الاسم
+formData.append('entry.456318645', order.customer.phone);        // الهاتف
+formData.append('entry.1066636445', order.customer.wilaya);       // الولاية
+formData.append('entry.921324105', order.customer.municipality); // البلدية
+formData.append('entry.87289143', order.customer.address);      // العنوان
+formData.append('entry.1394998101', order.customer.products);     // المنتجات
+formData.append('entry.2096956726', order.customer.total);        // المجموع
+formData.append('entry.1984444015', order.customer.notes);        // الملاحظات
       
       // إضافة المنتجات
       order.items.forEach((item, index) => {
@@ -1423,6 +1426,7 @@ function sendViaWhatsApp() {
 
 </body>
 </html>
+
 
 
 
