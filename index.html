@@ -945,7 +945,7 @@ document.getElementById("year").textContent = new Date().getFullYear();
 <script>
     /**************** الإعدادات ****************/
     const WHATSAPP_NUMBER = '213697743721'; // رقمك 0697743721 مع مفتاح الجزائر 213
-    const GOOGLE_FORM_URL = 'https://docs.google.com/spreadsheets/d/1ZqsC5xgEZDcmtTvFIOg9jWAjs8bKtNNxi2WheGwqtjA/edit?gid=0#gid=0'; // رابط جوجل شيت الخاص بك
+    const GOOGLE_FORM_URL = 'https://docs.google.com/spreadsheets/d/1ZqsC5xgEZDcmtTvFIOg9jWAjs8bKtNNxi2WheGwqtjA/edit?usp=sharing'; // رابط جوجل شيت الخاص بك
     const ENABLE_PERSIST_CART = true;
 
     // فرض تنسيق الأرقام باللاتينية في إخراج الجافاسكربت
@@ -1403,7 +1403,7 @@ function sendViaWhatsApp() {
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMsg)}`, '_blank');
 
   // 2. إرسال إلى Google Sheets
-  const scriptUrl = "https://script.google.com/macros/s/AKfycbwDyoeqgqjrBKdPbUwbuzeIM4SGKW2jgL2RznAdkwojJr0AzQRAAYufnaLRUt_Y78u9/exec"; // استبدل برابط الويب أب
+  const scriptUrl = "https://script.google.com/macros/s/AKfycbwzdBKXFaK5gexMDxl1JXhTnqu0LrsbpeBBJVNBjswtVx8LBu2b_aoYJXuZh6dpQKFN/exec"; // استبدل برابط الويب أب
   fetch(scriptUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -1426,6 +1426,7 @@ function sendViaWhatsApp() {
 
 </body>
 </html>
+
 
 
 
